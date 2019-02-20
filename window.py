@@ -1,9 +1,10 @@
 ﻿# -*- coding: utf-8 -*-
-#Basic window and timer handling
+#Basic window, timer, speech, menu handling
 #Copyright (C) 2019 Yukio Nozawa <personal@nyanchangames.com>
 
 from copy import copy
 import pygame
+import accessible_output2.outputs.auto
 from pygame.locals import *
 from dialog import *
 class singletonWindow():
@@ -21,6 +22,7 @@ class singletonWindow():
 		pygame.display.set_caption(ttl)
 		self.keys=[0]*255
 		self.previousKeys=[0]*255
+		self.speech=accessible_output2.outputs.auto.Auto()
 		return True
 
 	def frameUpdate(self):
@@ -52,7 +54,13 @@ class singletonWindow():
 		#end loop
 		return True
 	#end wait
+
+	def say(self,str):
+		"""tts speech"""
+		self.speech.speak(str)
+
 #end class singletonWindow
+
 
 class timer:
 	def __init__(self):
@@ -64,5 +72,59 @@ class timer:
 	@property
 	def elapsed(self):
 		return pygame.time.get_ticks()-self.startTick
-
 #end class timer
+
+class menu:
+	def __init__(self):
+		pass
+	def __del__(self):
+		pass
+	def initialize(self,wnd,ttl="no title", items=""):
+		"""Initializes the menu with window instance, title and initial menu items. Requires a singletonWindow instance for this menu to work. Menu items should be a sequence of strings (not an array). the "#" character is used as the menu delimitor. """
+		self.wnd=wnd
+		self.title=ttl
+		self.items=[]
+		if items!="": self.items=items.split("#")
+		self.cursor=0
+
+	def add(self,str):
+		"""Adds one or multiple menu items. # is used as the delimitor. """
+		lst=str.split("#")
+		items.append(lst)
+
+	def open(self):
+		"""Starts the menu. You should call frameUpdate() to keep the menu operate after this. """
+		if len(self.items)==0: return
+		self.wnd.say("%s, %s" % (self.title, self.items[self.cursor]))
+
+	def frameUpdate(self):
+		"""The frame updating function for this menu. You should call your window's frameUpdate prior to call this function. Returns None for no action, -1 for cancellation and 0-based index for being selected. """
+		if self.wnd.keyPressed(K_UP) and self.cursor!=0: self.moveTo(self.cursor-1)
+		if self.wnd.keyPressed(K_DOWN) and self.cursor!=len(self.items)-1: self.moveTo(self.cursor+1)
+		if self.wnd.keyPressed(K_HOME) and self.cursor!=0: self.moveTo(0)
+		if self.wnd.keyPressed(K_END) and self.cursor!=len(self.items): self.moveTo(len(self.items)-1)
+		if self.wnd.keyPressed(K_SPACE): self.moveTo(self.cursor)
+		if self.wnd.keyPressed(K_ESCAPE):
+			self.cancel()
+			return -1
+		#end cancel
+		if self.wnd.keyPressed(K_RETURN):
+			self.enter()
+			return self.cursor
+		#end enter
+		return None
+	#end frameUpdate
+
+	def cancel(self):
+		"""Internal function which is triggered when canceling the menu. """
+		pass#if you wanna do something, write here instead
+
+	def enter(self):
+		"""Internal function which is triggered when selecting an option. """
+		pass
+
+	def moveTo(self,c):
+		"""Moves the menu cursor to the specified position and reads out the cursor. """
+		self.cursor=c
+		self.wnd.say(self.items[self.cursor])
+#end class menu

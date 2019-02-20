@@ -35,9 +35,14 @@ class ssAppMain():
 	#end intro
 
 	def mainmenu(self):
+		m=window.menu()
+		m.initialize(self.wnd,"Please choose an option","Normal mode#Arcade mode#Exit")
+		m.open()
 		while(True):
 			if self.wnd.frameUpdate() is False: sys.exit(0)
 			if self.wnd.keyPressing(window.K_ESCAPE): return
+			selected=m.frameUpdate()
+			if selected==0 or selected==1: sys.exit(0)
 		#end loop
 	#end mainmenu
 #end class ssAppMain
