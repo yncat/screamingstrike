@@ -48,7 +48,7 @@ class singletonWindow():
 
 	def wait(self,msec):
 		"""waits for a specified period of milliseconds while keeping the window looping. Same as frameUpdate(), you should exit your game when this function returned false. """
-		t=timer()
+		t=Timer()
 		while t.elapsed<msec:
 			if self.frameUpdate() is False: return False
 		#end loop
@@ -62,7 +62,7 @@ class singletonWindow():
 #end class singletonWindow
 
 
-class timer:
+class Timer:
 	def __init__(self):
 		self.restart()
 
@@ -72,7 +72,7 @@ class timer:
 	@property
 	def elapsed(self):
 		return pygame.time.get_ticks()-self.startTick
-#end class timer
+#end class Timer
 
 class menu:
 	def __init__(self):

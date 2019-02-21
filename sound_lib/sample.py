@@ -37,6 +37,7 @@ class Sample(FlagObject):
 class SampleBasedChannel(Channel):
 	def __init__(self, hsample=None):
 		"""Creates a sample-based channel from a sample handle. """
-		handle = bass_call(BASS_SampleGetChannel, hsample.handle)
-		super(sampleBasedChannel, self).__init__(handle)
-
+		handle = bass_call(BASS_SampleGetChannel, hsample.handle, False)
+		super(SampleBasedChannel, self).__init__(handle)
+	def __free__(self):
+		pass#Sample-based channels don't have to be explicitly freed; BASS does that

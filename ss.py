@@ -7,8 +7,7 @@ from ssAppMain import *
 def main():
 	app=ssAppMain()
 	app.initialize()
-	app.intro()
-	app.mainmenu()
+	app.run()
 
 #global schope
 if __name__ == "__main__": main()
