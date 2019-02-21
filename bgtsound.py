@@ -5,20 +5,28 @@
 
 import math
 import sound_lib
-from sound_lib import output
+import sound_lib.output
+import sound_lib.sample
 from sound_lib import stream
 from dialog import dialog
-o=output.Output()
+o=sound_lib.output.Output()
 class sound():
 	def __init__(self):
 		self.handle=None
 		self.freq=44100
 
-	def load(self,filename=""):
+	def stream(self,filename=""):
 		if self.handle:
 			self.close()
 #end close previous
 		self.handle =stream.FileStream(file=filename)
+		self.freq=self.handle.get_frequency()
+
+	def load(self,sample=None):
+		if self.handle:
+			self.close()
+#end close previous
+		self.handle =sound_lib.sample.SampleBasedChannel(sample)
 		self.freq=self.handle.get_frequency()
 
 	def play(self):

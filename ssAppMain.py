@@ -5,6 +5,7 @@ import sys
 import random
 #import menu
 import window
+import sound_lib.sample
 from bgtsound import *
 class ssAppMain():
 	def __init__(self):
@@ -16,12 +17,24 @@ class ssAppMain():
 		self.wnd=window.singletonWindow()
 		ret=self.wnd.initialize(640,480,"Screaming Strike!")
 		self.music=sound()
-		self.music.load("sounds/bg.ogg")
+		self.music.stream("sounds/bg.ogg")
 		self.music.volume=-10
+		self.loadSounds()
 		return ret
+
+	def loadSounds(self):
+		"""Preload ingame sounds into memory. This is for enhancing performance while playing the game. """
+		self.sounds={}
+		#Footsteps on leaves
+		for i in range(1,18):
+			name="s_lf%d.ogg" % i
+			self.sounds[name]=sound_lib.sample.Sample("sounds/"+name)
+		#end steps on leaves
+	#end loadSounds
+
 	def intro(self):
 		introsound=sound()
-		introsound.load("sounds/ssIntro.ogg")
+		introsound.stream("sounds/ssIntro.ogg")
 		introsound.play()
 		while(introsound.playing):
 			if self.wnd.frameUpdate() is False: sys.exit(0)
