@@ -71,7 +71,6 @@ class Channel (FlagObject):
 	def get_length (self, mode=BASS_POS_BYTE):
 		return bass_call_0(BASS_ChannelGetLength, self.handle, mode)
 
-	__len__ = get_length
 
 	def __nonzero__(self):
 		return True

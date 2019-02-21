@@ -88,9 +88,14 @@ class sound():
 
 	@property
 	def playing(self):
-		if not self.handle:
+		if self.handle is None:
 			return False
-		return self.handle.is_playing
+		try:
+			s=self.handle.is_playing
+		except BassError:
+			return False
+		#end try
+		return s
 
 	def close(self):
 		if self.handle:
