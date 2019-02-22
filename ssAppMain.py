@@ -112,9 +112,11 @@ class GameField():
 		self.player.initialize(appMain,self)
 		self.defeats=0
 		self.nextLevelup=2
-
+		self.levelupBonus=BonusCounter()
+		self.levelupBonus.initialize(self.appMain)
 	def frameUpdate(self):
 		self.player.frameUpdate()
+		self.levelupBonus.frameUpdate()
 		for i in range(self.level):
 			if self.enemies[i] is not None and self.enemies[i].state==ENEMY_STATE_SHOULDBEDELETED: self.enemies[i]=None
 			if self.enemies[i] is not None: self.enemies[i].frameUpdate()
@@ -131,11 +133,11 @@ class GameField():
 		if self.nextLevelup==0: self.levelup()
 
 	def levelup(self):
+		self.player.addScore(self.player.hitPercentage*self.player.hitPercentage*self.level*self.player.lives*0.5)
+		self.levelupBonus.start(int(self.player.hitPercentage*0.1))
 		self.level+=1
 		self.enemies.append(None)
 		self.nextLevelup=1+self.level
-		self.appMain.wnd.say("Level %d!" % self.level)
-
 	def getCenterPosition(self):
 		if self.x%2==0:
 			return int((self.x/2)+1)
@@ -172,14 +174,27 @@ class Player():
 		self.punching=False
 		self.punchHitTime=200
 		self.punchRange=4
+		self.score=0
+		self.punches=0
+		self.hits=0
+		self.hitPercentage=0
+		self.consecutiveHitBonus=BonusCounter()
+		self.consecutiveHitBonus.initialize(self.appMain)
+		self.consecutiveMissUnbonus=BonusCounter()
+		self.consecutiveMissUnbonus.initialize(self.appMain)
+		self.consecutiveHits=0
+		self.consecutiveMisses=0
 
 	def frameUpdate(self):
+		self.consecutiveHitBonus.frameUpdate()
+		self.consecutiveMissUnbonus.frameUpdate()
 		if self.punching is False and self.appMain.wnd.keyPressed(window.K_SPACE): self.punchLaunch()
 		if self.punching is True and self.punchTimer.elapsed>=self.punchHitTime: self.punchHit()
 		if self.x!=0 and self.appMain.wnd.keyPressed(window.K_LEFT): self.moveTo(self.x-1)
 		if self.x!=self.field.getX()-1 and self.appMain.wnd.keyPressed(window.K_RIGHT): self.moveTo(self.x+1)
 
 	def punchLaunch(self):
+		self.punches+=1
 		self.punching=True
 		s=sound()
 		s.load(self.appMain.sounds["fists.ogg"])
@@ -190,12 +205,43 @@ class Player():
 
 	def punchHit(self):
 		self.punching=False
+		hit=False
 		for elem in self.field.enemies:
 			if elem.state==ENEMY_STATE_ALIVE and self.x==elem.x and elem.y<=self.punchRange:
 				elem.hit()
+				hit=True
+				self.hits+=1
+				self.consecutiveHits+=1
+				self.processConsecutiveMisses()
+				self.calcHitPercentage()#penetration would higher the percentage, but I don't care
 				self.field.logDefeat()
 				break
+			#end if
+		#end for
+		if not hit: self.punchMiss()
+	#end punchHit
 
+	def punchMiss(self):
+		self.consecutiveMisses+=1
+		if self.hits>0: self.calcHitPercentage()
+		self.processConsecutiveHits()
+
+	def processConsecutiveHits(self):
+		if self.consecutiveHits>5:
+			self.addScore(self.consecutiveHits*self.consecutiveHits*self.field.level*self.field.level)
+			self.consecutiveHitBonus.start(self.consecutiveHits)
+		#end if
+		self.consecutiveHits=0
+
+	def processConsecutiveMisses(self):
+		if self.consecutiveMisses>5:
+			self.addScore(self.consecutiveMisses*self.consecutiveMisses*self.field.level*self.field.level*-1)
+			self.consecutiveMissUnbonus.start(self.consecutiveMisses*-1)
+		#end if
+		self.consecutiveMisses=0
+
+	def calcHitPercentage(self):
+		self.hitPercentage=self.hits/self.punches*100
 	def moveTo(self,p):
 		self.x=p
 		s=sound()
@@ -214,7 +260,8 @@ class Player():
 			s.volume=-10
 			s.play()
 
-
+	def addScore(self,score):
+		self.score+=score
 #end class Player
 
 class Enemy():
@@ -290,3 +337,47 @@ class Enemy():
 		self.bodyfall.pan=self.field.getPan(self.x)
 		self.bodyfall.volume=self.field.getVolume(self.y)
 		self.bodyfall.play()
+
+class BonusCounter():
+	def __init__(self):
+		pass
+	def __del__(self):
+		pass
+	def initialize(self,appMain):
+		self.appMain=appMain
+		self.active=False
+		self.countTimer=window.Timer()
+		self.number=0
+		self.current=0
+	def start(self,number):
+		if number==0: return
+		self.number=number
+		self.current=0
+		self.countTimer.restart()
+		self.active=True
+		self.count()
+	def frameUpdate(self):
+		if self.active is True and self.countTimer.elapsed>=self.nextCountTime: self.count()
+	def count(self):
+		s=sound()
+
+		if self.number>0:
+			self.current+=1
+			s.load(self.appMain.sounds["bonus.ogg"])
+			p=75+(self.current*5)
+			if p>300: p=300
+		else:
+			self.current-=1
+			s.load(self.appMain.sounds["unbonus.ogg"])
+			p=150+(self.current*3)
+			if p<50: p=50
+		#end if
+		s.pitch=p
+		s.play()
+		if self.current==self.number:
+			self.active=False
+			return
+		w=200-(abs(self.current)*10)
+		if w<50: w=50
+		self.nextCountTime=w
+		self.countTimer.restart()
