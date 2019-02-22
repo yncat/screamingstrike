@@ -90,7 +90,8 @@ class menu:
 	def add(self,str):
 		"""Adds one or multiple menu items. # is used as the delimitor. """
 		lst=str.split("#")
-		items.append(lst)
+		for elem in lst:
+			self.items.append(elem)
 
 	def open(self):
 		"""Starts the menu. You should call frameUpdate() to keep the menu operate after this. """

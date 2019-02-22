@@ -32,7 +32,11 @@ class Channel (FlagObject):
 
 	def is_active (self):
 		"Checks if a sample, stream, or MOD music is active (playing) or stalled. Can also check if a recording is in progress."""
-		return bass_call_0(BASS_ChannelIsActive, self.handle)
+		try:
+			r=bass_call_0(BASS_ChannelIsActive, self.handle)
+		except BassError:
+			r=False
+		return r
 
 	@property
 	def is_playing(self):
@@ -56,7 +60,11 @@ class Channel (FlagObject):
 
 	def set_position (self, pos, mode=BASS_POS_BYTE):
 		"""Sets the playback position of a sample, MOD music, or stream."""
-		return bass_call(BASS_ChannelSetPosition, self.handle, pos, mode)
+		try:
+			r=bass_call(BASS_ChannelSetPosition, self.handle, pos, mode)
+		except BassError:
+			return 0
+		return r
 
 	position = property(get_position, set_position)
 

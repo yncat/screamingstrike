@@ -75,10 +75,12 @@ class ssAppMain():
 
 	def run(self):
 		if self.intro() is False: return
-		selected=self.mainmenu()
-		if selected is False: return
-		result=self.gamePlay(selected)
-		if result==GAME_RESULT_TERMINATE: return
+		while(True):
+			selected=self.mainmenu()
+			if selected is False: break
+			result=self.gamePlay(selected)
+			if result==GAME_RESULT_TERMINATE: break
+			if self.resultScreen(result) is False: break
 
 	def gamePlay(self,mode):
 		self.wnd.say("%s, start!" % MODEVAL_2_STR[mode])
@@ -88,6 +90,34 @@ class ssAppMain():
 			if self.wnd.frameUpdate() is False: return GAME_RESULT_TERMINATE
 			if self.wnd.keyPressed(window.K_ESCAPE): return GAME_RESULT_TERMINATE
 			if field.frameUpdate() is False:break
+		#end while
+		field.clear()
+		if self.wnd.wait(2000)==False: return GAME_RESULT_TERMINATE
+		s=sound()
+		s.load(self.sounds["dead.ogg"])
+		s.pitch=random.randint(70,130)
+		s.play()
+		if self.wnd.wait(800)==False: return GAME_RESULT_TERMINATE
+		with open("result.txt", mode='w') as f:
+			f.write(field.exportLog())
+		r=GameResult()
+		r.initialize(field)
+		return r
+
+	def resultScreen(self,result):
+		m=window.menu()
+		m.initialize(self.wnd,"Game result")
+		m.add("Final score: %d" % result.score)
+		m.add("Punches: %d, hits: %d, accuracy: %.2f%%" % (result.punches, result.hits, result.hitPercentage))
+		m.open()
+		while(True):
+			if self.wnd.frameUpdate() is False: return False
+			r=m.frameUpdate()
+			if r is not None:break
+		#end while
+		return True
+
+
 
 #end class ssAppMain
 
@@ -95,7 +125,9 @@ class GameField():
 	def __init__(self):
 		pass
 	def __del__(self):
-		pass
+		self.Enemies=None
+		self.player=None
+
 	def initialize(self,appMain, x,y,mode):
 		self.appMain=appMain
 		self.x=x
@@ -114,17 +146,21 @@ class GameField():
 		self.nextLevelup=2
 		self.levelupBonus=BonusCounter()
 		self.levelupBonus.initialize(self.appMain)
+		self.logs=[]
+
 	def frameUpdate(self):
 		self.player.frameUpdate()
+		if self.player.lives<=0: return False
 		self.levelupBonus.frameUpdate()
 		for i in range(self.level):
 			if self.enemies[i] is not None and self.enemies[i].state==ENEMY_STATE_SHOULDBEDELETED: self.enemies[i]=None
 			if self.enemies[i] is not None: self.enemies[i].frameUpdate()
 			if self.enemies[i] is None: self.spawnEnemy(i)
-
+		#end for
+		return True
 	def spawnEnemy(self,slot):
 		e=Enemy()
-		e.initialize(self.appMain,self,self.player,random.randint(0,self.x-1),random.randint(300,900),random.randint(1,self.appMain.getNumScreams()))
+		e.initialize(self.appMain,self,random.randint(0,self.x-1),random.randint(300,900),random.randint(1,self.appMain.getNumScreams()))
 		self.enemies[slot]=e
 
 	def logDefeat(self):
@@ -132,12 +168,24 @@ class GameField():
 		self.nextLevelup-=1
 		if self.nextLevelup==0: self.levelup()
 
+	def log(self,s):
+		self.logs.append(s)
+
+	def exportLog(self):
+		return "\n".join(self.logs)
+
 	def levelup(self):
+		if self.player.lives>1:
+			self.log("Leveled up to %d! (Accuracy %.1f%%, with %d lives remaining)" % (self.level, self.player.hitPercentage, self.player.lives))
+		else:
+			self.log("Leveled up to %d! (Accuracy %.1f%%, with %d life remaining)" % (self.level, self.player.hitPercentage, self.player.lives))
+	#end if 
 		self.player.addScore(self.player.hitPercentage*self.player.hitPercentage*self.level*self.player.lives*0.5)
 		self.levelupBonus.start(int(self.player.hitPercentage*0.1))
 		self.level+=1
 		self.enemies.append(None)
 		self.nextLevelup=1+self.level
+
 	def getCenterPosition(self):
 		if self.x%2==0:
 			return int((self.x/2)+1)
@@ -156,6 +204,8 @@ class GameField():
 	def getY(self):
 		return self.y
 
+	def clear(self):
+		self.enemies=[]
 
 #end class GameField
 
@@ -209,6 +259,9 @@ class Player():
 		for elem in self.field.enemies:
 			if elem.state==ENEMY_STATE_ALIVE and self.x==elem.x and elem.y<=self.punchRange:
 				elem.hit()
+				score=(1000-elem.speed)*(elem.y+1)*(0.5+(0.5*self.field.level))*0.1
+				self.field.log("Hit! (speed %d, distance %d)" % (900-elem.speed, elem.y))
+				self.addScore(score)
 				hit=True
 				self.hits+=1
 				self.consecutiveHits+=1
@@ -228,6 +281,7 @@ class Player():
 
 	def processConsecutiveHits(self):
 		if self.consecutiveHits>5:
+			self.field.log("%d consecutive hits bonus!" % self.consecutiveHits)
 			self.addScore(self.consecutiveHits*self.consecutiveHits*self.field.level*self.field.level)
 			self.consecutiveHitBonus.start(self.consecutiveHits)
 		#end if
@@ -235,6 +289,7 @@ class Player():
 
 	def processConsecutiveMisses(self):
 		if self.consecutiveMisses>5:
+			self.field.log("%d consecutive misses penalty!" % self.consecutiveMisses)
 			self.addScore(self.consecutiveMisses*self.consecutiveMisses*self.field.level*self.field.level*-1)
 			self.consecutiveMissUnbonus.start(self.consecutiveMisses*-1)
 		#end if
@@ -262,17 +317,24 @@ class Player():
 
 	def addScore(self,score):
 		self.score+=score
+		which="added"
+		if score<=0: which="subtracted"
+		self.field.log("Point: %.1f %s (%.1f)" % (score, which, self.score))
 #end class Player
 
 class Enemy():
 	def __init__(self):
-		pass
+		self.scream=None
+		self.bodyfall=None
+
 	def __del__(self):
-		pass
-	def initialize(self,appMain,field,player,x,speed,screamNum):
+		self.field=None
+		if self.scream is not None: self.scream.stop()
+		if self.bodyfall is not None: self.bodyfall.stop()
+
+	def initialize(self,appMain,field,x,speed,screamNum):
 		self.appMain=appMain
 		self.field=field
-		self.player=player
 		self.x=x
 		self.y=field.getY()
 		self.speed=speed
@@ -308,7 +370,7 @@ class Enemy():
 
 	def hitCheck(self):
 		if self.y!=0: return False
-		self.player.hit()
+		self.field.player.hit()
 		self.switchState(ENEMY_STATE_SHOULDBEDELETED)
 		return True
 
@@ -381,3 +443,17 @@ class BonusCounter():
 		if w<50: w=50
 		self.nextCountTime=w
 		self.countTimer.restart()
+
+class GameResult:
+	def __init__(self):
+		pass
+	def __del__(self):
+		pass
+	def initialize(self,field):
+		self.score=field.player.score
+		self.hitPercentage=field.player.hitPercentage
+		self.hits=field.player.hits
+		self.punches=field.player.punches
+		self.level=field.level
+
+
