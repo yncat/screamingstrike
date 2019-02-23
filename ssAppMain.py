@@ -5,7 +5,7 @@ import sys
 import random
 import glob
 import os
-import math
+import threading
 import window
 import sound_lib.sample
 from bgtsound import *
@@ -26,13 +26,16 @@ class ssAppMain():
 		pass
 	def initialize(self):
 		"""Initializes the app. returns True on success or False on failure. """
+		self.thread_loadSounds=threading.Thread(target=self.loadSounds)
+		self.thread_loadSounds.setDaemon(True)
+		self.thread_loadSounds.start()
 		self.wnd=window.singletonWindow()
 		ret=self.wnd.initialize(640,480,"Screaming Strike!")
 		self.music=sound()
 		self.music.stream("sounds/stream/bg.ogg")
 		self.music.volume=-10
-		self.loadSounds()
 		self.numScreams=len(glob.glob("sounds/scream*.ogg"))
+		self.thread_loadSounds.join()
 		return ret
 
 	def loadSounds(self):
