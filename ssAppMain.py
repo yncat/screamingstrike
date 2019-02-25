@@ -6,6 +6,7 @@ import random
 import glob
 import os
 import threading
+import datetime
 import window
 import sound_lib.sample
 from bgtsound import *
@@ -169,7 +170,7 @@ class ssAppMain():
 		s.pitch=random.randint(70,130)
 		s.play()
 		if self.wnd.wait(800)==False: return GAME_RESULT_TERMINATE
-		with open("result.txt", mode='w') as f:
+		with open("result.txt", mode='a') as f:
 			f.write(field.exportLog())
 		r=GameResult()
 		r.initialize(field)
@@ -177,7 +178,7 @@ class ssAppMain():
 
 	def resultScreen(self,result):
 		m=window.menu()
-		m.initialize(self.wnd,"Game result")
+		m.initialize(self.wnd,"Game result","",self.sounds["cursor.ogg"],self.sounds["confirm.ogg"],self.sounds["confirm.ogg"])
 		m.add("Final score: %d" % result.score)
 		m.add("Punches: %d, hits: %d, accuracy: %.2f%%" % (result.punches, result.hits, result.hitPercentage))
 		m.open()
@@ -218,6 +219,7 @@ class GameField():
 		self.levelupBonus=BonusCounter()
 		self.levelupBonus.initialize(self.appMain)
 		self.logs=[]
+		self.log("Game started at %s!" % datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S"))
 
 	def setLimits(self,lpLimit, rpLimit):
 		self.leftPanningLimit=lpLimit
@@ -263,7 +265,7 @@ class GameField():
 		self.levelupBonus.start(int(self.player.hitPercentage*0.1))
 		self.level+=1
 		self.enemies.append(None)
-		self.nextLevelup=1+self.level
+		self.nextLevelup=int(1+(self.level*self.level*0.3))
 
 	def getCenterPosition(self):
 		if self.x%2==0:
