@@ -7,6 +7,7 @@ import pygame
 import accessible_output2.outputs.auto
 from pygame.locals import *
 from dialog import *
+from bgtsound import *
 class singletonWindow():
 	"""Just a pygame window wrapper. As the name implies, you mustn't create multiple singletonWindow's in your game. """
 	def __init__(self):
@@ -79,13 +80,16 @@ class menu:
 		pass
 	def __del__(self):
 		pass
-	def initialize(self,wnd,ttl="no title", items=""):
+	def initialize(self,wnd,ttl="no title", items="", cursorSound=None, enterSound=None, cancelSound=None):
 		"""Initializes the menu with window instance, title and initial menu items. Requires a singletonWindow instance for this menu to work. Menu items should be a sequence of strings (not an array). the "#" character is used as the menu delimitor. """
 		self.wnd=wnd
 		self.title=ttl
 		self.items=[]
 		if items!="": self.items=items.split("#")
 		self.cursor=0
+		self.cursorSound=cursorSound
+		self.enterSound=enterSound
+		self.cancelSound=cancelSound
 
 	def add(self,str):
 		"""Adds one or multiple menu items. # is used as the delimitor. """
@@ -118,14 +122,19 @@ class menu:
 
 	def cancel(self):
 		"""Internal function which is triggered when canceling the menu. """
-		pass#if you wanna do something, write here instead
+		if self.cancelSound is not None: playOneShot(self.cancelSound)
 
 	def enter(self):
 		"""Internal function which is triggered when selecting an option. """
-		pass
+		if self.enterSound is not None: playOneShot(self.enterSound)
+
+	def getCursorPos(self):
+		"""Returns the current cursor position. """
+		return self.cursor
 
 	def moveTo(self,c):
 		"""Moves the menu cursor to the specified position and reads out the cursor. """
+		if self.cursorSound is not None: playOneShot(self.cursorSound)
 		self.cursor=c
 		self.wnd.say(self.items[self.cursor])
 #end class menu

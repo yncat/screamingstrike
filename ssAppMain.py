@@ -29,19 +29,20 @@ class ssAppMain():
 		self.thread_loadSounds=threading.Thread(target=self.loadSounds)
 		self.thread_loadSounds.setDaemon(True)
 		self.thread_loadSounds.start()
+		self.options=GameOptions()
+		self.options.initialize("data/options.dat")
 		self.wnd=window.singletonWindow()
 		ret=self.wnd.initialize(640,480,"Screaming Strike!")
 		self.music=sound()
-		self.music.stream("sounds/stream/bg.ogg")
-		self.music.volume=-10
-		self.numScreams=len(glob.glob("sounds/scream*.ogg"))
-		self.thread_loadSounds.join()
+		self.music.stream("data/sounds/stream/bg.ogg")
+		self.music.volume=self.options.bgmVolume
+		self.numScreams=len(glob.glob("data/sounds/scream*.ogg"))
 		return ret
 
 	def loadSounds(self):
 		"""Preload ingame sounds into memory. This is for enhancing performance while playing the game. """
 		self.sounds={}
-		files=glob.glob("sounds/*.ogg")
+		files=glob.glob("data/sounds/*.ogg")
 		for elem in files:
 			self.sounds[os.path.basename(elem)]=sound_lib.sample.Sample(elem)
 	#end loadSounds
@@ -51,7 +52,7 @@ class ssAppMain():
 
 	def intro(self):
 		introsound=sound()
-		introsound.stream("sounds/stream/ssIntro.ogg")
+		introsound.stream("data/sounds/stream/ssIntro.ogg")
 		introsound.play()
 		while(introsound.playing):
 			if self.wnd.frameUpdate() is False: sys.exit(0)
@@ -61,18 +62,19 @@ class ssAppMain():
 				break
 			#end skipping with enter
 		#end while intro is playing
+		self.thread_loadSounds.join()
 		self.music.play_looped()
 	#end intro
 
 	def mainmenu(self):
 		m=window.menu()
-		m.initialize(self.wnd,"Please choose an option","Normal mode#Arcade mode#Exit")
+		m.initialize(self.wnd,"Main menu. Use your up and down arrows to choose an option, then press enter to confirm","Normal mode#Arcade mode#Options#Exit",self.sounds["cursor.ogg"],self.sounds["confirm.ogg"],self.sounds["confirm.ogg"])
 		m.open()
 		while(True):
 			if self.wnd.frameUpdate() is False: return False
-			if self.wnd.keyPressing(window.K_ESCAPE): return False
+			if self.wnd.keyPressed(window.K_ESCAPE): return False
 			selected=m.frameUpdate()
-			if selected==0 or selected==1: return selected
+			if selected is not None and selected>=0: return selected
 		#end loop
 	#end mainmenu
 
@@ -80,15 +82,81 @@ class ssAppMain():
 		if self.intro() is False: return
 		while(True):
 			selected=self.mainmenu()
-			if selected is False: break
+			if selected is False or selected==3: return
+			if selected==2:
+				if self.optionsMenu() is False: return
+				continue
+			#end if
 			result=self.gamePlay(selected)
-			if result==GAME_RESULT_TERMINATE: break
-			if self.resultScreen(result) is False: break
+			if result==GAME_RESULT_TERMINATE: return
+			if self.resultScreen(result) is False: return
+
+	def optionsMenu(self):
+		backup=GameOptions()
+		backup.initialize(self.options)
+		m=window.menu()
+		m.initialize(self.wnd,"Options Menu, use your up and down arrows to choose an option, left and right arrows to change values, enter to save or escape to discard changes","",self.sounds["cursor.ogg"],self.sounds["confirm.ogg"],self.sounds["confirm.ogg"])
+		m.add("Background music volume")
+		m.add("Left panning limit")
+		m.add("Right panning limit.")
+		m.open()
+		while(True):
+			if self.wnd.frameUpdate() is False: return False
+			ret=m.frameUpdate()
+			if self.wnd.keyPressed(window.K_LEFT): self.optionChange(m.getCursorPos(),-1)
+			if self.wnd.keyPressed(window.K_RIGHT): self.optionChange(m.getCursorPos(),1)
+			if ret is None: continue
+			if ret==-1: 
+				self.options=GameOptions()
+				self.options.initialize(backup)
+				self.wnd.say("Changes discarded.")
+				self.music.volume=self.options.bgmVolume
+				return True
+			#end if
+			if ret>=0:
+				self.wnd.say("Settings saved")
+				self.options.save("data/options.dat")
+				return True
+
+	def optionChange(self,cursor,direction):
+		if cursor==0:#BGM volume
+			if direction==1 and self.options.bgmVolume==self.options.BGMVOLUME_POSITIVE_BOUNDARY: return
+			if direction==-1 and self.options.bgmVolume==self.options.BGMVOLUME_NEGATIVE_BOUNDARY: return
+			if direction==1: self.options.bgmVolume+=2
+			if direction==-1: self.options.bgmVolume-=2
+			self.music.volume=self.options.bgmVolume
+			self.wnd.say("%d" % (abs(-30-self.options.bgmVolume)*0.5))
+			return
+		#end bgm volume
+		if cursor==1:#left panning limit
+			if direction==1 and self.options.leftPanningLimit==self.options.LEFTPANNINGLIMIT_POSITIVE_BOUNDARY: return
+			if direction==-1 and self.options.leftPanningLimit==self.options.LEFTPANNINGLIMIT_NEGATIVE_BOUNDARY: return
+			if direction==1: self.options.leftPanningLimit+=5
+			if direction==-1: self.options.leftPanningLimit-=5
+			s=sound()
+			s.load(self.sounds["change.ogg"])
+			s.pan=self.options.leftPanningLimit
+			s.play()
+			return
+	#end left panning limit
+		if cursor==2:#right panning limit
+			if direction==1 and self.options.rightPanningLimit==self.options.RIGHTPANNINGLIMIT_POSITIVE_BOUNDARY: return
+			if direction==-1 and self.options.rightPanningLimit==self.options.RIGHTPANNINGLIMIT_NEGATIVE_BOUNDARY: return
+			if direction==1: self.options.rightPanningLimit+=5
+			if direction==-1: self.options.rightPanningLimit-=5
+			s=sound()
+			s.load(self.sounds["change.ogg"])
+			s.pan=self.options.rightPanningLimit
+			s.play()
+		return
+		#end left panning limit
+	#end optionChange
 
 	def gamePlay(self,mode):
 		self.wnd.say("%s, start!" % MODEVAL_2_STR[mode])
 		field=GameField()
 		field.initialize(self, 3,20,mode)
+		field.setLimits(self.options.leftPanningLimit,self.options.rightPanningLimit)
 		while(True):
 			if self.wnd.frameUpdate() is False: return GAME_RESULT_TERMINATE
 			if self.wnd.keyPressed(window.K_ESCAPE): return GAME_RESULT_TERMINATE
@@ -136,8 +204,8 @@ class GameField():
 		self.x=x
 		self.y=y
 		self.mode=mode
-		self.leftPanLimit=-100
-		self.rightPanLimit=100
+		self.leftPanningLimit=-100
+		self.rightPanningLimit=100
 		self.lowVolumeLimit=-30
 		self.highVolumeLimit=0
 		self.level=1
@@ -151,9 +219,16 @@ class GameField():
 		self.levelupBonus.initialize(self.appMain)
 		self.logs=[]
 
+	def setLimits(self,lpLimit, rpLimit):
+		self.leftPanningLimit=lpLimit
+		self.rightPanningLimit=rpLimit
+
 	def frameUpdate(self):
 		self.player.frameUpdate()
-		if self.player.lives<=0: return False
+		if self.player.lives<=0:
+			self.log("Game over! Final score: %d" % self.player.score)
+			return False
+		#end if
 		self.levelupBonus.frameUpdate()
 		for i in range(self.level):
 			if self.enemies[i] is not None and self.enemies[i].state==ENEMY_STATE_SHOULDBEDELETED: self.enemies[i]=None
@@ -161,6 +236,7 @@ class GameField():
 			if self.enemies[i] is None: self.spawnEnemy(i)
 		#end for
 		return True
+
 	def spawnEnemy(self,slot):
 		e=Enemy()
 		e.initialize(self.appMain,self,random.randint(0,self.x-1),random.randint(300,900),random.randint(1,self.appMain.getNumScreams()))
@@ -196,7 +272,7 @@ class GameField():
 			return int(self.x/2)
 
 	def getPan(self,pos):
-		return self.leftPanLimit+(self.rightPanLimit-self.leftPanLimit)/(self.x-1)*pos
+		return self.leftPanningLimit+(self.rightPanningLimit-self.leftPanningLimit)/(self.x-1)*pos
 
 	def getVolume(self,pos):
 		return self.highVolumeLimit-(self.highVolumeLimit-self.lowVolumeLimit)/self.y*pos
@@ -309,6 +385,7 @@ class Player():
 
 	def hit(self):
 		self.lives-=1
+		self.field.log("You've been slapped! (%d HP remaining)" % self.lives)
 		s=sound()
 		if self.lives>0:
 			s.load(self.appMain.sounds["attacked.ogg"])
@@ -459,4 +536,57 @@ class GameResult:
 		self.punches=field.player.punches
 		self.level=field.level
 
+class GameOptions:
+	def __init__(self):
+		self.BGMVOLUME_NEGATIVE_BOUNDARY=-30
+		self.BGMVOLUME_POSITIVE_BOUNDARY=0
+		self.LEFTPANNINGLIMIT_NEGATIVE_BOUNDARY=-100
+		self.LEFTPANNINGLIMIT_POSITIVE_BOUNDARY=-20
+		self.RIGHTPANNINGLIMIT_NEGATIVE_BOUNDARY=20
+		self.RIGHTPANNINGLIMIT_POSITIVE_BOUNDARY=100
+
+	def __del__(self):
+		pass
+
+	def initialize(self,importer):
+		if isinstance(importer,GameOptions):
+			self.copyFrom(importer)
+		elif isinstance(importer,str):
+			self.load(importer)
+		else:
+			self.setDefault()
+
+	def setDefault(self):
+		self.bgmVolume=-10
+		self.leftPanningLimit=-100
+		self.rightPanningLimit=100
+
+	def copyFrom(self,importer):
+		self.bgmVolume=importer.bgmVolume
+		self.leftPanningLimit=importer.leftPanningLimit
+		self.rightPanningLimit=importer.rightPanningLimit
+
+	def load(self,filename):
+		if os.path.isfile(filename) is not True:
+			self.setDefault()
+			self.save("data/options.dat")
+			return False
+		with open("data/options.dat", mode='r') as f:
+			values=f.read().split("#")
+		#end with
+		self.bgmVolume=int(values[0])
+		if self.bgmVolume<self.BGMVOLUME_NEGATIVE_BOUNDARY: self.bgmVolume=self.BGMVOLUME_NEGATIVE_BOUNDARY
+		if self.bgmVolume>self.BGMVOLUME_POSITIVE_BOUNDARY: self.bgmVolume=self.BGMVOLUME_POSITIVE_BOUNDARY
+		self.leftPanningLimit=int(values[1])
+		if self.leftPanningLimit<self.LEFTPANNINGLIMIT_NEGATIVE_BOUNDARY: self.leftPanningLimit=self.LEFTPANNINGLIMIT_NEGATIVE_BOUNDARY
+		if self.leftPanningLimit>self.LEFTPANNINGLIMIT_POSITIVE_BOUNDARY: self.leftPanningLimit=self.LEFTPANNINGLIMIT_POSITIVE_BOUNDARY
+		self.rightPanningLimit=int(values[2])
+		if self.rightPanningLimit>self.RIGHTPANNINGLIMIT_POSITIVE_BOUNDARY: self.rightPanningLimit=self.RIGHTPANNINGLIMIT_POSITIVE_BOUNDARY
+		if self.rightPanningLimit<self.RIGHTPANNINGLIMIT_NEGATIVE_BOUNDARY: self.rightPanningLimit=self.RIGHTPANNINGLIMIT_NEGATIVE_BOUNDARY
+		return True
+
+	def save(self,filename):
+		s="%d#%d#%d" % (self.bgmVolume,self.leftPanningLimit,self.rightPanningLimit)
+		with open("data/options.dat", mode="w") as f:
+			f.write(s)
 

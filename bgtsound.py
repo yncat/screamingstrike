@@ -10,6 +10,7 @@ import sound_lib.sample
 from sound_lib import stream
 from dialog import dialog
 o=sound_lib.output.Output()
+
 class sound():
 	def __init__(self):
 		self.handle=None
@@ -100,4 +101,10 @@ class sound():
 	def close(self):
 		if self.handle:
 			self.handle.free()
+
+#helper functions
+def playOneShot(sample):
+	s=sound()
+	s.load(sample)
+	s.play()
 
