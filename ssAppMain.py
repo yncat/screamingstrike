@@ -279,6 +279,9 @@ class GameField():
 	def getVolume(self,pos):
 		return self.highVolumeLimit-(self.highVolumeLimit-self.lowVolumeLimit)/self.y*pos
 
+	def getPitch(self,y):
+		return 70+(y*3)
+
 	def getX(self):
 		return self.x
 
@@ -592,3 +595,66 @@ class GameOptions:
 		with open("data/options.dat", mode="w") as f:
 			f.write(s)
 
+class Item():
+	def __init__(self):
+		self.fallingBeep=None
+		self.break=None
+
+	def __del__(self):
+		self.field=None
+		if self.fallingBeep is not None: self.fallingBeep.stop()
+		if self.break is not None: self.break.stop()
+
+	def initialize(self,appMain,field,x,speed):
+		self.appMain=appMain
+		self.field=field
+		self.x=x
+		self.y=field.getY()
+		self.speed=speed
+		self.state=ITEM_STATE_ALIVE
+		self.stepTimer=window.Timer()
+		self.fallingBeep=sound()
+		self.fallingBeep.load(appMain.sounds["itemfalling.ogg"])
+		self.fallingBeep.pan=self.field.getPan(self.x)
+		self.fallingBeep.volume=self.field.getVolume(self.y)
+		self.fallingBeep.pitch=self.field.getPitch(self.y)
+		self.fallingBeep.loop()
+
+	def frameUpdate(self):
+		if self.state==ITEM_STATE_BROKEN and self.break.playing is False: self.switchState(ITEM_STATE_SHOULDBEDELETED)
+		if self.state==ENEMY_STATE_ALIVE and self.stepTimer.elapsed>=self.speed: self.step()
+
+	def switchState(self, newState):
+		self.state=newState
+		if newState==ENEMY_STATE_BROKEN: self.playBroken()
+
+	def step(self):
+		if self.hitCheck() is True: return
+		self.y-=1
+		self.fallingBeep.pan=self.field.getPan(self.x)
+		self.fallingBeep.volume=self.field.getVolume(self.y)
+		self.fallingBeep.pitch=self.field.getPitch(self.y)
+		s.play()
+		self.stepTimer.restart()
+
+	def hitCheck(self):
+		if self.y!=0: return False
+		self.switchState(ITEM_STATE_BROKEN)
+		return True
+
+	def hit(self):
+		s=sound()
+		s.load(self.appMain.sounds["itemget.ogg"])
+		s.pan=self.field.getPan(self.x)
+		s.volume=self.field.getVolume(self.y)
+		s.play()
+		self.fallingBeep.stop()
+		self.switchState(ITEM_STATE_SHOULDBEDELETED)
+
+	def playBroken(self):
+		self.break=sound()
+		self.break.load(self.appMain.sounds["item_destroy%d.ogg" % random.randint(1,2)])
+		self.break.pitch=random.randint(70,130)
+		self.break.pan=self.field.getPan(self.x)
+		self.break.volume=self.field.getVolume(self.y)
+		self.break.play()
