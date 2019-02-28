@@ -19,6 +19,9 @@ ENEMY_STATE_ALIVE=0
 ENEMY_STATE_SCREAMING=1
 ENEMY_STATE_FALLING=2
 ENEMY_STATE_SHOULDBEDELETED=3
+ITEM_STATE_ALIVE=0
+ITEM_STATE_BROKEN=1
+ITEM_STATE_SHOULDBEDELETED=2
 
 class ssAppMain():
 	def __init__(self):
@@ -204,14 +207,16 @@ class GameField():
 		self.appMain=appMain
 		self.x=x
 		self.y=y
-		self.mode=mode
+		self.setModeHandler(mode)
 		self.leftPanningLimit=-100
 		self.rightPanningLimit=100
 		self.lowVolumeLimit=-30
 		self.highVolumeLimit=0
 		self.level=1
 		self.enemies=[]
+		self.items=[]
 		self.enemies.append(None)
+		self.items
 		self.player=Player()
 		self.player.initialize(appMain,self)
 		self.defeats=0
@@ -220,6 +225,14 @@ class GameField():
 		self.levelupBonus.initialize(self.appMain)
 		self.logs=[]
 		self.log("Game started at %s!" % datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S"))
+
+	def setModeHandler(self,mode):
+		if mode==MODE_NORMAL:
+			self.modeHandler=NormalModeHandler()
+		elif mode==MODE_ARCADE:
+			self.modeHandler=ArcadeModeHandler()
+		#end if
+		self.modeHandler.initialize(self.appMain,self)
 
 	def setLimits(self,lpLimit, rpLimit):
 		self.leftPanningLimit=lpLimit
@@ -231,12 +244,16 @@ class GameField():
 			self.log("Game over! Final score: %d" % self.player.score)
 			return False
 		#end if
+		self.modeHandler.frameUpdate()
 		self.levelupBonus.frameUpdate()
 		for i in range(self.level):
 			if self.enemies[i] is not None and self.enemies[i].state==ENEMY_STATE_SHOULDBEDELETED: self.enemies[i]=None
 			if self.enemies[i] is not None: self.enemies[i].frameUpdate()
 			if self.enemies[i] is None: self.spawnEnemy(i)
 		#end for
+		for elem in self.items[:]:
+			if elem is not None and elem.state==ITEM_STATE_SHOULDBEDELETED: self.items.remove(elem)
+			if elem is not None: elem.frameUpdate()
 		return True
 
 	def spawnEnemy(self,slot):
@@ -346,7 +363,7 @@ class Player():
 				score=(1000-elem.speed)*(elem.y+1)*(0.5+(0.5*self.field.level))*0.1
 				self.field.log("Hit! (speed %d, distance %d)" % (900-elem.speed, elem.y))
 				self.addScore(score)
-				hit=True
+				hit+=1
 				self.hits+=1
 				self.consecutiveHits+=1
 				self.processConsecutiveMisses()
@@ -355,6 +372,19 @@ class Player():
 				break
 			#end if
 		#end for
+
+		for elem in self.field.items:
+			if elem.state==ITEM_STATE_ALIVE and self.x==elem.x and elem.y<=self.punchRange:
+				elem.hit()
+				hit=True
+				self.hits+=1
+				self.consecutiveHits+=1
+				self.processConsecutiveMisses()
+				self.calcHitPercentage()
+				break
+			#end if
+		#end for
+
 		if not hit: self.punchMiss()
 	#end punchHit
 
@@ -438,7 +468,7 @@ class Enemy():
 		if newState==ENEMY_STATE_FALLING: self.playBodyfall()
 
 	def step(self):
-		if self.hitCheck() is True: return
+		if self.attackCheck() is True: return
 		self.y-=1
 		s=sound()
 		num=0
@@ -453,7 +483,7 @@ class Enemy():
 		s.play()
 		self.stepTimer.restart()
 
-	def hitCheck(self):
+	def attackCheck(self):
 		if self.y!=0: return False
 		self.field.player.hit()
 		self.switchState(ENEMY_STATE_SHOULDBEDELETED)
@@ -598,12 +628,12 @@ class GameOptions:
 class Item():
 	def __init__(self):
 		self.fallingBeep=None
-		self.break=None
+		self.shatter=None
 
 	def __del__(self):
 		self.field=None
 		if self.fallingBeep is not None: self.fallingBeep.stop()
-		if self.break is not None: self.break.stop()
+		if self.shatter is not None: self.shatter.stop()
 
 	def initialize(self,appMain,field,x,speed):
 		self.appMain=appMain
@@ -618,31 +648,36 @@ class Item():
 		self.fallingBeep.pan=self.field.getPan(self.x)
 		self.fallingBeep.volume=self.field.getVolume(self.y)
 		self.fallingBeep.pitch=self.field.getPitch(self.y)
-		self.fallingBeep.loop()
+		self.fallingBeep.play_looped()
 
 	def frameUpdate(self):
-		if self.state==ITEM_STATE_BROKEN and self.break.playing is False: self.switchState(ITEM_STATE_SHOULDBEDELETED)
+		if self.state==ITEM_STATE_BROKEN and self.shatter.playing is False: self.switchState(ITEM_STATE_SHOULDBEDELETED)
 		if self.state==ENEMY_STATE_ALIVE and self.stepTimer.elapsed>=self.speed: self.step()
 
 	def switchState(self, newState):
 		self.state=newState
-		if newState==ENEMY_STATE_BROKEN: self.playBroken()
+		if newState==ITEM_STATE_BROKEN: self.playShatter()
 
 	def step(self):
-		if self.hitCheck() is True: return
+		if self.destroyCheck() is True: return
 		self.y-=1
 		self.fallingBeep.pan=self.field.getPan(self.x)
 		self.fallingBeep.volume=self.field.getVolume(self.y)
 		self.fallingBeep.pitch=self.field.getPitch(self.y)
-		s.play()
 		self.stepTimer.restart()
 
-	def hitCheck(self):
+	def destroyCheck(self):
 		if self.y!=0: return False
 		self.switchState(ITEM_STATE_BROKEN)
 		return True
 
 	def hit(self):
+		s=sound()
+		s.load(self.appMain.sounds["hit.ogg"])
+		s.pan=self.field.getPan(self.x)
+		s.volume=self.field.getVolume(self.y)
+		s.pitch=random.randint(70,130)
+		s.play()
 		s=sound()
 		s.load(self.appMain.sounds["itemget.ogg"])
 		s.pan=self.field.getPan(self.x)
@@ -651,10 +686,46 @@ class Item():
 		self.fallingBeep.stop()
 		self.switchState(ITEM_STATE_SHOULDBEDELETED)
 
-	def playBroken(self):
-		self.break=sound()
-		self.break.load(self.appMain.sounds["item_destroy%d.ogg" % random.randint(1,2)])
-		self.break.pitch=random.randint(70,130)
-		self.break.pan=self.field.getPan(self.x)
-		self.break.volume=self.field.getVolume(self.y)
-		self.break.play()
+	def playShatter(self):
+		self.shatter=sound()
+		self.shatter.load(self.appMain.sounds["item_destroy%d.ogg" % random.randint(1,2)])
+		self.shatter.pitch=random.randint(70,130)
+		self.shatter.pan=self.field.getPan(self.x)
+		self.shatter.play()
+		self.fallingBeep.stop()
+
+class NormalModeHandler(object):
+	def __init__(self):
+		pass
+	def __del__(self):
+		self.appMain=None
+		self.field=None
+	def initialize(self,appMain,field):
+		self.appMain=appMain
+		self.field=field
+	def frameUpdate(self):
+		pass
+
+class ArcadeModeHandler(NormalModeHandler):
+	def __init__(self):
+		super().__init__()
+	def __del__(self):
+		super().__del__()
+	def initialize(self,appMain,field):
+		super().initialize(appMain,field)
+		self.itemComingTimer=window.Timer()
+		self.resetItemComingTimer()
+
+	def frameUpdate(self):
+		if self.itemComingTimer.elapsed>=self.itemComingTime: self.spawnItem()
+
+	def spawnItem(self):
+		i=Item()
+		i.initialize(self.appMain,self.field,random.randint(0,self.field.x-1),random.randint(100,900))
+		self.field.items.append(i)
+		self.resetItemComingTimer()
+
+	def resetItemComingTimer(self):
+		self.itemComingTimer.restart()
+		self.itemComingTime=random.randint(100,900)
+		self.itemComingTime=5000
