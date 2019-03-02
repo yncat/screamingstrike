@@ -23,6 +23,20 @@ ITEM_STATE_ALIVE=0
 ITEM_STATE_BROKEN=1
 ITEM_STATE_SHOULDBEDELETED=2
 
+ITEM_TYPE_NASTY=0
+ITEM_TYPE_GOOD=1
+
+ITEM_NASTY_SHRINK=0
+ITEM_NASTY_BLURRED=1
+ITEM_NASTY_SLOWDOWN=2
+ITEM_NASTY_MAX=2
+
+ITEM_GOOD_MEGATONPUNCH=0
+ITEM_GOOD_BOOST=1
+ITEM_GOOD_DESTRUCTION=2
+ITEM_GOOD_EXTRALIFE=3
+ITEM_GOOD_MAX=3
+
 class ssAppMain():
 	def __init__(self):
 		pass
@@ -335,6 +349,16 @@ class Player():
 		self.consecutiveMissUnbonus.initialize(self.appMain)
 		self.consecutiveHits=0
 		self.consecutiveMisses=0
+		self.shrink=ShrinkEffect()
+		self.shrink.initialize(self,appMain.sounds["shrink.ogg"],appMain.sounds["shrinkFade.ogg"])
+		self.blurred=BlurredEffect()
+		self.blurred.initialize(self,appMain.sounds["blurred.ogg"],appMain.sounds["blurredFade.ogg"])
+		self.slowDown=SlowDownEffect()
+		self.slowDown.initialize(self,appMain.sounds["slowDown.ogg"],appMain.sounds["slowDownFade.ogg"])
+		self.megatonPunch=MegatonPunchEffect()
+		self.megatonPunch.initialize(self,appMain.sounds["megatonPunch.ogg"],appMain.sounds["megatonPunchFade.ogg"])
+		self.boost=BoostEffect()
+		self.boost.initialize(self,appMain.sounds["boost.ogg"],appMain.sounds["boostFade.ogg"])
 
 	def frameUpdate(self):
 		self.consecutiveHitBonus.frameUpdate()
@@ -343,6 +367,11 @@ class Player():
 		if self.punching is True and self.punchTimer.elapsed>=self.punchHitTime: self.punchHit()
 		if self.x!=0 and self.appMain.wnd.keyPressed(window.K_LEFT): self.moveTo(self.x-1)
 		if self.x!=self.field.getX()-1 and self.appMain.wnd.keyPressed(window.K_RIGHT): self.moveTo(self.x+1)
+		self.shrink.frameUpdate()
+		self.blurred.frameUpdate()
+		self.slowDown.frameUpdate()
+		self.megatonPunch.frameUpdate()
+		self.boost.frameUpdate()
 
 	def punchLaunch(self):
 		self.punches+=1
@@ -376,6 +405,7 @@ class Player():
 		for elem in self.field.items:
 			if elem.state==ITEM_STATE_ALIVE and self.x==elem.x and elem.y<=self.punchRange:
 				elem.hit()
+				processItemHit(elem)
 				hit=True
 				self.hits+=1
 				self.consecutiveHits+=1
@@ -408,6 +438,30 @@ class Player():
 			self.consecutiveMissUnbonus.start(self.consecutiveMisses*-1)
 		#end if
 		self.consecutiveMisses=0
+
+	def processItemHit(self,item):
+		if item.type==ITEM_TYPE_NASTY:
+			processNastyItemHit(item)
+		else:
+			processGoodItemHit(item)
+
+	def processNastyItemHit(self,item):
+		if item.identifier==ITEM_NASTY_SHRINK:
+			self.shrink.activate()
+			return
+		if item.identifier==ITEM_NASTY_BLURRED:
+			self.blurred.activate()
+			return
+		if item.identifier==ITEM_NASTY_SLOWDOWN:
+			self.slowDown.activate()
+			return
+
+	def processGoodItemHit(self,item):
+		if item.identifier==ITEM_GOOD_MEGATONPUNCH:
+			self.megatonPunch.activate()
+			return
+		if item.identifier==ITEM_GOOD_BOOST:
+			self.boost.activate()
 
 	def calcHitPercentage(self):
 		self.hitPercentage=self.hits/self.punches*100
@@ -635,7 +689,7 @@ class Item():
 		if self.fallingBeep is not None: self.fallingBeep.stop()
 		if self.shatter is not None: self.shatter.stop()
 
-	def initialize(self,appMain,field,x,speed):
+	def initialize(self,appMain,field,x,speed,type,identifier):
 		self.appMain=appMain
 		self.field=field
 		self.x=x
@@ -649,6 +703,8 @@ class Item():
 		self.fallingBeep.volume=self.field.getVolume(self.y)
 		self.fallingBeep.pitch=self.field.getPitch(self.y)
 		self.fallingBeep.play_looped()
+		self.type=type
+		self.identifier=identifier
 
 	def frameUpdate(self):
 		if self.state==ITEM_STATE_BROKEN and self.shatter.playing is False: self.switchState(ITEM_STATE_SHOULDBEDELETED)
@@ -720,8 +776,11 @@ class ArcadeModeHandler(NormalModeHandler):
 		if self.itemComingTimer.elapsed>=self.itemComingTime: self.spawnItem()
 
 	def spawnItem(self):
+		spd=random.randint(100,900)
+		t=ITEM_TYPE_NASTY if random.randint(1,100)<=spd/10 else ITEM_TYPE_GOOD
+		i=random.randint(0,ITEM_NASTY_MAX) if t=ITEM_TYPE_NASTY else random.randint(0,ITEM_GOOD_MAX)
 		i=Item()
-		i.initialize(self.appMain,self.field,random.randint(0,self.field.x-1),random.randint(100,900))
+		i.initialize(self.appMain,self.field,random.randint(0,self.field.x-1),spd,t,i)
 		self.field.items.append(i)
 		self.resetItemComingTimer()
 
@@ -729,3 +788,37 @@ class ArcadeModeHandler(NormalModeHandler):
 		self.itemComingTimer.restart()
 		self.itemComingTime=random.randint(100,900)
 		self.itemComingTime=5000
+
+class ItemEffectBase(object):
+	def __init__(self):
+		pass
+	def __del__(self):
+		pass
+	def initialize(self,player,onSound,offSound):
+		self.player=player
+		self.active=False
+		self.timer=window.Timer()
+		self.onSound=onSound
+		self.offSound=offSound
+		self.lasts=15000
+
+	def activate(self):
+		s=sound()
+		s.load(self.onSound)
+		s.play()
+		self.active=True
+		self.timer.restart()
+
+	def deactivate(self):
+		s=sound()
+		s.load(self.offSound)
+		self.active=False
+
+	def frameUpdate(self):
+		if self.active is not True: return
+		if self.timer.elapsed>=self.lasts: self.deactivate()
+
+class ShrinkEffect(ItemEffectBase):
+	def activate(self):
+		super().activate()
+		self.player.changePunchRange(DEFAULT_PUNCHRANGE/2)
