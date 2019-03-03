@@ -778,7 +778,7 @@ class ArcadeModeHandler(NormalModeHandler):
 	def spawnItem(self):
 		spd=random.randint(100,900)
 		t=ITEM_TYPE_NASTY if random.randint(1,100)<=spd/10 else ITEM_TYPE_GOOD
-		i=random.randint(0,ITEM_NASTY_MAX) if t=ITEM_TYPE_NASTY else random.randint(0,ITEM_GOOD_MAX)
+		i=random.randint(0,ITEM_NASTY_MAX) if t==ITEM_TYPE_NASTY else random.randint(0,ITEM_GOOD_MAX)
 		i=Item()
 		i.initialize(self.appMain,self.field,random.randint(0,self.field.x-1),spd,t,i)
 		self.field.items.append(i)
