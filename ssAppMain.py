@@ -822,3 +822,19 @@ class ShrinkEffect(ItemEffectBase):
 	def activate(self):
 		super().activate()
 		self.player.changePunchRange(DEFAULT_PUNCHRANGE/2)
+
+class BlurredEffect(ItemEffectBase):
+	def activate(self):
+		super().activate()
+
+class SlowDownEffect(ItemEffectBase):
+	def activate(self):
+		super().activate()
+
+class MegatonPunchEffect(ItemEffectBase):
+	def activate(self):
+		super().activate()
+
+class BoostEffect(ItemEffectBase):
+	def activate(self):
+		super().activate()
