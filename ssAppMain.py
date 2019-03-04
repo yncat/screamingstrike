@@ -23,6 +23,7 @@ ITEM_STATE_ALIVE=0
 ITEM_STATE_BROKEN=1
 ITEM_STATE_SHOULDBEDELETED=2
 
+ITEM_BASE_EFFECT_TIME=15000
 ITEM_TYPE_NASTY=0
 ITEM_TYPE_GOOD=1
 
@@ -33,9 +34,13 @@ ITEM_NASTY_MAX=2
 
 ITEM_GOOD_MEGATONPUNCH=0
 ITEM_GOOD_BOOST=1
-ITEM_GOOD_DESTRUCTION=2
-ITEM_GOOD_EXTRALIFE=3
-ITEM_GOOD_MAX=3
+ITEM_GOOD_PENETRATION=2
+ITEM_GOOD_DESTRUCTION=3
+ITEM_GOOD_EXTRALIFE=4
+ITEM_GOOD_MAX=4
+
+PLAYER_DEFAULT_PUNCH_RANGE=4
+PLAYER_DEFAULT_PUNCH_SPEED=200
 
 class ssAppMain():
 	def __init__(self):
@@ -237,6 +242,8 @@ class GameField():
 		self.nextLevelup=2
 		self.levelupBonus=BonusCounter()
 		self.levelupBonus.initialize(self.appMain)
+		self.destructing=False
+		self.destructTimer=window.Timer()
 		self.logs=[]
 		self.log("Game started at %s!" % datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S"))
 
@@ -253,6 +260,10 @@ class GameField():
 		self.rightPanningLimit=rpLimit
 
 	def frameUpdate(self):
+		if self.destructing:
+			if self.destructTimer.elapsed>=1800: self.performDestruction()
+			return True
+		#end if destruct
 		self.player.frameUpdate()
 		if self.player.lives<=0:
 			self.log("Game over! Final score: %d" % self.player.score)
@@ -321,7 +332,24 @@ class GameField():
 
 	def clear(self):
 		self.enemies=[]
+		self.items=[]
 
+	def startDestruction(self):
+		if self.destructing: return
+		playOneShot(self.appMain.sounds["destructPowerup.ogg"])
+		self.destructTimer.restart()
+		self.destructing=True
+
+	def performDestruction(self):
+		playOneShot(self.appMain.sounds["destruct.ogg"])
+		self.log("Activating destruction!")
+		for elem in self.enemies:
+			if elem is not None and elem.state==ENEMY_STATE_ALIVE: elem.hit()
+			self.logDefeat()
+		for elem in self.items:
+			elem.destroy()
+		self.destructing=False
+		self.log("End destruction!")
 #end class GameField
 
 class Player():
@@ -337,8 +365,8 @@ class Player():
 		self.punchTimer=window.Timer()
 		self.punchTimer=window.Timer()
 		self.punching=False
-		self.punchHitTime=200
-		self.punchRange=4
+		self.punchSpeed=PLAYER_DEFAULT_PUNCH_SPEED
+		self.punchRange=PLAYER_DEFAULT_PUNCH_RANGE
 		self.score=0
 		self.punches=0
 		self.hits=0
@@ -349,29 +377,18 @@ class Player():
 		self.consecutiveMissUnbonus.initialize(self.appMain)
 		self.consecutiveHits=0
 		self.consecutiveMisses=0
-		self.shrink=ShrinkEffect()
-		self.shrink.initialize(self,appMain.sounds["shrink.ogg"],appMain.sounds["shrinkFade.ogg"])
-		self.blurred=BlurredEffect()
-		self.blurred.initialize(self,appMain.sounds["blurred.ogg"],appMain.sounds["blurredFade.ogg"])
-		self.slowDown=SlowDownEffect()
-		self.slowDown.initialize(self,appMain.sounds["slowDown.ogg"],appMain.sounds["slowDownFade.ogg"])
-		self.megatonPunch=MegatonPunchEffect()
-		self.megatonPunch.initialize(self,appMain.sounds["megatonPunch.ogg"],appMain.sounds["megatonPunchFade.ogg"])
-		self.boost=BoostEffect()
-		self.boost.initialize(self,appMain.sounds["boost.ogg"],appMain.sounds["boostFade.ogg"])
+		self.itemEffects=[]
+		self.penetrate=False
 
 	def frameUpdate(self):
 		self.consecutiveHitBonus.frameUpdate()
 		self.consecutiveMissUnbonus.frameUpdate()
 		if self.punching is False and self.appMain.wnd.keyPressed(window.K_SPACE): self.punchLaunch()
-		if self.punching is True and self.punchTimer.elapsed>=self.punchHitTime: self.punchHit()
+		if self.punching is True and self.punchTimer.elapsed>=self.punchSpeed: self.punchHit()
 		if self.x!=0 and self.appMain.wnd.keyPressed(window.K_LEFT): self.moveTo(self.x-1)
 		if self.x!=self.field.getX()-1 and self.appMain.wnd.keyPressed(window.K_RIGHT): self.moveTo(self.x+1)
-		self.shrink.frameUpdate()
-		self.blurred.frameUpdate()
-		self.slowDown.frameUpdate()
-		self.megatonPunch.frameUpdate()
-		self.boost.frameUpdate()
+		for elem in self.itemEffects[:]:
+			if not elem.frameUpdate(): self.itemEffects.remove(elem)
 
 	def punchLaunch(self):
 		self.punches+=1
@@ -385,36 +402,34 @@ class Player():
 
 	def punchHit(self):
 		self.punching=False
-		hit=False
-		for elem in self.field.enemies:
-			if elem.state==ENEMY_STATE_ALIVE and self.x==elem.x and elem.y<=self.punchRange:
-				elem.hit()
-				score=(1000-elem.speed)*(elem.y+1)*(0.5+(0.5*self.field.level))*0.1
-				self.field.log("Hit! (speed %d, distance %d)" % (900-elem.speed, elem.y))
-				self.addScore(score)
-				hit+=1
-				self.hits+=1
-				self.consecutiveHits+=1
-				self.processConsecutiveMisses()
-				self.calcHitPercentage()#penetration would higher the percentage, but I don't care
-				self.field.logDefeat()
-				break
-			#end if
-		#end for
-
-		for elem in self.field.items:
-			if elem.state==ITEM_STATE_ALIVE and self.x==elem.x and elem.y<=self.punchRange:
-				elem.hit()
-				processItemHit(elem)
-				hit=True
-				self.hits+=1
-				self.consecutiveHits+=1
-				self.processConsecutiveMisses()
-				self.calcHitPercentage()
-				break
-			#end if
-		#end for
-
+		hit=0
+		for pos in range(int(self.punchRange)+1):
+			for elem in self.field.enemies:
+				if elem.state==ENEMY_STATE_ALIVE and self.x==elem.x and elem.y==pos:
+					elem.hit()
+					hit+=1
+					self.hits+=1
+					self.consecutiveHits+=1
+					self.processConsecutiveMisses()
+					self.calcHitPercentage()#penetration would higher the percentage, but I don't care
+					self.field.logDefeat()
+					if not self.penetrate: break
+				#end if
+			#end for enemies
+			if not self.penetrate and hit>0: break
+			for elem in self.field.items:
+				if elem.state==ITEM_STATE_ALIVE and self.x==elem.x and elem.y==pos:
+					elem.hit()
+					self.processItemHit(elem)
+					hit=True
+					self.hits+=1
+					self.consecutiveHits+=1
+					self.processConsecutiveMisses()
+					self.calcHitPercentage()
+					if not self.penetrate: break
+				#end if
+			#end for items
+		#end for range
 		if not hit: self.punchMiss()
 	#end punchHit
 
@@ -441,27 +456,86 @@ class Player():
 
 	def processItemHit(self,item):
 		if item.type==ITEM_TYPE_NASTY:
-			processNastyItemHit(item)
+			self.processNastyItemHit(item)
 		else:
-			processGoodItemHit(item)
+			self.processGoodItemHit(item)
 
 	def processNastyItemHit(self,item):
 		if item.identifier==ITEM_NASTY_SHRINK:
-			self.shrink.activate()
+			e=ShrinkEffect()
+			e.initialize(self,self.appMain)
+			e.activate()
+			self.itemEffects.append(e)
 			return
 		if item.identifier==ITEM_NASTY_BLURRED:
-			self.blurred.activate()
+			e=BlurredEffect()
+			e.initialize(self,self.appMain)
+			e.activate()
+			self.itemEffects.append(e)
 			return
 		if item.identifier==ITEM_NASTY_SLOWDOWN:
-			self.slowDown.activate()
+			e=SlowDownEffect()
+			e.initialize(self,self.appMain)
+			e.activate()
+			self.itemEffects.append(e)
 			return
 
 	def processGoodItemHit(self,item):
 		if item.identifier==ITEM_GOOD_MEGATONPUNCH:
-			self.megatonPunch.activate()
+			e=MegatonPunchEffect()
+			e.initialize(self,self.appMain)
+			e.activate()
+			self.itemEffects.append(e)
 			return
 		if item.identifier==ITEM_GOOD_BOOST:
-			self.boost.activate()
+			e=BoostEffect()
+			e.initialize(self,self.appMain)
+			e.activate()
+			self.itemEffects.append(e)
+			return
+		if item.identifier==ITEM_GOOD_PENETRATION:
+			existing=self.findEffect("Penetration")
+			if existing is None:
+				e=PenetrationEffect()
+				e.initialize(self,self.appMain)
+				e.activate()
+				self.itemEffects.append(e)
+			else:
+				existing.extend(ITEM_BASE_EFFECT_TIME)
+			return
+		if item.identifier==ITEM_GOOD_DESTRUCTION:
+			self.field.startDestruction()
+			return
+		if item.identifier==ITEM_GOOD_EXTRALIFE:
+			self.lives+=1
+			self.field.log("Extra life! (now %d lives)" % self.lives)
+			s=sound()
+			s.load(self.appMain.sounds["extraLife.ogg"])
+			s.pitch=60+(self.lives*10)
+			s.play()
+			return
+
+	def findEffect(self,name):
+		for elem in self.itemEffects:
+			if elem.name==name: return elem
+		return None
+
+	def setPunchRange(self,r):
+		previous=self.punchRange
+		self.field.log("The effective range of your Punch is now %d (from %d)" % (r,previous))
+		self.punchRange=r
+
+	def setPunchSpeed(self,s):
+		previous=self.punchSpeed
+		self.field.log("The speed of your punch is now %d milliseconds (from %d)" % (s,previous))
+		self.punchSpeed=s
+
+	def setPenetration(self,p):
+		if p is True:
+			self.field.log("Your punches now penetrate enemies and items!")
+		else:
+			self.field.log("Your punches no longer penetrate enemies and items!")
+		self.penetration=p
 
 	def calcHitPercentage(self):
 		self.hitPercentage=self.hits/self.punches*100
@@ -552,6 +626,9 @@ class Enemy():
 		s.play()
 		self.playScream()
 		self.switchState(ENEMY_STATE_SCREAMING)
+		score=(1000-self.speed)*(self.y+1)*(0.5+(0.5*self.field.level))*0.1
+		self.field.log("Hit! (speed %d, distance %d)" % (900-self.speed, self.y))
+		self.field.player.addScore(score)
 
 	def playScream(self):
 		self.scream=sound()
@@ -742,11 +819,15 @@ class Item():
 		self.fallingBeep.stop()
 		self.switchState(ITEM_STATE_SHOULDBEDELETED)
 
+	def destroy(self):
+		self.switchState(ITEM_STATE_BROKEN)
+
 	def playShatter(self):
 		self.shatter=sound()
 		self.shatter.load(self.appMain.sounds["item_destroy%d.ogg" % random.randint(1,2)])
 		self.shatter.pitch=random.randint(70,130)
 		self.shatter.pan=self.field.getPan(self.x)
+		self.shatter.volume=self.field.getVolume(self.y)
 		self.shatter.play()
 		self.fallingBeep.stop()
 
@@ -771,36 +852,52 @@ class ArcadeModeHandler(NormalModeHandler):
 		super().initialize(appMain,field)
 		self.itemComingTimer=window.Timer()
 		self.resetItemComingTimer()
+		self.itemShowerTimer=window.Timer()
+		self.resetItemShower()
 
 	def frameUpdate(self):
+		if self.itemShowerTimer.elapsed>=self.itemShowerTime: self.triggerItemShower()
 		if self.itemComingTimer.elapsed>=self.itemComingTime: self.spawnItem()
+
+	def triggerItemShower(self):
+		self.spawnItem()
+		self.itemShowerCount-=1
+		if self.itemShowerCount==0:
+			self.resetItemShower()
+		else:
+			self.itemShowerTime=150
+			self.itemShowerTimer.restart()
+
+	def resetItemShower(self):
+		self.itemShowerTime=90000
+		self.itemShowerCount=random.randint(3,6)
 
 	def spawnItem(self):
 		spd=random.randint(100,900)
 		t=ITEM_TYPE_NASTY if random.randint(1,100)<=spd/10 else ITEM_TYPE_GOOD
-		i=random.randint(0,ITEM_NASTY_MAX) if t==ITEM_TYPE_NASTY else random.randint(0,ITEM_GOOD_MAX)
+		ident=random.randint(0,ITEM_NASTY_MAX) if t==ITEM_TYPE_NASTY else random.randint(0,ITEM_GOOD_MAX)
 		i=Item()
-		i.initialize(self.appMain,self.field,random.randint(0,self.field.x-1),spd,t,i)
+		i.initialize(self.appMain,self.field,random.randint(0,self.field.x-1),spd,t,ident)
 		self.field.items.append(i)
 		self.resetItemComingTimer()
 
 	def resetItemComingTimer(self):
 		self.itemComingTimer.restart()
-		self.itemComingTime=random.randint(100,900)
-		self.itemComingTime=5000
+		self.itemComingTime=random.randint(0,60000)
 
 class ItemEffectBase(object):
 	def __init__(self):
 		pass
 	def __del__(self):
 		pass
-	def initialize(self,player,onSound,offSound):
+	def initialize(self,player,onSound,offSound,name):
 		self.player=player
 		self.active=False
 		self.timer=window.Timer()
 		self.onSound=onSound
 		self.offSound=offSound
-		self.lasts=15000
+		self.lasts=ITEM_BASE_EFFECT_TIME
+		self.name=name
 
 	def activate(self):
 		s=sound()
@@ -808,33 +905,102 @@ class ItemEffectBase(object):
 		s.play()
 		self.active=True
 		self.timer.restart()
+		self.player.field.log("A new \"%s\" effect is starting!" % self.name)
 
 	def deactivate(self):
 		s=sound()
 		s.load(self.offSound)
+		s.play()
 		self.active=False
+		self.player.field.log("One of your \"%s\" effects are ending!" % self.name)
+
+	def extend(self,ms):
+		s=sound()
+		s.load(self.onSound)
+		s.pitch=130
+		s.play()
+		self.lasts+=ms
+		self.player.field.log("Your \"%s\" effect has been extended for %d milliseconds! (now %d)" % ( self.name, ms, self.lasts-self.timer.elapsed))
 
 	def frameUpdate(self):
-		if self.active is not True: return
-		if self.timer.elapsed>=self.lasts: self.deactivate()
+		if self.active is not True: return False
+		if self.timer.elapsed>=self.lasts:
+			self.deactivate()
+			return False
+		return True
 
 class ShrinkEffect(ItemEffectBase):
+	def initialize(self,player,appMain):
+		super().initialize(player,appMain.sounds["shrink.ogg"],appMain.sounds["shrinkFade.ogg"],"Shrink")
+
 	def activate(self):
 		super().activate()
-		self.player.changePunchRange(DEFAULT_PUNCHRANGE/2)
+		self.player.setPunchRange(self.player.punchRange/2)
+
+	def deactivate(self):
+		super().deactivate()
+		self.player.setPunchRange(self.player.punchRange*2)
 
 class BlurredEffect(ItemEffectBase):
-	def activate(self):
-		super().activate()
+	def initialize(self,player,appMain):
+		super().initialize(player,appMain.sounds["blurred.ogg"],appMain.sounds["blurredFade.ogg"],"Blurred")
+
+	def frameUpdate(self):
+		if super().frameUpdate() is False: return False
+		if random.randint(1,10)==1:
+			while(True):
+				d=random.randint(0,self.player.field.getX()-1)
+				if d!=self.player.x: break
+			#end while
+			self.player.moveTo(d)
+		#whether to trigger blurring?
+		return True
+	#end frameUpdate
 
 class SlowDownEffect(ItemEffectBase):
+	def initialize(self,player,appMain):
+		super().initialize(player,appMain.sounds["slowDown.ogg"],appMain.sounds["slowDownFade.ogg"],"Slow down")
+
 	def activate(self):
 		super().activate()
+		self.player.setPunchSpeed(self.player.punchSpeed*2)
+
+	def deactivate(self):
+		super().deactivate()
+		self.player.setPunchSpeed(self.player.punchSpeed/2)
 
 class MegatonPunchEffect(ItemEffectBase):
+	def initialize(self,player,appMain):
+		super().initialize(player,appMain.sounds["megatonPunch.ogg"],appMain.sounds["megatonPunchFade.ogg"],"Megaton punch")
+
 	def activate(self):
 		super().activate()
+		self.player.setPunchRange(self.player.punchRange*5)
+
+	def deactivate(self):
+		super().deactivate()
+		self.player.setPunchRange(self.player.punchRange/5)
 
 class BoostEffect(ItemEffectBase):
+	def initialize(self,player,appMain):
+		super().initialize(player,appMain.sounds["boost.ogg"],appMain.sounds["boostFade.ogg"],"Boost")
+
 	def activate(self):
 		super().activate()
+		self.player.setPunchSpeed(self.player.punchSpeed/2)
+
+	def deactivate(self):
+		super().deactivate()
+		self.player.setPunchSpeed(self.player.punchSpeed*2)
+
+class PenetrationEffect(ItemEffectBase):
+	def initialize(self,player,appMain):
+		super().initialize(player,appMain.sounds["penetration.ogg"],appMain.sounds["penetrationFade.ogg"],"Penetration")
+
+	def activate(self):
+		super().activate()
+		self.player.setPenetration(True)
+
+	def deactivate(self):
+		super().deactivate()
+		self.player.setPenetration(False)
