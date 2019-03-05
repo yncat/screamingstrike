@@ -822,9 +822,11 @@ class Item():
 	def destroyCheck(self):
 		if self.y!=0: return False
 		self.switchState(ITEM_STATE_BROKEN)
+		self.field.log("A \"%s\" item fell on the ground and shattered in peaces!" % ITEM_NAMES[self.type][self.identifier])
 		return True
 
 	def hit(self):
+		self.field.log("Obtained a \"%s\" item!" % ITEM_NAMES[self.type][self.identifier])
 		s=sound()
 		s.load(appMain.sounds["hit.ogg"])
 		s.pan=self.field.getPan(self.x)
@@ -840,6 +842,7 @@ class Item():
 		self.switchState(ITEM_STATE_SHOULDBEDELETED)
 
 	def destroy(self):
+		self.field.log("A \"%s\" item was shattered in peaces by the destruction!" % ITEM_NAMES[self.type][self.identifier])
 		self.switchState(ITEM_STATE_BROKEN)
 
 	def playShatter(self):
