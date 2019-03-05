@@ -38,7 +38,9 @@ ITEM_GOOD_PENETRATION=2
 ITEM_GOOD_DESTRUCTION=3
 ITEM_GOOD_EXTRALIFE=4
 ITEM_GOOD_MAX=4
-
+ITEM_NAMES={}
+ITEM_NAMES[ITEM_TYPE_NASTY]={ITEM_NASTY_SHRINK:"Shrink", ITEM_NASTY_BLURRED:"Blurred", ITEM_NASTY_SLOWDOWN:"Slow down"}
+ITEM_NAMES[ITEM_TYPE_GOOD]={ITEM_GOOD_MEGATONPUNCH:"Megaton punch", ITEM_GOOD_BOOST:"Boost", ITEM_GOOD_PENETRATION:"Penetration", ITEM_GOOD_DESTRUCTION:"Destruction", ITEM_GOOD_EXTRALIFE:"Extra life"}
 PLAYER_DEFAULT_PUNCH_RANGE=4
 PLAYER_DEFAULT_PUNCH_SPEED=200
 
@@ -49,6 +51,8 @@ class ssAppMain():
 		pass
 	def initialize(self):
 		"""Initializes the app. returns True on success or False on failure. """
+		global appMain
+		appMain=self
 		self.thread_loadSounds=threading.Thread(target=self.loadSounds)
 		self.thread_loadSounds.setDaemon(True)
 		self.thread_loadSounds.start()
@@ -60,7 +64,23 @@ class ssAppMain():
 		self.music.stream("data/sounds/stream/bg.ogg")
 		self.music.volume=self.options.bgmVolume
 		self.numScreams=len(glob.glob("data/sounds/scream*.ogg"))
+		self.itemVoicePlayer=ItemVoicePlayer()
+		print(self.getItemVoicesList())
+		if not self.itemVoicePlayer.initialize(self.options.itemVoice): self.resetItemVoice()
 		return ret
+
+	def resetItemVoice(self):
+		voices=self.getItemVoicesList()
+		if len(voices)==0:
+			self.options.itemVoice=""
+		else:
+			self.options.itemVoice=voices[0]
+
+	def getItemVoicesList(self):
+		lst=[]
+		for elem in glob.glob("data/voices/*"):
+			if os.path.isdir(elem): lst.append(os.path.basename(elem))
+		return lst
 
 	def loadSounds(self):
 		"""Preload ingame sounds into memory. This is for enhancing performance while playing the game. """
@@ -178,7 +198,7 @@ class ssAppMain():
 	def gamePlay(self,mode):
 		self.wnd.say("%s, start!" % MODEVAL_2_STR[mode])
 		field=GameField()
-		field.initialize(self, 3,20,mode)
+		field.initialize(3,20,mode)
 		field.setLimits(self.options.leftPanningLimit,self.options.rightPanningLimit)
 		while(True):
 			if self.wnd.frameUpdate() is False: return GAME_RESULT_TERMINATE
@@ -222,8 +242,7 @@ class GameField():
 		self.Enemies=None
 		self.player=None
 
-	def initialize(self,appMain, x,y,mode):
-		self.appMain=appMain
+	def initialize(self, x,y,mode):
 		self.x=x
 		self.y=y
 		self.setModeHandler(mode)
@@ -237,11 +256,11 @@ class GameField():
 		self.enemies.append(None)
 		self.items
 		self.player=Player()
-		self.player.initialize(appMain,self)
+		self.player.initialize(self)
 		self.defeats=0
 		self.nextLevelup=2
 		self.levelupBonus=BonusCounter()
-		self.levelupBonus.initialize(self.appMain)
+		self.levelupBonus.initialize()
 		self.destructing=False
 		self.destructTimer=window.Timer()
 		self.logs=[]
@@ -253,7 +272,7 @@ class GameField():
 		elif mode==MODE_ARCADE:
 			self.modeHandler=ArcadeModeHandler()
 		#end if
-		self.modeHandler.initialize(self.appMain,self)
+		self.modeHandler.initialize(self)
 
 	def setLimits(self,lpLimit, rpLimit):
 		self.leftPanningLimit=lpLimit
@@ -283,7 +302,7 @@ class GameField():
 
 	def spawnEnemy(self,slot):
 		e=Enemy()
-		e.initialize(self.appMain,self,random.randint(0,self.x-1),random.randint(300,900),random.randint(1,self.appMain.getNumScreams()))
+		e.initialize(self,random.randint(0,self.x-1),random.randint(300,900),random.randint(1,appMain.getNumScreams()))
 		self.enemies[slot]=e
 
 	def logDefeat(self):
@@ -307,7 +326,7 @@ class GameField():
 		self.levelupBonus.start(int(self.player.hitPercentage*0.1))
 		self.level+=1
 		self.enemies.append(None)
-		self.nextLevelup=int(1+(self.level*self.level*0.3))
+		self.nextLevelup=int(1+(self.level*self.level*0.25))
 
 	def getCenterPosition(self):
 		if self.x%2==0:
@@ -336,12 +355,12 @@ class GameField():
 
 	def startDestruction(self):
 		if self.destructing: return
-		playOneShot(self.appMain.sounds["destructPowerup.ogg"])
+		playOneShot(appMain.sounds["destructPowerup.ogg"])
 		self.destructTimer.restart()
 		self.destructing=True
 
 	def performDestruction(self):
-		playOneShot(self.appMain.sounds["destruct.ogg"])
+		playOneShot(appMain.sounds["destruct.ogg"])
 		self.log("Activating destruction!")
 		for elem in self.enemies:
 			if elem is not None and elem.state==ENEMY_STATE_ALIVE: elem.hit()
@@ -357,8 +376,7 @@ class Player():
 		pass
 	def __del__(self):
 		pass
-	def initialize(self,appMain,field):
-		self.appMain=appMain
+	def initialize(self,field):
 		self.field=field
 		self.lives=3
 		self.x=field.getCenterPosition()
@@ -372,9 +390,9 @@ class Player():
 		self.hits=0
 		self.hitPercentage=0
 		self.consecutiveHitBonus=BonusCounter()
-		self.consecutiveHitBonus.initialize(self.appMain)
+		self.consecutiveHitBonus.initialize()
 		self.consecutiveMissUnbonus=BonusCounter()
-		self.consecutiveMissUnbonus.initialize(self.appMain)
+		self.consecutiveMissUnbonus.initialize()
 		self.consecutiveHits=0
 		self.consecutiveMisses=0
 		self.itemEffects=[]
@@ -383,10 +401,10 @@ class Player():
 	def frameUpdate(self):
 		self.consecutiveHitBonus.frameUpdate()
 		self.consecutiveMissUnbonus.frameUpdate()
-		if self.punching is False and self.appMain.wnd.keyPressed(window.K_SPACE): self.punchLaunch()
+		if self.punching is False and appMain.wnd.keyPressed(window.K_SPACE): self.punchLaunch()
 		if self.punching is True and self.punchTimer.elapsed>=self.punchSpeed: self.punchHit()
-		if self.x!=0 and self.appMain.wnd.keyPressed(window.K_LEFT): self.moveTo(self.x-1)
-		if self.x!=self.field.getX()-1 and self.appMain.wnd.keyPressed(window.K_RIGHT): self.moveTo(self.x+1)
+		if self.x!=0 and appMain.wnd.keyPressed(window.K_LEFT): self.moveTo(self.x-1)
+		if self.x!=self.field.getX()-1 and appMain.wnd.keyPressed(window.K_RIGHT): self.moveTo(self.x+1)
 		for elem in self.itemEffects[:]:
 			if not elem.frameUpdate(): self.itemEffects.remove(elem)
 
@@ -394,7 +412,7 @@ class Player():
 		self.punches+=1
 		self.punching=True
 		s=sound()
-		s.load(self.appMain.sounds["fists.ogg"])
+		s.load(appMain.sounds["fists.ogg"])
 		s.pan=self.field.getPan(self.x)
 		s.pitch=random.randint(90,110)
 		s.play()
@@ -463,33 +481,37 @@ class Player():
 	def processNastyItemHit(self,item):
 		if item.identifier==ITEM_NASTY_SHRINK:
 			e=ShrinkEffect()
-			e.initialize(self,self.appMain)
+			e.initialize(self)
 			e.activate()
 			self.itemEffects.append(e)
 			return
 		if item.identifier==ITEM_NASTY_BLURRED:
 			e=BlurredEffect()
-			e.initialize(self,self.appMain)
+			e.initialize(self)
 			e.activate()
 			self.itemEffects.append(e)
 			return
 		if item.identifier==ITEM_NASTY_SLOWDOWN:
 			e=SlowDownEffect()
-			e.initialize(self,self.appMain)
+			e.initialize(self)
 			e.activate()
 			self.itemEffects.append(e)
 			return
 
 	def processGoodItemHit(self,item):
 		if item.identifier==ITEM_GOOD_MEGATONPUNCH:
-			e=MegatonPunchEffect()
-			e.initialize(self,self.appMain)
-			e.activate()
-			self.itemEffects.append(e)
+			existing=self.findEffect("Megaton punch")
+			if existing is None:
+				e=MegatonPunchEffect()
+				e.initialize(self)
+				e.activate()
+				self.itemEffects.append(e)
+			else:
+				existing.extend(ITEM_BASE_EFFECT_TIME)
 			return
 		if item.identifier==ITEM_GOOD_BOOST:
 			e=BoostEffect()
-			e.initialize(self,self.appMain)
+			e.initialize(self)
 			e.activate()
 			self.itemEffects.append(e)
 			return
@@ -497,7 +519,7 @@ class Player():
 			existing=self.findEffect("Penetration")
 			if existing is None:
 				e=PenetrationEffect()
-				e.initialize(self,self.appMain)
+				e.initialize(self)
 				e.activate()
 				self.itemEffects.append(e)
 			else:
@@ -510,7 +532,7 @@ class Player():
 			self.lives+=1
 			self.field.log("Extra life! (now %d lives)" % self.lives)
 			s=sound()
-			s.load(self.appMain.sounds["extraLife.ogg"])
+			s.load(appMain.sounds["extraLife.ogg"])
 			s.pitch=60+(self.lives*10)
 			s.play()
 			return
@@ -542,7 +564,7 @@ class Player():
 	def moveTo(self,p):
 		self.x=p
 		s=sound()
-		s.load(self.appMain.sounds["change.ogg"])
+		s.load(appMain.sounds["change.ogg"])
 		s.pan=self.field.getPan(self.x)
 		s.play()
 
@@ -551,10 +573,10 @@ class Player():
 		self.field.log("You've been slapped! (%d HP remaining)" % self.lives)
 		s=sound()
 		if self.lives>0:
-			s.load(self.appMain.sounds["attacked.ogg"])
+			s.load(appMain.sounds["attacked.ogg"])
 			s.play()
 		else:
-			s.load(self.appMain.sounds["gameover.ogg"])
+			s.load(appMain.sounds["gameover.ogg"])
 			s.volume=-10
 			s.play()
 
@@ -575,8 +597,7 @@ class Enemy():
 		if self.scream is not None: self.scream.stop()
 		if self.bodyfall is not None: self.bodyfall.stop()
 
-	def initialize(self,appMain,field,x,speed,screamNum):
-		self.appMain=appMain
+	def initialize(self,field,x,speed,screamNum):
 		self.field=field
 		self.x=x
 		self.y=field.getY()
@@ -604,7 +625,7 @@ class Enemy():
 			num=random.randint(1,18)
 			if num!=self.lastStepNum: break
 		#end while
-		s.load(self.appMain.sounds["s_lf%d.ogg" % num])
+		s.load(appMain.sounds["s_lf%d.ogg" % num])
 		s.pan=self.field.getPan(self.x)
 		s.volume=self.field.getVolume(self.y)
 		s.pitch=random.randint(90,110)
@@ -619,9 +640,8 @@ class Enemy():
 
 	def hit(self):
 		s=sound()
-		s.load(self.appMain.sounds["hit.ogg"])
+		s.load(appMain.sounds["hit.ogg"])
 		s.pan=self.field.getPan(self.x)
-		s.volume=self.field.getVolume(self.y)
 		s.pitch=random.randint(70,130)
 		s.play()
 		self.playScream()
@@ -632,7 +652,7 @@ class Enemy():
 
 	def playScream(self):
 		self.scream=sound()
-		self.scream.load(self.appMain.sounds["scream%d.ogg" % self.screamNum])
+		self.scream.load(appMain.sounds["scream%d.ogg" % self.screamNum])
 		self.scream.pitch=random.randint(80,120)
 		self.scream.pan=self.field.getPan(self.x)
 		self.scream.volume=self.field.getVolume(self.y)
@@ -640,7 +660,7 @@ class Enemy():
 
 	def playBodyfall(self):
 		self.bodyfall=sound()
-		self.bodyfall.load(self.appMain.sounds["dead.ogg"])
+		self.bodyfall.load(appMain.sounds["dead.ogg"])
 		self.bodyfall.pitch=random.randint(70,130)
 		self.bodyfall.pan=self.field.getPan(self.x)
 		self.bodyfall.volume=self.field.getVolume(self.y)
@@ -651,8 +671,7 @@ class BonusCounter():
 		pass
 	def __del__(self):
 		pass
-	def initialize(self,appMain):
-		self.appMain=appMain
+	def initialize(self):
 		self.active=False
 		self.countTimer=window.Timer()
 		self.number=0
@@ -671,12 +690,12 @@ class BonusCounter():
 
 		if self.number>0:
 			self.current+=1
-			s.load(self.appMain.sounds["bonus.ogg"])
+			s.load(appMain.sounds["bonus.ogg"])
 			p=75+(self.current*5)
 			if p>300: p=300
 		else:
 			self.current-=1
-			s.load(self.appMain.sounds["unbonus.ogg"])
+			s.load(appMain.sounds["unbonus.ogg"])
 			p=150+(self.current*3)
 			if p<50: p=50
 		#end if
@@ -726,11 +745,12 @@ class GameOptions:
 		self.bgmVolume=-10
 		self.leftPanningLimit=-100
 		self.rightPanningLimit=100
-
+		self.itemVoice="chris"
 	def copyFrom(self,importer):
 		self.bgmVolume=importer.bgmVolume
 		self.leftPanningLimit=importer.leftPanningLimit
 		self.rightPanningLimit=importer.rightPanningLimit
+		self.itemVoice=importer.itemVoice
 
 	def load(self,filename):
 		if os.path.isfile(filename) is not True:
@@ -749,10 +769,11 @@ class GameOptions:
 		self.rightPanningLimit=int(values[2])
 		if self.rightPanningLimit>self.RIGHTPANNINGLIMIT_POSITIVE_BOUNDARY: self.rightPanningLimit=self.RIGHTPANNINGLIMIT_POSITIVE_BOUNDARY
 		if self.rightPanningLimit<self.RIGHTPANNINGLIMIT_NEGATIVE_BOUNDARY: self.rightPanningLimit=self.RIGHTPANNINGLIMIT_NEGATIVE_BOUNDARY
+		self.itemVoice=values[3]
 		return True
 
 	def save(self,filename):
-		s="%d#%d#%d" % (self.bgmVolume,self.leftPanningLimit,self.rightPanningLimit)
+		s="%d#%d#%d#%s" % (self.bgmVolume,self.leftPanningLimit,self.rightPanningLimit,self.itemVoice)
 		with open("data/options.dat", mode="w") as f:
 			f.write(s)
 
@@ -766,8 +787,7 @@ class Item():
 		if self.fallingBeep is not None: self.fallingBeep.stop()
 		if self.shatter is not None: self.shatter.stop()
 
-	def initialize(self,appMain,field,x,speed,type,identifier):
-		self.appMain=appMain
+	def initialize(self,field,x,speed,type,identifier):
 		self.field=field
 		self.x=x
 		self.y=field.getY()
@@ -806,16 +826,16 @@ class Item():
 
 	def hit(self):
 		s=sound()
-		s.load(self.appMain.sounds["hit.ogg"])
+		s.load(appMain.sounds["hit.ogg"])
 		s.pan=self.field.getPan(self.x)
-		s.volume=self.field.getVolume(self.y)
 		s.pitch=random.randint(70,130)
 		s.play()
 		s=sound()
-		s.load(self.appMain.sounds["itemget.ogg"])
+		s.load(appMain.sounds["itemget.ogg"])
 		s.pan=self.field.getPan(self.x)
 		s.volume=self.field.getVolume(self.y)
 		s.play()
+		appMain.itemVoicePlayer.play("get %s.ogg" % ITEM_NAMES[self.type][self.identifier], self.field.getPan(self.x))
 		self.fallingBeep.stop()
 		self.switchState(ITEM_STATE_SHOULDBEDELETED)
 
@@ -823,8 +843,9 @@ class Item():
 		self.switchState(ITEM_STATE_BROKEN)
 
 	def playShatter(self):
+		appMain.itemVoicePlayer.play("lose %s.ogg" % ITEM_NAMES[self.type][self.identifier], self.field.getPan(self.x))
 		self.shatter=sound()
-		self.shatter.load(self.appMain.sounds["item_destroy%d.ogg" % random.randint(1,2)])
+		self.shatter.load(appMain.sounds["item_destroy%d.ogg" % random.randint(1,2)])
 		self.shatter.pitch=random.randint(70,130)
 		self.shatter.pan=self.field.getPan(self.x)
 		self.shatter.volume=self.field.getVolume(self.y)
@@ -835,10 +856,8 @@ class NormalModeHandler(object):
 	def __init__(self):
 		pass
 	def __del__(self):
-		self.appMain=None
 		self.field=None
-	def initialize(self,appMain,field):
-		self.appMain=appMain
+	def initialize(self,field):
 		self.field=field
 	def frameUpdate(self):
 		pass
@@ -848,8 +867,8 @@ class ArcadeModeHandler(NormalModeHandler):
 		super().__init__()
 	def __del__(self):
 		super().__del__()
-	def initialize(self,appMain,field):
-		super().initialize(appMain,field)
+	def initialize(self,field):
+		super().initialize(field)
 		self.itemComingTimer=window.Timer()
 		self.resetItemComingTimer()
 		self.itemShowerTimer=window.Timer()
@@ -877,7 +896,7 @@ class ArcadeModeHandler(NormalModeHandler):
 		t=ITEM_TYPE_NASTY if random.randint(1,100)<=spd/10 else ITEM_TYPE_GOOD
 		ident=random.randint(0,ITEM_NASTY_MAX) if t==ITEM_TYPE_NASTY else random.randint(0,ITEM_GOOD_MAX)
 		i=Item()
-		i.initialize(self.appMain,self.field,random.randint(0,self.field.x-1),spd,t,ident)
+		i.initialize(self.field,random.randint(0,self.field.x-1),spd,t,ident)
 		self.field.items.append(i)
 		self.resetItemComingTimer()
 
@@ -930,7 +949,7 @@ class ItemEffectBase(object):
 		return True
 
 class ShrinkEffect(ItemEffectBase):
-	def initialize(self,player,appMain):
+	def initialize(self,player):
 		super().initialize(player,appMain.sounds["shrink.ogg"],appMain.sounds["shrinkFade.ogg"],"Shrink")
 
 	def activate(self):
@@ -942,7 +961,7 @@ class ShrinkEffect(ItemEffectBase):
 		self.player.setPunchRange(self.player.punchRange*2)
 
 class BlurredEffect(ItemEffectBase):
-	def initialize(self,player,appMain):
+	def initialize(self,player):
 		super().initialize(player,appMain.sounds["blurred.ogg"],appMain.sounds["blurredFade.ogg"],"Blurred")
 
 	def frameUpdate(self):
@@ -958,7 +977,7 @@ class BlurredEffect(ItemEffectBase):
 	#end frameUpdate
 
 class SlowDownEffect(ItemEffectBase):
-	def initialize(self,player,appMain):
+	def initialize(self,player):
 		super().initialize(player,appMain.sounds["slowDown.ogg"],appMain.sounds["slowDownFade.ogg"],"Slow down")
 
 	def activate(self):
@@ -970,7 +989,7 @@ class SlowDownEffect(ItemEffectBase):
 		self.player.setPunchSpeed(self.player.punchSpeed/2)
 
 class MegatonPunchEffect(ItemEffectBase):
-	def initialize(self,player,appMain):
+	def initialize(self,player):
 		super().initialize(player,appMain.sounds["megatonPunch.ogg"],appMain.sounds["megatonPunchFade.ogg"],"Megaton punch")
 
 	def activate(self):
@@ -982,7 +1001,7 @@ class MegatonPunchEffect(ItemEffectBase):
 		self.player.setPunchRange(self.player.punchRange/5)
 
 class BoostEffect(ItemEffectBase):
-	def initialize(self,player,appMain):
+	def initialize(self,player):
 		super().initialize(player,appMain.sounds["boost.ogg"],appMain.sounds["boostFade.ogg"],"Boost")
 
 	def activate(self):
@@ -994,7 +1013,7 @@ class BoostEffect(ItemEffectBase):
 		self.player.setPunchSpeed(self.player.punchSpeed*2)
 
 class PenetrationEffect(ItemEffectBase):
-	def initialize(self,player,appMain):
+	def initialize(self,player):
 		super().initialize(player,appMain.sounds["penetration.ogg"],appMain.sounds["penetrationFade.ogg"],"Penetration")
 
 	def activate(self):
@@ -1004,3 +1023,36 @@ class PenetrationEffect(ItemEffectBase):
 	def deactivate(self):
 		super().deactivate()
 		self.player.setPenetration(False)
+
+class ItemVoicePlayer():
+	def __init__(self):
+		pass
+	def __del__(self):
+		pass
+
+	def initialize(self,name):
+		self.active=False
+		if not os.path.exists("data/voices/%s" % name): return False
+		self.sounds={}
+		files=glob.glob("data/voices/%s/*.ogg" % name)
+		if len(files)==0: return False
+		for elem in files:
+			self.sounds[os.path.basename(elem)]=sound_lib.sample.Sample(elem)
+		self.name=name
+		self.active=True
+
+	def clear(self):
+		self.sounds={}
+
+	def test(self):
+		if not self.active: return
+		playOneShot(random.choice(list(self.sounds)))
+
+	def play(self,file, pan):
+		if not self.active: return
+		if file in self.sounds:
+			s=sound()
+			s.load(self.sounds[file])
+			s.pan=pan
+			s.play()
+
