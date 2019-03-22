@@ -1,73 +1,86 @@
 # -*- coding: utf-8 -*-
-#Screaming Strike main implementation
-#Copyright (C) 2019 Yukio Nozawa <personal@nyanchangames.com>
+# Screaming Strike main implementation
+# Copyright (C) 2019 Yukio Nozawa <personal@nyanchangames.com>
 import sys
 import random
 import glob
 import os
 import threading
 import datetime
+import gettext
 import window
 import sound_lib.sample
 from bgtsound import *
-#constants
-MODE_NORMAL=0
-MODE_ARCADE=1
-MODEVAL_2_STR=["Normal","Arcade"]
-GAME_RESULT_TERMINATE=0
-ENEMY_STATE_ALIVE=0
-ENEMY_STATE_SCREAMING=1
-ENEMY_STATE_FALLING=2
-ENEMY_STATE_SHOULDBEDELETED=3
-ITEM_STATE_ALIVE=0
-ITEM_STATE_BROKEN=1
-ITEM_STATE_SHOULDBEDELETED=2
+# constants
+MODE_NORMAL = 0
+MODE_ARCADE = 1
+MODEVAL_2_STR = ["Normal", "Arcade"]
+GAME_RESULT_TERMINATE = 0
+ENEMY_STATE_ALIVE = 0
+ENEMY_STATE_SCREAMING = 1
+ENEMY_STATE_FALLING = 2
+ENEMY_STATE_SHOULDBEDELETED = 3
+ITEM_STATE_ALIVE = 0
+ITEM_STATE_BROKEN = 1
+ITEM_STATE_SHOULDBEDELETED = 2
 
-ITEM_BASE_EFFECT_TIME=15000
-ITEM_TYPE_NASTY=0
-ITEM_TYPE_GOOD=1
+ITEM_BASE_EFFECT_TIME = 15000
+ITEM_TYPE_NASTY = 0
+ITEM_TYPE_GOOD = 1
 
-ITEM_NASTY_SHRINK=0
-ITEM_NASTY_BLURRED=1
-ITEM_NASTY_SLOWDOWN=2
-ITEM_NASTY_MAX=2
+ITEM_NASTY_SHRINK = 0
+ITEM_NASTY_BLURRED = 1
+ITEM_NASTY_SLOWDOWN = 2
+ITEM_NASTY_MAX = 2
 
-ITEM_GOOD_MEGATONPUNCH=0
-ITEM_GOOD_BOOST=1
-ITEM_GOOD_PENETRATION=2
-ITEM_GOOD_DESTRUCTION=3
-ITEM_GOOD_EXTRALIFE=4
-ITEM_GOOD_MAX=4
-ITEM_NAMES={}
-ITEM_NAMES[ITEM_TYPE_NASTY]={ITEM_NASTY_SHRINK:"Shrink", ITEM_NASTY_BLURRED:"Blurred", ITEM_NASTY_SLOWDOWN:"Slow down"}
-ITEM_NAMES[ITEM_TYPE_GOOD]={ITEM_GOOD_MEGATONPUNCH:"Megaton punch", ITEM_GOOD_BOOST:"Boost", ITEM_GOOD_PENETRATION:"Penetration", ITEM_GOOD_DESTRUCTION:"Destruction", ITEM_GOOD_EXTRALIFE:"Extra life"}
-PLAYER_DEFAULT_PUNCH_RANGE=4
-PLAYER_DEFAULT_PUNCH_SPEED=200
+ITEM_GOOD_MEGATONPUNCH = 0
+ITEM_GOOD_BOOST = 1
+ITEM_GOOD_PENETRATION = 2
+ITEM_GOOD_DESTRUCTION = 3
+ITEM_GOOD_EXTRALIFE = 4
+ITEM_GOOD_MAX = 4
+ITEM_NAMES = {}
+ITEM_NAMES[ITEM_TYPE_NASTY] = {ITEM_NASTY_SHRINK: "Shrink",
+    ITEM_NASTY_BLURRED: "Blurred", ITEM_NASTY_SLOWDOWN: "Slow down"}
+ITEM_NAMES[ITEM_TYPE_GOOD] = {ITEM_GOOD_MEGATONPUNCH: "Megaton punch", ITEM_GOOD_BOOST: "Boost",
+    ITEM_GOOD_PENETRATION: "Penetration", ITEM_GOOD_DESTRUCTION: "Destruction", ITEM_GOOD_EXTRALIFE: "Extra life"}
+PLAYER_DEFAULT_PUNCH_RANGE = 4
+PLAYER_DEFAULT_PUNCH_SPEED = 200
+
 
 class ssAppMain():
 	def __init__(self):
 		pass
+
 	def __del__(self):
 		pass
+
 	def initialize(self):
 		"""Initializes the app. returns True on success or False on failure. """
 		global appMain
-		appMain=self
-		self.thread_loadSounds=threading.Thread(target=self.loadSounds)
+		appMain = self
+		self.thread_loadSounds = threading.Thread(target=self.loadSounds)
 		self.thread_loadSounds.setDaemon(True)
 		self.thread_loadSounds.start()
-		self.options=GameOptions()
+		self.options = GameOptions()
 		self.options.initialize("data/options.dat")
-		self.wnd=window.singletonWindow()
-		ret=self.wnd.initialize(640,480,"Screaming Strike!")
-		self.music=sound()
+		self.initTranslation()
+		self.wnd = window.singletonWindow()
+		ret = self.wnd.initialize(640, 480, "Screaming Strike!")
+		self.music = sound()
 		self.music.stream("data/sounds/stream/bg.ogg")
-		self.music.volume=self.options.bgmVolume
-		self.numScreams=len(glob.glob("data/sounds/scream*.ogg"))
-		self.itemVoicePlayer=ItemVoicePlayer()
+		self.music.volume = self.options.bgmVolume
+		self.numScreams = len(glob.glob("data/sounds/scream*.ogg"))
+		self.itemVoicePlayer = ItemVoicePlayer()
 		print(self.getItemVoicesList())
-		if not self.itemVoicePlayer.initialize(self.options.itemVoice): self.resetItemVoice()
+		if not self.itemVoicePlayer.initialize(
+		    self.options.itemVoice): self.resetItemVoice()
 		return ret
+
+	def initTranslation(self):
+		self.translator = gettext.translation("messages", "locale", languages=[
+                                      "ja-JP"], fallback=True)
+		self.translator.install()
 
 	def resetItemVoice(self):
 		voices=self.getItemVoicesList()
@@ -88,7 +101,7 @@ class ssAppMain():
 		files=glob.glob("data/sounds/*.ogg")
 		for elem in files:
 			self.sounds[os.path.basename(elem)]=sound_lib.sample.Sample(elem)
-	#end loadSounds
+	# end loadSounds
 
 	def getNumScreams(self):
 		return self.numScreams
@@ -103,23 +116,23 @@ class ssAppMain():
 				introsound.fadeout(900)
 				self.wnd.wait(1000)
 				break
-			#end skipping with enter
-		#end while intro is playing
+			# end skipping with enter
+		# end while intro is playing
 		self.thread_loadSounds.join()
 		self.music.play_looped()
-	#end intro
+	# end intro
 
 	def mainmenu(self):
 		m=window.menu()
-		m.initialize(self.wnd,"Main menu. Use your up and down arrows to choose an option, then press enter to confirm","Normal mode#Arcade mode#Options#Exit",self.sounds["cursor.ogg"],self.sounds["confirm.ogg"],self.sounds["confirm.ogg"])
+		m.initialize(self.wnd,_("Main menu. Use your up and down arrows to choose an option, then press enter to confirm"),_("Normal mode#Arcade mode#Options#Exit"),self.sounds["cursor.ogg"],self.sounds["confirm.ogg"],self.sounds["confirm.ogg"])
 		m.open()
 		while(True):
 			if self.wnd.frameUpdate() is False: return False
 			if self.wnd.keyPressed(window.K_ESCAPE): return False
 			selected=m.frameUpdate()
 			if selected is not None and selected>=0: return selected
-		#end loop
-	#end mainmenu
+		# end loop
+	# end mainmenu
 
 	def run(self):
 		if self.intro() is False: return
@@ -129,7 +142,7 @@ class ssAppMain():
 			if selected==2:
 				if self.optionsMenu() is False: return
 				continue
-			#end if
+			# end if
 			result=self.gamePlay(selected)
 			if result==GAME_RESULT_TERMINATE: return
 			if self.resultScreen(result) is False: return
@@ -138,10 +151,10 @@ class ssAppMain():
 		backup=GameOptions()
 		backup.initialize(self.options)
 		m=window.menu()
-		m.initialize(self.wnd,"Options Menu, use your up and down arrows to choose an option, left and right arrows to change values, enter to save or escape to discard changes","",self.sounds["cursor.ogg"],self.sounds["confirm.ogg"],self.sounds["confirm.ogg"])
-		m.add("Background music volume")
-		m.add("Left panning limit")
-		m.add("Right panning limit.")
+		m.initialize(self.wnd,_("Options Menu, use your up and down arrows to choose an option, left and right arrows to change values, enter to save or escape to discard changes"),"",self.sounds["cursor.ogg"],self.sounds["confirm.ogg"],self.sounds["confirm.ogg"])
+		m.add(_("Background music volume"))
+		m.add(_("Left panning limit"))
+		m.add(_("Right panning limit."))
 		m.open()
 		while(True):
 			if self.wnd.frameUpdate() is False: return False
@@ -152,12 +165,12 @@ class ssAppMain():
 			if ret==-1: 
 				self.options=GameOptions()
 				self.options.initialize(backup)
-				self.wnd.say("Changes discarded.")
+				self.wnd.say(_("Changes discarded."))
 				self.music.volume=self.options.bgmVolume
 				return True
-			#end if
+			# end if
 			if ret>=0:
-				self.wnd.say("Settings saved")
+				self.wnd.say(_("Settings saved"))
 				self.options.save("data/options.dat")
 				return True
 
@@ -170,7 +183,7 @@ class ssAppMain():
 			self.music.volume=self.options.bgmVolume
 			self.wnd.say("%d" % (abs(-30-self.options.bgmVolume)*0.5))
 			return
-		#end bgm volume
+		# end bgm volume
 		if cursor==1:#left panning limit
 			if direction==1 and self.options.leftPanningLimit==self.options.LEFTPANNINGLIMIT_POSITIVE_BOUNDARY: return
 			if direction==-1 and self.options.leftPanningLimit==self.options.LEFTPANNINGLIMIT_NEGATIVE_BOUNDARY: return
@@ -181,7 +194,7 @@ class ssAppMain():
 			s.pan=self.options.leftPanningLimit
 			s.play()
 			return
-	#end left panning limit
+	# end left panning limit
 		if cursor==2:#right panning limit
 			if direction==1 and self.options.rightPanningLimit==self.options.RIGHTPANNINGLIMIT_POSITIVE_BOUNDARY: return
 			if direction==-1 and self.options.rightPanningLimit==self.options.RIGHTPANNINGLIMIT_NEGATIVE_BOUNDARY: return
@@ -192,11 +205,11 @@ class ssAppMain():
 			s.pan=self.options.rightPanningLimit
 			s.play()
 		return
-		#end left panning limit
-	#end optionChange
+		# end left panning limit
+	# end optionChange
 
 	def gamePlay(self,mode):
-		self.wnd.say("%s, start!" % MODEVAL_2_STR[mode])
+		self.wnd.say(_("%(playmode)s, start!") % {"playmode": MODEVAL_2_STR[mode]})
 		field=GameField()
 		field.initialize(3,20,mode)
 		field.setLimits(self.options.leftPanningLimit,self.options.rightPanningLimit)
@@ -204,7 +217,7 @@ class ssAppMain():
 			if self.wnd.frameUpdate() is False: return GAME_RESULT_TERMINATE
 			if self.wnd.keyPressed(window.K_ESCAPE): return GAME_RESULT_TERMINATE
 			if field.frameUpdate() is False:break
-		#end while
+		# end while
 		field.clear()
 		if self.wnd.wait(2000)==False: return GAME_RESULT_TERMINATE
 		s=sound()
@@ -220,20 +233,20 @@ class ssAppMain():
 
 	def resultScreen(self,result):
 		m=window.menu()
-		m.initialize(self.wnd,"Game result","",self.sounds["cursor.ogg"],self.sounds["confirm.ogg"],self.sounds["confirm.ogg"])
-		m.add("Final score: %d" % result.score)
-		m.add("Punches: %d, hits: %d, accuracy: %.2f%%" % (result.punches, result.hits, result.hitPercentage))
+		m.initialize(self.wnd,_("Game result"),"",self.sounds["cursor.ogg"],self.sounds["confirm.ogg"],self.sounds["confirm.ogg"])
+		m.add(_("Final score: %(score)d") % {"score": result.score})
+		m.add(_("Punches: %(punches)d, hits: %(hits)d, accuracy: %(accuracy).2f%%") % {"punches": result.punches, "hits": result.hits, "accuracy": result.hitPercentage})
 		m.open()
 		while(True):
 			if self.wnd.frameUpdate() is False: return False
 			r=m.frameUpdate()
 			if r is not None:break
-		#end while
+		# end while
 		return True
 
 
 
-#end class ssAppMain
+# end class ssAppMain
 
 class GameField():
 	def __init__(self):
@@ -264,14 +277,14 @@ class GameField():
 		self.destructing=False
 		self.destructTimer=window.Timer()
 		self.logs=[]
-		self.log("Game started at %s!" % datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S"))
+		self.log(_("Game started at %(startedtime)s!") % {"startedtime": datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S")})
 
 	def setModeHandler(self,mode):
 		if mode==MODE_NORMAL:
 			self.modeHandler=NormalModeHandler()
 		elif mode==MODE_ARCADE:
 			self.modeHandler=ArcadeModeHandler()
-		#end if
+		# end if
 		self.modeHandler.initialize(self)
 
 	def setLimits(self,lpLimit, rpLimit):
@@ -282,19 +295,19 @@ class GameField():
 		if self.destructing:
 			if self.destructTimer.elapsed>=1800: self.performDestruction()
 			return True
-		#end if destruct
+		# end if destruct
 		self.player.frameUpdate()
 		if self.player.lives<=0:
-			self.log("Game over! Final score: %d" % self.player.score)
+			self.log(_("Game over! Final score: %(score)d") % {"score": self.player.score})
 			return False
-		#end if
+		# end if
 		self.modeHandler.frameUpdate()
 		self.levelupBonus.frameUpdate()
 		for i in range(self.level):
 			if self.enemies[i] is not None and self.enemies[i].state==ENEMY_STATE_SHOULDBEDELETED: self.enemies[i]=None
 			if self.enemies[i] is not None: self.enemies[i].frameUpdate()
 			if self.enemies[i] is None: self.spawnEnemy(i)
-		#end for
+		# end for
 		for elem in self.items[:]:
 			if elem is not None and elem.state==ITEM_STATE_SHOULDBEDELETED: self.items.remove(elem)
 			if elem is not None: elem.frameUpdate()
@@ -318,10 +331,10 @@ class GameField():
 
 	def levelup(self):
 		if self.player.lives>1:
-			self.log("Leveled up to %d! (Accuracy %.1f%%, with %d lives remaining)" % (self.level, self.player.hitPercentage, self.player.lives))
+			self.log(_("Leveled up to %(newlevel)! (Accuracy %(accuracy).1f%%, with %(lives)d lives remaining)") % {"newlevel": self.level, "accuracy": self.player.hitPercentage, "lives": self.player.lives})
 		else:
-			self.log("Leveled up to %d! (Accuracy %.1f%%, with %d life remaining)" % (self.level, self.player.hitPercentage, self.player.lives))
-	#end if 
+			self.log(_("Leveled up to %(newlevel)d! (Accuracy %(accuracy).1f%%, with %(lives)d life remaining)") % {"newlevel": self.level, "accuracy": self.player.hitPercentage, "lives": self.player.lives})
+	# end if 
 		self.player.addScore(self.player.hitPercentage*self.player.hitPercentage*self.level*self.player.lives*0.5)
 		self.levelupBonus.start(int(self.player.hitPercentage*0.1))
 		self.level+=1
@@ -361,15 +374,15 @@ class GameField():
 
 	def performDestruction(self):
 		playOneShot(appMain.sounds["destruct.ogg"])
-		self.log("Activating destruction!")
+		self.log(_("Activating destruction!"))
 		for elem in self.enemies:
 			if elem is not None and elem.state==ENEMY_STATE_ALIVE: elem.hit()
 			self.logDefeat()
 		for elem in self.items:
 			elem.destroy()
 		self.destructing=False
-		self.log("End destruction!")
-#end class GameField
+		self.log(_("End destruction!"))
+# end class GameField
 
 class Player():
 	def __init__(self):
@@ -432,8 +445,8 @@ class Player():
 					self.calcHitPercentage()#penetration would higher the percentage, but I don't care
 					self.field.logDefeat()
 					if not self.penetrate: break
-				#end if
-			#end for enemies
+				# end if
+			# end for enemies
 			if not self.penetrate and hit>0: break
 			for elem in self.field.items:
 				if elem.state==ITEM_STATE_ALIVE and self.x==elem.x and elem.y==pos:
@@ -445,11 +458,11 @@ class Player():
 					self.processConsecutiveMisses()
 					self.calcHitPercentage()
 					if not self.penetrate: break
-				#end if
-			#end for items
-		#end for range
+				# end if
+			# end for items
+		# end for range
 		if not hit: self.punchMiss()
-	#end punchHit
+	# end punchHit
 
 	def punchMiss(self):
 		self.consecutiveMisses+=1
@@ -458,18 +471,18 @@ class Player():
 
 	def processConsecutiveHits(self):
 		if self.consecutiveHits>5:
-			self.field.log("%d consecutive hits bonus!" % self.consecutiveHits)
+			self.field.log(_("%(hits)d consecutive hits bonus!") % {"hits": self.consecutiveHits})
 			self.addScore(self.consecutiveHits*self.consecutiveHits*self.field.level*self.field.level)
 			self.consecutiveHitBonus.start(self.consecutiveHits)
-		#end if
+		# end if
 		self.consecutiveHits=0
 
 	def processConsecutiveMisses(self):
 		if self.consecutiveMisses>5:
-			self.field.log("%d consecutive misses penalty!" % self.consecutiveMisses)
+			self.field.log(_("%(misses)d consecutive misses penalty!") % {"misses": self.consecutiveMisses})
 			self.addScore(self.consecutiveMisses*self.consecutiveMisses*self.field.level*self.field.level*-1)
 			self.consecutiveMissUnbonus.start(self.consecutiveMisses*-1)
-		#end if
+		# end if
 		self.consecutiveMisses=0
 
 	def processItemHit(self,item):
@@ -530,7 +543,7 @@ class Player():
 			return
 		if item.identifier==ITEM_GOOD_EXTRALIFE:
 			self.lives+=1
-			self.field.log("Extra life! (now %d lives)" % self.lives)
+			self.field.log(_("Extra life! (now %(lives)d lives)") % {"lives": self.lives})
 			s=sound()
 			s.load(appMain.sounds["extraLife.ogg"])
 			s.pitch=60+(self.lives*10)
@@ -544,19 +557,19 @@ class Player():
 
 	def setPunchRange(self,r):
 		previous=self.punchRange
-		self.field.log("The effective range of your Punch is now %d (from %d)" % (r,previous))
+		self.field.log(_("The effective range of your Punch is now %(range)d (from %(from)d)") % {"range": r, "from": previous})
 		self.punchRange=r
 
 	def setPunchSpeed(self,s):
 		previous=self.punchSpeed
-		self.field.log("The speed of your punch is now %d milliseconds (from %d)" % (s,previous))
+		self.field.log(_("The speed of your punch is now %(speed)d milliseconds (from %(from)d)") % {"speed": s, "from": previous})
 		self.punchSpeed=s
 
 	def setPenetration(self,p):
 		if p is True:
-			self.field.log("Your punches now penetrate enemies and items!")
+			self.field.log(_("Your punches now penetrate enemies and items!"))
 		else:
-			self.field.log("Your punches no longer penetrate enemies and items!")
+			self.field.log(_("Your punches no longer penetrate enemies and items!"))
 		self.penetration=p
 
 	def calcHitPercentage(self):
@@ -570,7 +583,7 @@ class Player():
 
 	def hit(self):
 		self.lives-=1
-		self.field.log("You've been slapped! (%d HP remaining)" % self.lives)
+		self.field.log(_("You've been slapped! (%(lives)d HP remaining)") % {"lives": self.lives})
 		s=sound()
 		if self.lives>0:
 			s.load(appMain.sounds["attacked.ogg"])
@@ -582,10 +595,10 @@ class Player():
 
 	def addScore(self,score):
 		self.score+=score
-		which="added"
-		if score<=0: which="subtracted"
-		self.field.log("Point: %.1f %s (%.1f)" % (score, which, self.score))
-#end class Player
+		which=_("added")
+		if score<=0: which=_("subtracted")
+		self.field.log(_("Point: %(added).1f %(changestr)s (%(total).1f)") % {"added": score, "changestr": which, "total": self.score})
+# end class Player
 
 class Enemy():
 	def __init__(self):
@@ -624,7 +637,7 @@ class Enemy():
 		while True:
 			num=random.randint(1,18)
 			if num!=self.lastStepNum: break
-		#end while
+		# end while
 		s.load(appMain.sounds["s_lf%d.ogg" % num])
 		s.pan=self.field.getPan(self.x)
 		s.volume=self.field.getVolume(self.y)
@@ -647,7 +660,7 @@ class Enemy():
 		self.playScream()
 		self.switchState(ENEMY_STATE_SCREAMING)
 		score=(1000-self.speed)*(self.y+1)*(0.5+(0.5*self.field.level))*0.1
-		self.field.log("Hit! (speed %d, distance %d)" % (900-self.speed, self.y))
+		self.field.log(_("Hit! (speed %(speed)d, distance %(distance)d)") % {"speed": 900-self.speed, "distance": self.y})
 		self.field.player.addScore(score)
 
 	def playScream(self):
@@ -698,7 +711,7 @@ class BonusCounter():
 			s.load(appMain.sounds["unbonus.ogg"])
 			p=150+(self.current*3)
 			if p<50: p=50
-		#end if
+		# end if
 		s.pitch=p
 		s.play()
 		if self.current==self.number:
@@ -759,7 +772,7 @@ class GameOptions:
 			return False
 		with open("data/options.dat", mode='r') as f:
 			values=f.read().split("#")
-		#end with
+		# end with
 		self.bgmVolume=int(values[0])
 		if self.bgmVolume<self.BGMVOLUME_NEGATIVE_BOUNDARY: self.bgmVolume=self.BGMVOLUME_NEGATIVE_BOUNDARY
 		if self.bgmVolume>self.BGMVOLUME_POSITIVE_BOUNDARY: self.bgmVolume=self.BGMVOLUME_POSITIVE_BOUNDARY
@@ -822,11 +835,11 @@ class Item():
 	def destroyCheck(self):
 		if self.y!=0: return False
 		self.switchState(ITEM_STATE_BROKEN)
-		self.field.log("A \"%s\" item fell on the ground and shattered in peaces!" % ITEM_NAMES[self.type][self.identifier])
+		self.field.log(_("A \"%(item)s\" item fell on the ground and shattered into peaces!") % {"item": ITEM_NAMES[self.type][self.identifier]})
 		return True
 
 	def hit(self):
-		self.field.log("Obtained a \"%s\" item!" % ITEM_NAMES[self.type][self.identifier])
+		self.field.log(_("Obtained a \"%(item)s\" item!") % {"item": ITEM_NAMES[self.type][self.identifier]})
 		s=sound()
 		s.load(appMain.sounds["hit.ogg"])
 		s.pan=self.field.getPan(self.x)
@@ -842,7 +855,7 @@ class Item():
 		self.switchState(ITEM_STATE_SHOULDBEDELETED)
 
 	def destroy(self):
-		self.field.log("A \"%s\" item was shattered in peaces by the destruction!" % ITEM_NAMES[self.type][self.identifier])
+		self.field.log(_("A \"%(item)s\" item was shattered into peaces by the destruction!") % {"item": ITEM_NAMES[self.type][self.identifier]})
 		self.switchState(ITEM_STATE_BROKEN)
 
 	def playShatter(self):
@@ -927,14 +940,14 @@ class ItemEffectBase(object):
 		s.play()
 		self.active=True
 		self.timer.restart()
-		self.player.field.log("A new \"%s\" effect is starting!" % self.name)
+		self.player.field.log(_("A new \"%(item)s\" effect is starting!") % {"item": self.name})
 
 	def deactivate(self):
 		s=sound()
 		s.load(self.offSound)
 		s.play()
 		self.active=False
-		self.player.field.log("One of your \"%s\" effects are ending!" % self.name)
+		self.player.field.log(_("One of your \"%(item)s\" effects is ending!") % {"item": self.name})
 
 	def extend(self,ms):
 		s=sound()
@@ -942,7 +955,7 @@ class ItemEffectBase(object):
 		s.pitch=130
 		s.play()
 		self.lasts+=ms
-		self.player.field.log("Your \"%s\" effect has been extended for %d milliseconds! (now %d)" % ( self.name, ms, self.lasts-self.timer.elapsed))
+		self.player.field.log(_("Your \"%(item)s\" effect has been extended for %(extended)d milliseconds! (now %(newtime)d)") %  {"item": self.name, "extended": ms, "newtime": self.lasts-self.timer.elapsed})
 
 	def frameUpdate(self):
 		if self.active is not True: return False
@@ -973,11 +986,11 @@ class BlurredEffect(ItemEffectBase):
 			while(True):
 				d=random.randint(0,self.player.field.getX()-1)
 				if d!=self.player.x: break
-			#end while
+			# end while
 			self.player.moveTo(d)
-		#whether to trigger blurring?
+		# whether to trigger blurring?
 		return True
-	#end frameUpdate
+	# end frameUpdate
 
 class SlowDownEffect(ItemEffectBase):
 	def initialize(self,player):

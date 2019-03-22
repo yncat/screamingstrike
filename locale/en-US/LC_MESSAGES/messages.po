@@ -1,0 +1,192 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the Falcon package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Falcon\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-03-22 22:51+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ssAppMain.py:127
+msgid ""
+"Main menu. Use your up and down arrows to choose an option, then press enter "
+"to confirm"
+msgstr ""
+
+#: ssAppMain.py:127
+msgid "Normal mode#Arcade mode#Options#Exit"
+msgstr ""
+
+#: ssAppMain.py:154
+msgid ""
+"Options Menu, use your up and down arrows to choose an option, left and "
+"right arrows to change values, enter to save or escape to discard changes"
+msgstr ""
+
+#: ssAppMain.py:155
+msgid "Background music volume"
+msgstr ""
+
+#: ssAppMain.py:156
+msgid "Left panning limit"
+msgstr ""
+
+#: ssAppMain.py:157
+msgid "Right panning limit."
+msgstr ""
+
+#: ssAppMain.py:168
+msgid "Changes discarded."
+msgstr ""
+
+#: ssAppMain.py:173
+msgid "Settings saved"
+msgstr ""
+
+#: ssAppMain.py:212
+#, python-format
+msgid "%(playmode)s, start!"
+msgstr ""
+
+#: ssAppMain.py:236
+msgid "Game result"
+msgstr ""
+
+#: ssAppMain.py:237
+#, python-format
+msgid "Final score: %(score)d"
+msgstr ""
+
+#: ssAppMain.py:238
+#, python-format
+msgid "Punches: %(punches)d, hits: %(hits)d, accuracy: %(accuracy).2f%%"
+msgstr ""
+
+#: ssAppMain.py:280
+#, python-format
+msgid "Game started at %(startedtime)s!"
+msgstr ""
+
+#: ssAppMain.py:301
+#, python-format
+msgid "Game over! Final score: %(score)d"
+msgstr ""
+
+#: ssAppMain.py:334
+msgid ""
+"Leveled up to %(newlevel)! (Accuracy %(accuracy).1f%%, with %(lives)d lives "
+"remaining)"
+msgstr ""
+
+#: ssAppMain.py:336
+#, python-format
+msgid ""
+"Leveled up to %(newlevel)d! (Accuracy %(accuracy).1f%%, with %(lives)d life "
+"remaining)"
+msgstr ""
+
+#: ssAppMain.py:377
+msgid "Activating destruction!"
+msgstr ""
+
+#: ssAppMain.py:384
+msgid "End destruction!"
+msgstr ""
+
+#: ssAppMain.py:474
+#, python-format
+msgid "%(hits)d consecutive hits bonus!"
+msgstr ""
+
+#: ssAppMain.py:482
+#, python-format
+msgid "%(misses)d consecutive misses penalty!"
+msgstr ""
+
+#: ssAppMain.py:546
+#, python-format
+msgid "Extra life! (now %(lives)d lives)"
+msgstr ""
+
+#: ssAppMain.py:560
+#, python-format
+msgid "The effective range of your Punch is now %(range)d (from %(from)d)"
+msgstr ""
+
+#: ssAppMain.py:565
+#, python-format
+msgid "The speed of your punch is now %(speed)d milliseconds (from %(from)d)"
+msgstr ""
+
+#: ssAppMain.py:570
+msgid "Your punches now penetrate enemies and items!"
+msgstr ""
+
+#: ssAppMain.py:572
+msgid "Your punches no longer penetrate enemies and items!"
+msgstr ""
+
+#: ssAppMain.py:586
+#, python-format
+msgid "You've been slapped! (%(lives)d HP remaining)"
+msgstr ""
+
+#: ssAppMain.py:598
+msgid "added"
+msgstr ""
+
+#: ssAppMain.py:599
+msgid "subtracted"
+msgstr ""
+
+#: ssAppMain.py:600
+#, python-format
+msgid "Point: %(added).1f %(changestr)s (%(total).1f)"
+msgstr ""
+
+#: ssAppMain.py:663
+#, python-format
+msgid "Hit! (speed %(speed)d, distance %(distance)d)"
+msgstr ""
+
+#: ssAppMain.py:838
+#, python-format
+msgid "A \"%(item)s\" item fell on the ground and shattered into peaces!"
+msgstr ""
+
+#: ssAppMain.py:842
+#, python-format
+msgid "Obtained a \"%(item)s\" item!"
+msgstr ""
+
+#: ssAppMain.py:858
+#, python-format
+msgid "A \"%(item)s\" item was shattered into peaces by the destruction!"
+msgstr ""
+
+#: ssAppMain.py:943
+#, python-format
+msgid "A new \"%(item)s\" effect is starting!"
+msgstr ""
+
+#: ssAppMain.py:950
+#, python-format
+msgid "One of your \"%(item)s\" effects is ending!"
+msgstr ""
+
+#: ssAppMain.py:958
+#, python-format
+msgid ""
+"Your \"%(item)s\" effect has been extended for %(extended)d milliseconds! "
+"(now %(newtime)d)"
+msgstr ""
