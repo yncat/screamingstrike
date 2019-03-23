@@ -2,3 +2,5 @@
 result.txt
 data/options.dat
 *.po~
+ss.build/
+ss.dist/
