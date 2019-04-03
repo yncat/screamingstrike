@@ -11,6 +11,7 @@ if platform.system() == 'Windows':
 	#import sapi4
 
 if platform.system() == 'Darwin':
+	from . import nsSpeechSynthesizer
 	from . import voiceover
 
 if platform.system() == 'Linux':
