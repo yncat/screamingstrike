@@ -13,6 +13,7 @@ import sound_lib.sample
 from bgtsound import *
 import bonusCounter
 import enemy
+import gameOptions
 import globalVars
 import player
 
@@ -60,8 +61,10 @@ class ssAppMain():
 		self.thread_loadSounds = threading.Thread(target=self.loadSounds)
 		self.thread_loadSounds.setDaemon(True)
 		self.thread_loadSounds.start()
-		self.options = GameOptions()
+		self.options = gameOptions.GameOptions()
 		self.options.initialize("data/options.dat")
+		self.itemVoices=self.getItemVoicesList()
+		self.locales=self.getLocalesList()
 		self.initTranslation()
 		self.wnd = window.singletonWindow()
 		ret = self.wnd.initialize(640, 480, "Screaming Strike!")
@@ -69,27 +72,27 @@ class ssAppMain():
 		self.music.stream("data/sounds/stream/bg.ogg")
 		self.music.volume = self.options.bgmVolume
 		self.numScreams = len(glob.glob("data/sounds/scream*.ogg"))
-		self.itemVoicePlayer = ItemVoicePlayer()
-		print(self.getItemVoicesList())
-		if not self.itemVoicePlayer.initialize(
-		    self.options.itemVoice): self.resetItemVoice()
 		return ret
 
 	def initTranslation(self):
-		self.translator = gettext.translation("messages", "locale", languages=[
-                                      "ja-JP"], fallback=True)
+		self.translator = gettext.translation("messages", "locale", languages=[self.options.language], fallback=True)
 		self.translator.install()
 
 	def resetItemVoice(self):
-		voices=self.getItemVoicesList()
-		if len(voices)==0:
+		if len(self.itemVoices)==0:
 			self.options.itemVoice=""
 		else:
-			self.options.itemVoice=voices[0]
+			self.options.itemVoice=self.itemVoices[0]
 
 	def getItemVoicesList(self):
 		lst=[]
 		for elem in glob.glob("data/voices/*"):
+			if os.path.isdir(elem): lst.append(os.path.basename(elem))
+		return lst
+
+	def getLocalesList(self):
+		lst=[]
+		for elem in glob.glob("locale/*"):
 			if os.path.isdir(elem): lst.append(os.path.basename(elem))
 		return lst
 
@@ -146,13 +149,15 @@ class ssAppMain():
 			if self.resultScreen(result) is False: return
 
 	def optionsMenu(self):
-		backup=GameOptions()
+		backup=gameOptions.GameOptions()
 		backup.initialize(self.options)
 		m=window.menu()
 		m.initialize(self.wnd,_("Options Menu, use your up and down arrows to choose an option, left and right arrows to change values, enter to save or escape to discard changes"),"",self.sounds["cursor.ogg"],self.sounds["confirm.ogg"],self.sounds["confirm.ogg"])
 		m.add(_("Background music volume"))
 		m.add(_("Left panning limit"))
 		m.add(_("Right panning limit."))
+		m.add(_("Item announcement voice"))
+		m.add(_("Language (restart to apply)"))
 		m.open()
 		while(True):
 			if self.wnd.frameUpdate() is False: return False
@@ -161,7 +166,7 @@ class ssAppMain():
 			if self.wnd.keyPressed(window.K_RIGHT): self.optionChange(m.getCursorPos(),1)
 			if ret is None: continue
 			if ret==-1: 
-				self.options=GameOptions()
+				self.options=gameOptions.GameOptions()
 				self.options.initialize(backup)
 				self.wnd.say(_("Changes discarded."))
 				self.music.volume=self.options.bgmVolume
@@ -202,14 +207,46 @@ class ssAppMain():
 			s.load(self.sounds["change.ogg"])
 			s.pan=self.options.rightPanningLimit
 			s.play()
-		return
+			return
 		# end left panning limit
+		if cursor==3:#item voice
+			c=0
+			for n in self.itemVoices:#which are we selecting?
+				if self.options.itemVoice==n: break
+				c+=1
+			#detected the current option
+			if direction==1 and c==len(self.itemVoices)-1: return#clipping
+			if direction==-1 and c==0: return#clipping
+			c+=direction
+			pl = ItemVoicePlayer()
+			if not pl.initialize(self.itemVoices[c]):
+				self.wnd.say(_("%(voice)s cannot be loaded.") % {"voice": self.itemVoices[c]})
+				return
+			self.wnd.say(self.itemVoices[c])
+			pl.test()
+			self.options.itemVoice=self.itemVoices[c]
+			return
+		#end item voices
+		if cursor==4:#language
+			c=0
+			for n in self.locales:#which are we selecting?
+				if n==self.options.language: break
+				c+=1
+			#detected the current option
+			if direction==1 and c==len(self.locales)-1: return#clipping
+			if direction==-1 and c==0: return#clipping
+			c+=direction
+			self.wnd.say(self.locales[c])
+			self.options.language=self.locales[c]
+			return
+		#end item voices
+
 	# end optionChange
 
 	def gamePlay(self,mode):
 		self.wnd.say(_("%(playmode)s, start!") % {"playmode": MODEVAL_2_STR[mode]})
 		field=GameField()
-		field.initialize(3,20,mode)
+		field.initialize(3,20,mode,self.options.itemVoice)
 		field.setLimits(self.options.leftPanningLimit,self.options.rightPanningLimit)
 		while(True):
 			if self.wnd.frameUpdate() is False: return GAME_RESULT_TERMINATE
@@ -253,7 +290,7 @@ class GameField():
 		self.Enemies=None
 		self.player=None
 
-	def initialize(self, x,y,mode):
+	def initialize(self, x,y,mode, voice):
 		self.x=x
 		self.y=y
 		self.setModeHandler(mode)
@@ -274,6 +311,10 @@ class GameField():
 		self.levelupBonus.initialize()
 		self.destructing=False
 		self.destructTimer=window.Timer()
+		self.itemVoicePlayer=ItemVoicePlayer()
+		self.itemVoicePlayer.initialize(voice)
+
+
 		self.logs=[]
 		self.log(_("Game started at %(startedtime)s!") % {"startedtime": datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S")})
 
@@ -395,62 +436,6 @@ class GameResult:
 		self.punches=field.player.punches
 		self.level=field.level
 
-class GameOptions:
-	def __init__(self):
-		self.BGMVOLUME_NEGATIVE_BOUNDARY=-30
-		self.BGMVOLUME_POSITIVE_BOUNDARY=0
-		self.LEFTPANNINGLIMIT_NEGATIVE_BOUNDARY=-100
-		self.LEFTPANNINGLIMIT_POSITIVE_BOUNDARY=-20
-		self.RIGHTPANNINGLIMIT_NEGATIVE_BOUNDARY=20
-		self.RIGHTPANNINGLIMIT_POSITIVE_BOUNDARY=100
-
-	def __del__(self):
-		pass
-
-	def initialize(self,importer):
-		if isinstance(importer,GameOptions):
-			self.copyFrom(importer)
-		elif isinstance(importer,str):
-			self.load(importer)
-		else:
-			self.setDefault()
-
-	def setDefault(self):
-		self.bgmVolume=-10
-		self.leftPanningLimit=-100
-		self.rightPanningLimit=100
-		self.itemVoice="chris"
-	def copyFrom(self,importer):
-		self.bgmVolume=importer.bgmVolume
-		self.leftPanningLimit=importer.leftPanningLimit
-		self.rightPanningLimit=importer.rightPanningLimit
-		self.itemVoice=importer.itemVoice
-
-	def load(self,filename):
-		if os.path.isfile(filename) is not True:
-			self.setDefault()
-			self.save("data/options.dat")
-			return False
-		with open("data/options.dat", mode='r') as f:
-			values=f.read().split("#")
-		# end with
-		self.bgmVolume=int(values[0])
-		if self.bgmVolume<self.BGMVOLUME_NEGATIVE_BOUNDARY: self.bgmVolume=self.BGMVOLUME_NEGATIVE_BOUNDARY
-		if self.bgmVolume>self.BGMVOLUME_POSITIVE_BOUNDARY: self.bgmVolume=self.BGMVOLUME_POSITIVE_BOUNDARY
-		self.leftPanningLimit=int(values[1])
-		if self.leftPanningLimit<self.LEFTPANNINGLIMIT_NEGATIVE_BOUNDARY: self.leftPanningLimit=self.LEFTPANNINGLIMIT_NEGATIVE_BOUNDARY
-		if self.leftPanningLimit>self.LEFTPANNINGLIMIT_POSITIVE_BOUNDARY: self.leftPanningLimit=self.LEFTPANNINGLIMIT_POSITIVE_BOUNDARY
-		self.rightPanningLimit=int(values[2])
-		if self.rightPanningLimit>self.RIGHTPANNINGLIMIT_POSITIVE_BOUNDARY: self.rightPanningLimit=self.RIGHTPANNINGLIMIT_POSITIVE_BOUNDARY
-		if self.rightPanningLimit<self.RIGHTPANNINGLIMIT_NEGATIVE_BOUNDARY: self.rightPanningLimit=self.RIGHTPANNINGLIMIT_NEGATIVE_BOUNDARY
-		self.itemVoice=values[3]
-		return True
-
-	def save(self,filename):
-		s="%d#%d#%d#%s" % (self.bgmVolume,self.leftPanningLimit,self.rightPanningLimit,self.itemVoice)
-		with open("data/options.dat", mode="w") as f:
-			f.write(s)
-
 class Item():
 	def __init__(self):
 		self.fallingBeep=None
@@ -511,7 +496,7 @@ class Item():
 		s.pan=self.field.getPan(self.x)
 		s.volume=self.field.getVolume(self.y)
 		s.play()
-		globalVars.appMain.itemVoicePlayer.play("get %s.ogg" % ITEM_NAMES[self.type][self.identifier], self.field.getPan(self.x))
+		self.field.itemVoicePlayer.play("get %s.ogg" % ITEM_NAMES[self.type][self.identifier], self.field.getPan(self.x))
 		self.fallingBeep.stop()
 		self.switchState(ITEM_STATE_SHOULDBEDELETED)
 
@@ -520,7 +505,7 @@ class Item():
 		self.switchState(ITEM_STATE_BROKEN)
 
 	def playShatter(self):
-		globalVars.appMain.itemVoicePlayer.play("lose %s.ogg" % ITEM_NAMES[self.type][self.identifier], self.field.getPan(self.x))
+		self.field.itemVoicePlayer.play("lose %s.ogg" % ITEM_NAMES[self.type][self.identifier], self.field.getPan(self.x))
 		self.shatter=sound()
 		self.shatter.load(globalVars.appMain.sounds["item_destroy%d.ogg" % random.randint(1,2)])
 		self.shatter.pitch=random.randint(70,130)

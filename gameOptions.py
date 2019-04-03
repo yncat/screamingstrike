@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 # Screaming Strike game options handler
 # Copyright (C) 2019 Yukio Nozawa <personal@nyanchangames.com>
-import configParser
 import locale
-
+import os
 class GameOptions:
 	def __init__(self):
 		self.BGMVOLUME_NEGATIVE_BOUNDARY=-30
@@ -29,13 +28,14 @@ class GameOptions:
 		self.leftPanningLimit=-100
 		self.rightPanningLimit=100
 		self.itemVoice="chris"
-		l=locale.getdefaultlocale()
+		self.language=locale.getdefaultlocale()[0]
 
 	def copyFrom(self,importer):
 		self.bgmVolume=importer.bgmVolume
 		self.leftPanningLimit=importer.leftPanningLimit
 		self.rightPanningLimit=importer.rightPanningLimit
 		self.itemVoice=importer.itemVoice
+		self.language=importer.language
 
 	def load(self,filename):
 		if os.path.isfile(filename) is not True:
@@ -45,6 +45,7 @@ class GameOptions:
 		with open("data/options.dat", mode='r') as f:
 			values=f.read().split("#")
 		# end with
+		numValues=len(values)
 		self.bgmVolume=int(values[0])
 		if self.bgmVolume<self.BGMVOLUME_NEGATIVE_BOUNDARY: self.bgmVolume=self.BGMVOLUME_NEGATIVE_BOUNDARY
 		if self.bgmVolume>self.BGMVOLUME_POSITIVE_BOUNDARY: self.bgmVolume=self.BGMVOLUME_POSITIVE_BOUNDARY
@@ -55,9 +56,10 @@ class GameOptions:
 		if self.rightPanningLimit>self.RIGHTPANNINGLIMIT_POSITIVE_BOUNDARY: self.rightPanningLimit=self.RIGHTPANNINGLIMIT_POSITIVE_BOUNDARY
 		if self.rightPanningLimit<self.RIGHTPANNINGLIMIT_NEGATIVE_BOUNDARY: self.rightPanningLimit=self.RIGHTPANNINGLIMIT_NEGATIVE_BOUNDARY
 		self.itemVoice=values[3]
+		self.language=values[4] if numValues>4 else locale.getdefaultlocale()[0]
 		return True
 
 	def save(self,filename):
-		s="%d#%d#%d#%s" % (self.bgmVolume,self.leftPanningLimit,self.rightPanningLimit,self.itemVoice)
+		s="%d#%d#%d#%s#%s" % (self.bgmVolume,self.leftPanningLimit,self.rightPanningLimit,self.itemVoice, self.language)
 		with open("data/options.dat", mode="w") as f:
 			f.write(s)
