@@ -4,10 +4,12 @@
 
 from copy import copy
 import pygame
+print("pygame OK")
 import accessible_output2.outputs.auto
 from pygame.locals import *
 from dialog import *
 from bgtsound import *
+print("all imports OK")
 class singletonWindow():
 	"""Just a pygame window wrapper. As the name implies, you mustn't create multiple singletonWindow's in your game. """
 	def __init__(self):
@@ -17,7 +19,9 @@ class singletonWindow():
 
 	def initialize(self,x,y,ttl):
 		"""Initializes the game window. Returns True on success or False for failure. """
+		print("before initing pygame")
 		pygame.init()
+		print("pygame init OK")
 		self.clock=pygame.time.Clock()
 		self.screen = pygame.display.set_mode((x, y))
 		pygame.display.set_caption(ttl)
