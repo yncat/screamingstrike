@@ -22,7 +22,7 @@ print("Building %s. This will take several minutes. Please wait..." % PROJECT)
 if win:
 	cmd="nuitka --follow-imports --windows-disable-console --standalone --mingw64 --include-plugin-directory=sound_lib/lib/x64 %s.py" % (PROJECT)
 else:
-	cmd="python3 -m nuitka --follow-imports --standalone %s.py" % (PROJECT)
+	cmd="python3 -m nuitka --follow-imports --standalone --include-plugin-directory=sound_lib/lib/x64 %s.py" % (PROJECT)
 common.run(cmd, sh=True)
 if win:
 	print("Copying pythoncom37.dll...")
