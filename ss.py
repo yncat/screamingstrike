@@ -6,7 +6,7 @@ import sys
 from ssAppMain import *
 
 def main():
-	sys.stderr = open('data/errorLog.txt', 'w')
+#	sys.stderr = open('data/errorLog.txt', 'w') # uncomment this line when releasing
 	app=ssAppMain()
 	app.initialize()
 	app.run()
