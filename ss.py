@@ -2,9 +2,11 @@
 #Screaming Strike startup file
 #Copyright (C) 2019 Yukio Nozawa <personal@nyanchangames.com>
 #See SsAppMain.py for application entry point
+import sys
 from ssAppMain import *
 
 def main():
+	sys.stderr = open('data/errorLog.txt', 'w')
 	app=ssAppMain()
 	app.initialize()
 	app.run()
