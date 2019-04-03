@@ -3,7 +3,7 @@ from __future__ import absolute_import
 from .base import Output
 from AppKit import NSSpeechSynthesizer
 
-class NSSpeechSynthesizer(Output):
+class NSSpeechSynth(Output):
 
 	"""Speech output supporting the Apple built-in tts, which is independent from voiceover."""
 
@@ -20,4 +20,4 @@ class NSSpeechSynthesizer(Output):
 	def is_active(self):
 		return True
 
-output_class = NSSpeechSynthesizer
+output_class = NSSpeechSynth
