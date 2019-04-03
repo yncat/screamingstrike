@@ -11,6 +11,8 @@ win=True
 if platform.system() == 'Darwin':
 	win=False
 
+print("win=%s, cwd=%s" % (win, os.getcwd()))
+sys.exit()
 PROJECT = "ss"  # Change this line accordingly
 PYTHON_PATH="C:/python37"#Windows only
 
