@@ -12,7 +12,6 @@ if platform.system() == 'Darwin':
 	win=False
 
 print("win=%s, cwd=%s" % (win, os.getcwd()))
-sys.exit()
 PROJECT = "ss"  # Change this line accordingly
 PYTHON_PATH="C:/python37"#Windows only
 
@@ -25,7 +24,7 @@ if win:
 	cmd="nuitka --follow-imports --windows-disable-console --standalone --mingw64 --include-plugin-directory=sound_lib/lib/x64 %s.py" % (PROJECT)
 else:
 	cmd="python3 -m nuitka --follow-imports --standalone --include-plugin-directory=sound_lib/lib/x64 %s.py" % (PROJECT)
-common.run(cmd, sh=True)
+common.run(cmd, sh=win)#win uses shell=true and mac doesn't
 if win:
 	print("Copying pythoncom37.dll...")
 	shutil.copyfile("%s/Lib/site-packages/pywin32_system32/pythoncom37.dll" % (PYTHON_PATH), "%s.dist/pythoncom37.dll" % PROJECT)
