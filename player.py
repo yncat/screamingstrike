@@ -4,8 +4,10 @@
 from bgtsound import *
 import random
 import bonusCounter
-import globalVars
 import enemy
+import globalVars
+import itemConstants
+import itemEffects
 import window
 
 DEFAULT_PUNCH_RANGE = 4
@@ -76,7 +78,7 @@ class Player():
 			# end for enemies
 			if not self.penetrate and hit>0: break
 			for elem in self.field.items:
-				if elem.state==ITEM_STATE_ALIVE and self.x==elem.x and elem.y==pos:
+				if elem.state==itemConstants.STATE_ALIVE and self.x==elem.x and elem.y==pos:
 					elem.hit()
 					self.processItemHit(elem)
 					hit=True
@@ -112,63 +114,63 @@ class Player():
 		# end if
 		self.consecutiveMisses=0
 
-	def processItemHit(self,item):
-		if item.type==ITEM_TYPE_NASTY:
-			self.processNastyItemHit(item)
+	def processItemHit(self,it):
+		if it.type==itemConstants.TYPE_NASTY:
+			self.processNastyItemHit(it)
 		else:
-			self.processGoodItemHit(item)
+			self.processGoodItemHit(it)
 
-	def processNastyItemHit(self,item):
-		if item.identifier==ITEM_NASTY_SHRINK:
-			e=ShrinkEffect()
+	def processNastyItemHit(self,it):
+		if it.identifier==itemConstants.NASTY_SHRINK:
+			e=itemEffects.ShrinkEffect()
 			e.initialize(self)
 			e.activate()
 			self.itemEffects.append(e)
 			return
-		if item.identifier==ITEM_NASTY_BLURRED:
-			e=BlurredEffect()
+		if it.identifier==itemConstants.NASTY_BLURRED:
+			e=itemEffects.BlurredEffect()
 			e.initialize(self)
 			e.activate()
 			self.itemEffects.append(e)
 			return
-		if item.identifier==ITEM_NASTY_SLOWDOWN:
-			e=SlowDownEffect()
+		if it.identifier==itemConstants.NASTY_SLOWDOWN:
+			e=itemEffects.SlowDownEffect()
 			e.initialize(self)
 			e.activate()
 			self.itemEffects.append(e)
 			return
 
-	def processGoodItemHit(self,item):
-		if item.identifier==ITEM_GOOD_MEGATONPUNCH:
+	def processGoodItemHit(self,it):
+		if it.identifier==itemConstants.GOOD_MEGATONPUNCH:
 			existing=self.findEffect("Megaton punch")
 			if existing is None:
-				e=MegatonPunchEffect()
+				e=itemEffects.MegatonPunchEffect()
 				e.initialize(self)
 				e.activate()
 				self.itemEffects.append(e)
 			else:
-				existing.extend(ITEM_BASE_EFFECT_TIME)
+				existing.extend(itemConstants.BASE_EFFECT_TIME)
 			return
-		if item.identifier==ITEM_GOOD_BOOST:
-			e=BoostEffect()
+		if it.identifier==itemConstants.GOOD_BOOST:
+			e=itemEffects.BoostEffect()
 			e.initialize(self)
 			e.activate()
 			self.itemEffects.append(e)
 			return
-		if item.identifier==ITEM_GOOD_PENETRATION:
+		if it.identifier==itemConstants.GOOD_PENETRATION:
 			existing=self.findEffect("Penetration")
 			if existing is None:
-				e=PenetrationEffect()
+				e=itemEffect.PenetrationEffect()
 				e.initialize(self)
 				e.activate()
 				self.itemEffects.append(e)
 			else:
-				existing.extend(ITEM_BASE_EFFECT_TIME)
+				existing.extend(itemConstants.BASE_EFFECT_TIME)
 			return
-		if item.identifier==ITEM_GOOD_DESTRUCTION:
+		if it.identifier==itemConstants.GOOD_DESTRUCTION:
 			self.field.startDestruction()
 			return
-		if item.identifier==ITEM_GOOD_EXTRALIFE:
+		if it.identifier==itemConstants.GOOD_EXTRALIFE:
 			self.lives+=1
 			self.field.log(_("Extra life! (now %(lives)d lives)") % {"lives": self.lives})
 			s=sound()

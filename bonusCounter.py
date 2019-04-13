@@ -35,7 +35,7 @@ class BonusCounter():
 			if p>300: p=300
 		else:
 			self.current-=1
-			s.load(appMain.sounds["unbonus.ogg"])
+			s.load(globalVars.appMain.sounds["unbonus.ogg"])
 			p=150+(self.current*3)
 			if p<50: p=50
 		# end if

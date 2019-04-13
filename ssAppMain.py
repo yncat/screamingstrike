@@ -15,6 +15,8 @@ import bonusCounter
 import enemy
 import gameOptions
 import globalVars
+import item
+import itemConstants
 import player
 
 # constants
@@ -22,30 +24,6 @@ MODE_NORMAL = 0
 MODE_ARCADE = 1
 MODEVAL_2_STR = ["Normal", "Arcade"]
 GAME_RESULT_TERMINATE = 0
-ITEM_STATE_ALIVE = 0
-ITEM_STATE_BROKEN = 1
-ITEM_STATE_SHOULDBEDELETED = 2
-
-ITEM_BASE_EFFECT_TIME = 15000
-ITEM_TYPE_NASTY = 0
-ITEM_TYPE_GOOD = 1
-
-ITEM_NASTY_SHRINK = 0
-ITEM_NASTY_BLURRED = 1
-ITEM_NASTY_SLOWDOWN = 2
-ITEM_NASTY_MAX = 2
-
-ITEM_GOOD_MEGATONPUNCH = 0
-ITEM_GOOD_BOOST = 1
-ITEM_GOOD_PENETRATION = 2
-ITEM_GOOD_DESTRUCTION = 3
-ITEM_GOOD_EXTRALIFE = 4
-ITEM_GOOD_MAX = 4
-ITEM_NAMES = {}
-ITEM_NAMES[ITEM_TYPE_NASTY] = {ITEM_NASTY_SHRINK: "Shrink",
-    ITEM_NASTY_BLURRED: "Blurred", ITEM_NASTY_SLOWDOWN: "Slow down"}
-ITEM_NAMES[ITEM_TYPE_GOOD] = {ITEM_GOOD_MEGATONPUNCH: "Megaton punch", ITEM_GOOD_BOOST: "Boost",
-    ITEM_GOOD_PENETRATION: "Penetration", ITEM_GOOD_DESTRUCTION: "Destruction", ITEM_GOOD_EXTRALIFE: "Extra life"}
 
 
 class ssAppMain():
@@ -348,7 +326,7 @@ class GameField():
 			if self.enemies[i] is None: self.spawnEnemy(i)
 		# end for
 		for elem in self.items[:]:
-			if elem is not None and elem.state==ITEM_STATE_SHOULDBEDELETED: self.items.remove(elem)
+			if elem is not None and elem.state==itemConstants.STATE_SHOULDBEDELETED: self.items.remove(elem)
 			if elem is not None: elem.frameUpdate()
 		return True
 
@@ -436,84 +414,6 @@ class GameResult:
 		self.punches=field.player.punches
 		self.level=field.level
 
-class Item():
-	def __init__(self):
-		self.fallingBeep=None
-		self.shatter=None
-
-	def __del__(self):
-		self.field=None
-		if self.fallingBeep is not None: self.fallingBeep.stop()
-		if self.shatter is not None: self.shatter.stop()
-
-	def initialize(self,field,x,speed,type,identifier):
-		self.field=field
-		self.x=x
-		self.y=field.getY()
-		self.speed=speed
-		self.state=ITEM_STATE_ALIVE
-		self.stepTimer=window.Timer()
-		self.fallingBeep=sound()
-		self.fallingBeep.load(globalVars.appMain.sounds["itemfalling.ogg"])
-		self.fallingBeep.pan=self.field.getPan(self.x)
-		self.fallingBeep.volume=self.field.getVolume(self.y)
-		self.fallingBeep.pitch=self.field.getPitch(self.y)
-		self.fallingBeep.play_looped()
-		self.type=type
-		self.identifier=identifier
-
-	def frameUpdate(self):
-		if self.state==ITEM_STATE_BROKEN and self.shatter.playing is False: self.switchState(ITEM_STATE_SHOULDBEDELETED)
-		if self.state==enemy.STATE_ALIVE and self.stepTimer.elapsed>=self.speed: self.step()
-
-	def switchState(self, newState):
-		self.state=newState
-		if newState==ITEM_STATE_BROKEN: self.playShatter()
-
-	def step(self):
-		if self.destroyCheck() is True: return
-		self.y-=1
-		self.fallingBeep.pan=self.field.getPan(self.x)
-		self.fallingBeep.volume=self.field.getVolume(self.y)
-		self.fallingBeep.pitch=self.field.getPitch(self.y)
-		self.stepTimer.restart()
-
-	def destroyCheck(self):
-		if self.y!=0: return False
-		self.switchState(ITEM_STATE_BROKEN)
-		self.field.log(_("A \"%(item)s\" item fell on the ground and shattered into peaces!") % {"item": ITEM_NAMES[self.type][self.identifier]})
-		return True
-
-	def hit(self):
-		self.field.log(_("Obtained a \"%(item)s\" item!") % {"item": ITEM_NAMES[self.type][self.identifier]})
-		s=sound()
-		s.load(globalVars.appMain.sounds["hit.ogg"])
-		s.pan=self.field.getPan(self.x)
-		s.pitch=random.randint(70,130)
-		s.play()
-		s=sound()
-		s.load(globalVars.appMain.sounds["itemget.ogg"])
-		s.pan=self.field.getPan(self.x)
-		s.volume=self.field.getVolume(self.y)
-		s.play()
-		self.field.itemVoicePlayer.play("get %s.ogg" % ITEM_NAMES[self.type][self.identifier], self.field.getPan(self.x))
-		self.fallingBeep.stop()
-		self.switchState(ITEM_STATE_SHOULDBEDELETED)
-
-	def destroy(self):
-		self.field.log(_("A \"%(item)s\" item was shattered into peaces by the destruction!") % {"item": ITEM_NAMES[self.type][self.identifier]})
-		self.switchState(ITEM_STATE_BROKEN)
-
-	def playShatter(self):
-		self.field.itemVoicePlayer.play("lose %s.ogg" % ITEM_NAMES[self.type][self.identifier], self.field.getPan(self.x))
-		self.shatter=sound()
-		self.shatter.load(globalVars.appMain.sounds["item_destroy%d.ogg" % random.randint(1,2)])
-		self.shatter.pitch=random.randint(70,130)
-		self.shatter.pan=self.field.getPan(self.x)
-		self.shatter.volume=self.field.getVolume(self.y)
-		self.shatter.play()
-		self.fallingBeep.stop()
-
 class NormalModeHandler(object):
 	def __init__(self):
 		pass
@@ -555,9 +455,9 @@ class ArcadeModeHandler(NormalModeHandler):
 
 	def spawnItem(self):
 		spd=random.randint(100,900)
-		t=ITEM_TYPE_NASTY if random.randint(1,100)<=spd/10 else ITEM_TYPE_GOOD
-		ident=random.randint(0,ITEM_NASTY_MAX) if t==ITEM_TYPE_NASTY else random.randint(0,ITEM_GOOD_MAX)
-		i=Item()
+		t=itemConstants.TYPE_NASTY if random.randint(1,100)<=spd/10 else itemConstants.TYPE_GOOD
+		ident=random.randint(0,itemConstants.NASTY_MAX) if t==item.TYPE_NASTY else random.randint(0,item.GOOD_MAX)
+		i=item.Item()
 		i.initialize(self.field,random.randint(0,self.field.x-1),spd,t,ident)
 		self.field.items.append(i)
 		self.resetItemComingTimer()
@@ -566,125 +466,6 @@ class ArcadeModeHandler(NormalModeHandler):
 		self.itemComingTimer.restart()
 		self.itemComingTime=random.randint(0,60000)
 
-class ItemEffectBase(object):
-	def __init__(self):
-		pass
-	def __del__(self):
-		pass
-	def initialize(self,player,onSound,offSound,name):
-		self.player=player
-		self.active=False
-		self.timer=window.Timer()
-		self.onSound=onSound
-		self.offSound=offSound
-		self.lasts=ITEM_BASE_EFFECT_TIME
-		self.name=name
-
-	def activate(self):
-		s=sound()
-		s.load(self.onSound)
-		s.play()
-		self.active=True
-		self.timer.restart()
-		self.player.field.log(_("A new \"%(item)s\" effect is starting!") % {"item": self.name})
-
-	def deactivate(self):
-		s=sound()
-		s.load(self.offSound)
-		s.play()
-		self.active=False
-		self.player.field.log(_("One of your \"%(item)s\" effects is ending!") % {"item": self.name})
-
-	def extend(self,ms):
-		s=sound()
-		s.load(self.onSound)
-		s.pitch=130
-		s.play()
-		self.lasts+=ms
-		self.player.field.log(_("Your \"%(item)s\" effect has been extended for %(extended)d milliseconds! (now %(newtime)d)") %  {"item": self.name, "extended": ms, "newtime": self.lasts-self.timer.elapsed})
-
-	def frameUpdate(self):
-		if self.active is not True: return False
-		if self.timer.elapsed>=self.lasts:
-			self.deactivate()
-			return False
-		return True
-
-class ShrinkEffect(ItemEffectBase):
-	def initialize(self,player):
-		super().initialize(player,globalVars.appMain.sounds["shrink.ogg"],globalVars.appMain.sounds["shrinkFade.ogg"],"Shrink")
-
-	def activate(self):
-		super().activate()
-		self.player.setPunchRange(self.player.punchRange/2)
-
-	def deactivate(self):
-		super().deactivate()
-		self.player.setPunchRange(self.player.punchRange*2)
-
-class BlurredEffect(ItemEffectBase):
-	def initialize(self,player):
-		super().initialize(player,globalVars.appMain.sounds["blurred.ogg"],globalVars.appMain.sounds["blurredFade.ogg"],"Blurred")
-
-	def frameUpdate(self):
-		if super().frameUpdate() is False: return False
-		if random.randint(1,10)==1:
-			while(True):
-				d=random.randint(0,self.player.field.getX()-1)
-				if d!=self.player.x: break
-			# end while
-			self.player.moveTo(d)
-		# whether to trigger blurring?
-		return True
-	# end frameUpdate
-
-class SlowDownEffect(ItemEffectBase):
-	def initialize(self,player):
-		super().initialize(player,globalVars.appMain.sounds["slowDown.ogg"],globalVars.appMain.sounds["slowDownFade.ogg"],"Slow down")
-
-	def activate(self):
-		super().activate()
-		self.player.setPunchSpeed(self.player.punchSpeed*2)
-
-	def deactivate(self):
-		super().deactivate()
-		self.player.setPunchSpeed(self.player.punchSpeed/2)
-
-class MegatonPunchEffect(ItemEffectBase):
-	def initialize(self,player):
-		super().initialize(player,globalVars.appMain.sounds["megatonPunch.ogg"],globalVars.appMain.sounds["megatonPunchFade.ogg"],"Megaton punch")
-
-	def activate(self):
-		super().activate()
-		self.player.setPunchRange(self.player.punchRange*5)
-
-	def deactivate(self):
-		super().deactivate()
-		self.player.setPunchRange(self.player.punchRange/5)
-
-class BoostEffect(ItemEffectBase):
-	def initialize(self,player):
-		super().initialize(player,globalVars.appMain.sounds["boost.ogg"],globalVars.appMain.sounds["boostFade.ogg"],"Boost")
-
-	def activate(self):
-		super().activate()
-		self.player.setPunchSpeed(self.player.punchSpeed/2)
-
-	def deactivate(self):
-		super().deactivate()
-		self.player.setPunchSpeed(self.player.punchSpeed*2)
-
-class PenetrationEffect(ItemEffectBase):
-	def initialize(self,player):
-		super().initialize(player,globalVars.appMain.sounds["penetration.ogg"],globalVars.appMain.sounds["penetrationFade.ogg"],"Penetration")
-
-	def activate(self):
-		super().activate()
-		self.player.setPenetration(True)
-
-	def deactivate(self):
-		super().deactivate()
-		self.player.setPenetration(False)
 
 class ItemVoicePlayer():
 	def __init__(self):
