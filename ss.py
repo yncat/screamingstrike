@@ -4,6 +4,8 @@
 #See SsAppMain.py for application entry point
 import sys
 import os
+import platform
+if platform.system()=="Darwin": os.setcwd("../Resources")
 print(os.getcwd())
 from ssAppMain import *
 
