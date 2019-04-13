@@ -4,8 +4,8 @@
 #See SsAppMain.py for application entry point
 import sys
 import os
-import platform
-if platform.system()=="Darwin": os.setcwd("../Resources")
+import platform_utils.paths
+if platform_utils.paths.is_mac and platform_utils.paths.is_frozen(): os.chdir("../Resources")
 print(os.getcwd())
 from ssAppMain import *
 
