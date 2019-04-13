@@ -4,15 +4,10 @@
 
 from copy import copy
 import pygame
-print("pygame OK")
 import accessible_output2.outputs.auto
-print("accessible_output2 OK")
 from pygame.locals import *
-print("pygame.locals OK")
 from dialog import *
-print("dialog ok")
 from bgtsound import *
-print("all imports OK")
 class singletonWindow():
 	"""Just a pygame window wrapper. As the name implies, you mustn't create multiple singletonWindow's in your game. """
 	def __init__(self):
