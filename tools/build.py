@@ -20,21 +20,26 @@ if not os.path.exists("data"):
   sys.exit()
 
 print("Building %s. This will take several minutes. Please wait..." % PROJECT)
+copydir=""
+
 if win:
 	cmd="nuitka --follow-imports --windows-disable-console --standalone --mingw64 --include-plugin-directory=sound_lib/lib/x64 %s.py" % (PROJECT)
+	copydir="%s.dist" % PROJECT
 else:
-	cmd="python3 -m nuitka --follow-imports --standalone --include-plugin-directory=sound_lib/lib/x64 %s.py" % (PROJECT)
+	cmd="pyinstaller --windowed --onefile --osx-bundle-identifier com.nyanchanGames.%s %s.py" % (PROJECT, PROJECT)
+	copydir="dist/%s.app/Contents/Resources" % PROJECT
+
 common.run(cmd, sh=win)#win uses shell=true and mac doesn't
 if win:
 	print("Copying pythoncom37.dll...")
 	shutil.copyfile("%s/Lib/site-packages/pywin32_system32/pythoncom37.dll" % (PYTHON_PATH), "%s.dist/pythoncom37.dll" % PROJECT)
 
 print("Copying sound_lib dlls...")
-shutil.copytree("sound_lib/lib/x64", "%s.dist/sound_lib/lib/x64" % PROJECT)
-common.mkdir("%s.dist/accessible_output2" % PROJECT)
+shutil.copytree("sound_lib/lib/x64", "%s/sound_lib/lib/x64" % copydir)
+common.mkdir("%s/accessible_output2" % copydir)
 print("Copying accessible_output2 dlls...")
-shutil.copytree("accessible_output2/lib", "%s.dist/accessible_output2/lib" % PROJECT)
+shutil.copytree("accessible_output2/lib", "%s/accessible_output2/lib" % copydir)
 print("Copying data files...")
-shutil.copytree("data", "%s.dist/data" % (PROJECT),
+shutil.copytree("data", "%s/data" % (copydir),
                 ignore=shutil.ignore_patterns("options.dat"))
 print("Done!")
