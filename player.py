@@ -160,7 +160,7 @@ class Player():
 		if it.identifier==itemConstants.GOOD_PENETRATION:
 			existing=self.findEffect("Penetration")
 			if existing is None:
-				e=itemEffect.PenetrationEffect()
+				e=itemEffects.PenetrationEffect()
 				e.initialize(self)
 				e.activate()
 				self.itemEffects.append(e)
