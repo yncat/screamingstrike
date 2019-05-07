@@ -2,6 +2,7 @@
 # Screaming Strike enemy handler
 # Copyright (C) 2019 Yukio Nozawa <personal@nyanchangames.com>
 
+"""This module contains enemy class."""
 import bgtsound
 import random
 import globalVars
@@ -13,6 +14,7 @@ STATE_FALLING = 2
 STATE_SHOULDBEDELETED = 3
 
 class Enemy():
+	"""This class represents an enemy."""
 	def __init__(self):
 		self.scream=None
 		self.bodyfall=None
@@ -23,6 +25,17 @@ class Enemy():
 		if self.bodyfall is not None: self.bodyfall.stop()
 
 	def initialize(self,field,x,speed,screamNum):
+		"""Initializes this enemy.
+
+		:param field: The field to which this enemy is bound.
+		:type field: gameField.Field
+		:param x: X position where this enemy spawns. The Y position is currently hardcoded to 20, so you can't change that.
+		:type x: int
+		:param speed: Speed of this enemy in milliseconds.
+		:type speed: int
+		:param screamNum: Scream file number.
+		:type screamNum: int
+		"""
 		self.field=field
 		self.x=x
 		self.y=field.getY()
@@ -33,15 +46,22 @@ class Enemy():
 		self.lastStepNum=-1
 
 	def frameUpdate(self):
+		"""Call this method once per frame to keep this enemy updated."""
 		if self.state==STATE_SCREAMING and self.scream.playing is False: self.switchState(STATE_FALLING)
 		if self.state==STATE_FALLING and self.bodyfall.playing is False: self.switchState(STATE_SHOULDBEDELETED)
 		if self.state==STATE_ALIVE and self.stepTimer.elapsed>=self.speed: self.step()
 
 	def switchState(self, newState):
+		"""Changes this enemy's state. Internally called.
+
+		:param newState: New state. STATE_**.
+		:type newState: int
+		"""
 		self.state=newState
 		if newState==STATE_FALLING: self.playBodyfall()
 
 	def step(self):
+		"""Makes this enemy walk one step. If it reaches to the player, it automatically attacks."""
 		if self.attackCheck() is True: return
 		self.y-=1
 		s=bgtsound.sound()
@@ -54,16 +74,19 @@ class Enemy():
 		s.pan=self.field.getPan(self.x)
 		s.volume=self.field.getVolume(self.y)
 		s.pitch=random.randint(90,110)
+		if self.y<4: s.pitch-=(4-self.y)*8
 		s.play()
 		self.stepTimer.restart()
 
 	def attackCheck(self):
+		"""Checks if this enemy can attack the player. If it can, it attacks."""
 		if self.y!=0: return False
 		self.field.player.hit()
 		self.switchState(STATE_SHOULDBEDELETED)
 		return True
 
 	def hit(self):
+		"""Kills this enemy as it got hit."""
 		s=bgtsound.sound()
 		s.load(globalVars.appMain.sounds["hit.ogg"])
 		s.pan=self.field.getPan(self.x)
@@ -76,6 +99,7 @@ class Enemy():
 		self.field.player.addScore(score)
 
 	def playScream(self):
+		"""Makes this enemy scream. Internally called."""
 		self.scream=bgtsound.sound()
 		self.scream.load(globalVars.appMain.sounds["scream%d.ogg" % self.screamNum])
 		self.scream.pitch=random.randint(80,120)
@@ -84,6 +108,7 @@ class Enemy():
 		self.scream.play()
 
 	def playBodyfall(self):
+		"""Makes a bodyfall sound for this enemy. Internally called."""
 		self.bodyfall=bgtsound.sound()
 		self.bodyfall.load(globalVars.appMain.sounds["dead.ogg"])
 		self.bodyfall.pitch=random.randint(70,130)
