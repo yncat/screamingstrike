@@ -101,7 +101,7 @@ class ssAppMain():
 
 	def mainmenu(self):
 		m=window.menu()
-		m.initialize(self.wnd,_("Main menu. Use your up and down arrows to choose an option, then press enter to confirm"),_("Normal mode#Arcade mode#Options#Exit"),self.sounds["cursor.ogg"],self.sounds["confirm.ogg"],self.sounds["confirm.ogg"])
+		m.initialize(self.wnd,_("Main menu. Use your up and down arrows to choose an option, then press enter to confirm"),_("Normal mode#Arcade mode#Classic mode#Options#Exit"),self.sounds["cursor.ogg"],self.sounds["confirm.ogg"],self.sounds["confirm.ogg"])
 		m.open()
 		while(True):
 			if self.wnd.frameUpdate() is False: return False
@@ -115,8 +115,8 @@ class ssAppMain():
 		if self.intro() is False: return
 		while(True):
 			selected=self.mainmenu()
-			if selected is False or selected==3: return
-			if selected==2:
+			if selected is False or selected==4: return
+			if selected==3:
 				if self.optionsMenu() is False: return
 				continue
 			# end if

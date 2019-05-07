@@ -99,6 +99,7 @@ class Player():
 		self.processConsecutiveHits()
 
 	def processConsecutiveHits(self):
+		if not self.field.modeHandler.allowConsecutiveHitsBonus: return
 		if self.consecutiveHits>5:
 			self.field.log(_("%(hits)d consecutive hits bonus!") % {"hits": self.consecutiveHits})
 			self.addScore(self.consecutiveHits*self.consecutiveHits*self.field.level*self.field.level)
@@ -107,6 +108,7 @@ class Player():
 		self.consecutiveHits=0
 
 	def processConsecutiveMisses(self):
+		if not self.field.modeHandler.allowConsecutiveMissesBonus: return
 		if self.consecutiveMisses>5:
 			self.field.log(_("%(misses)d consecutive misses penalty!") % {"misses": self.consecutiveMisses})
 			self.addScore(self.consecutiveMisses*self.consecutiveMisses*self.field.level*self.field.level*-1)

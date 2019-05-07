@@ -12,21 +12,32 @@ ARCADE=1
 CLASSIC=2
 NAME_STR = ["Normal", "Arcade", "Classic"]
 
-class NormalModeHandler(object):
+class ModeHandlerBase(object):
 	def __init__(self):
-		pass
+		self.allowConsecutiveHitsBonus=True
+		self.allowConsecutiveMissesBonus=True
+		self.allowLevelupBonus=True
+
 	def __del__(self):
 		self.field=None
+
 	def initialize(self,field):
 		self.field=field
+
 	def frameUpdate(self):
 		pass
 
-class ArcadeModeHandler(NormalModeHandler):
+class NormalModeHandler(ModeHandlerBase):
 	def __init__(self):
 		super().__init__()
-	def __del__(self):
-		super().__del__()
+
+	def initialize(self,field):
+		super().Initialize(field)
+
+class ArcadeModeHandler(ModeHandlerBase):
+	def __init__(self):
+		super().__init__()
+
 	def initialize(self,field):
 		super().initialize(field)
 		self.itemComingTimer=window.Timer()
@@ -63,3 +74,11 @@ class ArcadeModeHandler(NormalModeHandler):
 	def resetItemComingTimer(self):
 		self.itemComingTimer.restart()
 		self.itemComingTime=random.randint(0,60000)
+
+class ClassicModeHandler(ModeHandlerBase):
+	def __init__(self):
+		super().__init__()
+		#disable bonuses
+		self.allowConsecutiveHitsBonus=False
+		self.allowConsecutiveMissesBonus=False
+		self.allowLevelupBonus=False

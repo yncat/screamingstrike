@@ -51,6 +51,8 @@ class GameField():
 			self.modeHandler=NormalModeHandler()
 		elif mode==gameModes.ARCADE:
 			self.modeHandler=gameModes.ArcadeModeHandler()
+		elif mode==gameModes.CLASSIC:
+			self.modeHandler=gameModes.ClassicModeHandler()
 		# end if
 		self.modeHandler.initialize(self)
 
@@ -102,11 +104,15 @@ class GameField():
 		else:
 			self.log(_("Leveled up to %(newlevel)d! (Accuracy %(accuracy).1f%%, with %(lives)d life remaining)") % {"newlevel": self.level, "accuracy": self.player.hitPercentage, "lives": self.player.lives})
 	# end if 
-		self.player.addScore(self.player.hitPercentage*self.player.hitPercentage*self.level*self.player.lives*0.5)
-		self.levelupBonus.start(int(self.player.hitPercentage*0.1))
+		self.processLevelupBonus()
 		self.level+=1
 		self.enemies.append(None)
 		self.nextLevelup=int(1+(self.level*self.level*0.25))
+
+	def processLevelupBonus(self):
+		if not self.modeHandler.allowLevelupBonus: return
+		self.player.addScore(self.player.hitPercentage*self.player.hitPercentage*self.level*self.player.lives*0.5)
+		self.levelupBonus.start(int(self.player.hitPercentage*0.1))
 
 	def getCenterPosition(self):
 		if self.x%2==0:
