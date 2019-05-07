@@ -89,3 +89,9 @@ class ClassicModeHandler(ModeHandlerBase):
 		self.allowConsecutiveHitsBonus=False
 		self.allowConsecutiveMissesBonus=False
 		self.allowLevelupBonus=False
+
+	def calculateNextLevelup(self):
+		"""
+This function provides classic mode specific formula.
+"""
+		return int((2+self.field.level)*0.7)

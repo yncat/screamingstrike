@@ -4,7 +4,6 @@
 import sys
 import random
 import glob
-import math
 import os
 import threading
 import gettext
@@ -264,7 +263,7 @@ class ssAppMain():
 
 	def resetMusicPitch(self):
 		while(True):
-			if math.abs(self.music.pitch-100)<=2: break
+			if abs(self.music.pitch-100)<=2: break
 			if self.music.pitch<100:
 				self.music.pitch+=2
 			else:
