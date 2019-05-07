@@ -25,6 +25,10 @@ GAME_RESULT_TERMINATE = 0
 
 
 class ssAppMain():
+	"""
+The game's main application class.
+Instantiate this class, call initialize method, then call run method to start the application. Other methods are internally used and should not be called from outside of the class.
+"""
 	def __init__(self):
 		pass
 
@@ -32,7 +36,9 @@ class ssAppMain():
 		pass
 
 	def initialize(self):
-		"""Initializes the app. returns True on success or False on failure. """
+		"""
+Initializes the app. returns True on success or False on failure.
+"""
 		globalVars.appMain = self
 		self.thread_loadSounds = threading.Thread(target=self.loadSounds)
 		self.thread_loadSounds.setDaemon(True)
@@ -51,29 +57,43 @@ class ssAppMain():
 		return ret
 
 	def initTranslation(self):
+		"""
+Initializes translation.
+"""
 		self.translator = gettext.translation("messages", "locale", languages=[self.options.language], fallback=True)
 		self.translator.install()
 
 	def resetItemVoice(self):
+		"""
+Resets the speaker voice settings. This function searches voices and set the first found one as default. If no voice is available, it disables item speaking.
+"""
 		if len(self.itemVoices)==0:
 			self.options.itemVoice=""
 		else:
 			self.options.itemVoice=self.itemVoices[0]
 
 	def getItemVoicesList(self):
+		"""
+Searches for available voices as item speaker. It returns detected voice names as a list.
+:rtype: list
+"""
 		lst=[]
 		for elem in glob.glob("data/voices/*"):
 			if os.path.isdir(elem): lst.append(os.path.basename(elem))
 		return lst
 
 	def getLocalesList(self):
+		"""
+Searches for available languages. Returns the list of found languages.
+:rtype: list
+"""
 		lst=[]
 		for elem in glob.glob("locale/*"):
 			if os.path.isdir(elem): lst.append(os.path.basename(elem))
 		return lst
 
 	def loadSounds(self):
-		"""Preload ingame sounds into memory. This is for enhancing performance while playing the game. """
+		"""Preloads ingame sounds into memory. This is for enhancing performance while playing the game. """
 		self.sounds={}
 		files=glob.glob("data/sounds/*.ogg")
 		for elem in files:
@@ -81,9 +101,14 @@ class ssAppMain():
 	# end loadSounds
 
 	def getNumScreams(self):
+		"""
+Returns the number of auto-detected screams.
+:rtype: int
+"""
 		return self.numScreams
 
 	def intro(self):
+		"""Plays the intro sound. It blocks when the sound is playing, then starts the game music. """
 		introsound=sound()
 		introsound.stream("data/sounds/stream/ssIntro.ogg")
 		introsound.play()
@@ -100,6 +125,10 @@ class ssAppMain():
 	# end intro
 
 	def mainmenu(self):
+		"""
+Shows the main menu and returns what was selected as index.
+:rtype: int
+"""
 		m=window.menu()
 		m.initialize(self.wnd,_("Main menu. Use your up and down arrows to choose an option, then press enter to confirm"),_("Normal mode#Arcade mode#Classic mode#Options#Exit"),self.sounds["cursor.ogg"],self.sounds["confirm.ogg"],self.sounds["confirm.ogg"])
 		m.open()
@@ -112,6 +141,9 @@ class ssAppMain():
 	# end mainmenu
 
 	def run(self):
+		"""
+Starts the game. initialize method must be successfully called prior to call this method. It returns when the game is exited.
+"""
 		if self.intro() is False: return
 		while(True):
 			selected=self.mainmenu()
@@ -126,6 +158,9 @@ class ssAppMain():
 			if self.resultScreen(result) is False: return
 
 	def optionsMenu(self):
+		"""
+Shows the game options menu. It returns when the menu is closed and all required i/o is finished.
+"""
 		backup=gameOptions.GameOptions()
 		backup.initialize(self.options)
 		m=window.menu()
@@ -155,6 +190,12 @@ class ssAppMain():
 				return True
 
 	def optionChange(self,cursor,direction):
+		"""Changes a specific game option. Used in the optionsMenu method.
+:param cursor: the cursor position in the settings menu
+:type cursor: int
+:param direction: Which arrow key was pressed (0=left / 1=right)
+:type direction: int
+"""
 		if cursor==0:#BGM volume
 			if direction==1 and self.options.bgmVolume==self.options.BGMVOLUME_POSITIVE_BOUNDARY: return
 			if direction==-1 and self.options.bgmVolume==self.options.BGMVOLUME_NEGATIVE_BOUNDARY: return
@@ -221,6 +262,10 @@ class ssAppMain():
 	# end optionChange
 
 	def gamePlay(self,mode):
+		"""
+Starts the gameplay. It returns when the gameplay is finished or exited. If it is finished with a result, returns the result. Otherwise, returns None.
+:rtype: GameResult
+"""
 		self.wnd.say(_("%(playmode)s, start!") % {"playmode": gameModes.NAME_STR[mode]})
 		field=gameField.GameField()
 		field.initialize(3,20,mode,self.options.itemVoice)
@@ -244,6 +289,7 @@ class ssAppMain():
 		return r
 
 	def resultScreen(self,result):
+		"""Shows the game results screen."""
 		m=window.menu()
 		m.initialize(self.wnd,_("Game result"),"",self.sounds["cursor.ogg"],self.sounds["confirm.ogg"],self.sounds["confirm.ogg"])
 		m.add(_("Final score: %(score)d") % {"score": result.score})
@@ -257,11 +303,19 @@ class ssAppMain():
 		return True
 
 	def changeMusicPitch_relative(self,p):
+		"""
+Changes the game music's pitch relatively. Positive values will increase (speedup), and negative values will decrease (slow down). If it hits either of the boundaries (50 lowest, 400 highest), this method does nothing.
+:param p: Amount
+:type p: int
+"""
 		if self.music.pitch+p>400: return
 		self.music.pitch+=p
 	#end changeMusicPitch_relative
 
 	def resetMusicPitch(self):
+		"""
+Resets the music's pitch to default. The pitch change will be processed gradually and this method returns when the music is reverted to the normal speed.
+"""
 		while(True):
 			if abs(self.music.pitch-100)<=2: break
 			if self.music.pitch<100:
@@ -277,12 +331,14 @@ class ssAppMain():
 
 
 class GameResult:
+	"""This class stores a gameplay's result. """
 	def __init__(self):
 		pass
 	def __del__(self):
 		pass
 	def initialize(self,field):
 		self.score=field.player.score
+			"""Initializes all data."""
 		self.hitPercentage=field.player.hitPercentage
 		self.hits=field.player.hits
 		self.punches=field.player.punches
