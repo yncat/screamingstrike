@@ -20,10 +20,10 @@ class Player():
 	def __del__(self):
 		pass
 	def initialize(self,field):
-		"""
-Initializes this player.
+		"""Initializes this player.
+
 :param field: The field instance on which this player should be bound.
-:type field: GameField
+:type field: gameField.GameField
 """
 		self.field=field
 		self.lives=3
@@ -131,9 +131,10 @@ Initializes this player.
 
 	def processItemHit(self,it):
 		"""
-Processes hitting an item. Called from punchHit. This method just checks the item is good or nasty, then calls the specific methods.
-:param it: Item instance which got hit.
-:type it: Item
+		Processes hitting an item. Called from punchHit. This method just checks the item is good or nasty, then calls the specific methods.
+
+		:param it: Item instance which got hit.
+		:type it: item.Item
 """
 		if it.type==itemConstants.TYPE_NASTY:
 			self.processNastyItemHit(it)
@@ -143,8 +144,9 @@ Processes hitting an item. Called from punchHit. This method just checks the ite
 	def processNastyItemHit(self,it):
 		"""
 Processes a nasty item hit. Called from processItemHit.
+
 :param it: Item instance which got hit.
-:type it: Item
+:type it: item.Item
 """
 		if it.identifier==itemConstants.NASTY_SHRINK:
 			e=itemEffects.ShrinkEffect()
@@ -168,8 +170,9 @@ Processes a nasty item hit. Called from processItemHit.
 	def processGoodItemHit(self,it):
 		"""
 Processes a good item hit. Called from processItemHit.
+
 :param it: Item instance which got hit.
-:type it: Item
+:type it: item.Item
 """
 		if it.identifier==itemConstants.GOOD_MEGATONPUNCH:
 			existing=self.findEffect("Megaton punch")
@@ -212,8 +215,10 @@ Processes a good item hit. Called from processItemHit.
 	def findEffect(self,name):
 		"""
 Checks whether this player has the specified effect currently active.
+
 :param name: Name of the effect to search(Blurred, Megaton Punch, etc).
 :type name: str
+
 :rtype: bool
 """
 		for elem in self.itemEffects:
@@ -223,6 +228,7 @@ Checks whether this player has the specified effect currently active.
 	def setPunchRange(self,r):
 		"""
 Changes this player's effective punch length.
+
 :param r: New range.
 :type r: int
 """
@@ -233,6 +239,7 @@ Changes this player's effective punch length.
 	def setPunchSpeed(self,s):
 		"""
 Changes this player's punching speed.
+
 :param s: New speed in milliseconds.
 :type s: int
 """
@@ -243,6 +250,7 @@ Changes this player's punching speed.
 	def setPenetration(self,p):
 		"""
 Sets whether this player's punches penetrate.
+
 :param p: Penetrate?
 :type p: bool
 """
@@ -259,6 +267,7 @@ Sets whether this player's punches penetrate.
 	def moveTo(self,p):
 		"""
 Moves this player to the specified position.
+
 :param p: New position.
 :type p: int
 """
@@ -284,6 +293,7 @@ Moves this player to the specified position.
 	def addScore(self,score):
 		"""
 Add a specified amount of score to this player.
+
 :param score: Score to add.
 :type score: int
 """

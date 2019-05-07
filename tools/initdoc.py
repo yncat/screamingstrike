@@ -3,4 +3,4 @@
 # Copyright (C) 2019 Yukio Nozawa <personal@nyanchangames.com>
 import common
 
-common.run("sphinx-build -b html docs/api docs/api/_build")
+common.run("sphinx-apidoc -f -o docs/api .")
