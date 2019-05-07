@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Screaming Strike player handler class
 # Copyright (C) 2019 Yukio Nozawa <personal@nyanchangames.com>
-from bgtsound import *
+import bgtsound
 import random
 import bonusCounter
 import enemy
@@ -62,7 +62,7 @@ class Player():
 		if self.punching: return
 		self.punches+=1
 		self.punching=True
-		s=sound()
+		s=bgtsound.sound()
 		s.load(globalVars.appMain.sounds["fists.ogg"])
 		s.pan=self.field.getPan(self.x)
 		s.pitch=random.randint(90,110)
@@ -206,7 +206,7 @@ Processes a good item hit. Called from processItemHit.
 		if it.identifier==itemConstants.GOOD_EXTRALIFE:
 			self.lives+=1
 			self.field.log(_("Extra life! (now %(lives)d lives)") % {"lives": self.lives})
-			s=sound()
+			s=bgtsound.sound()
 			s.load(globalVars.appMain.sounds["extraLife.ogg"])
 			s.pitch=60+(self.lives*10)
 			s.play()
@@ -272,7 +272,7 @@ Moves this player to the specified position.
 :type p: int
 """
 		self.x=p
-		s=sound()
+		s=bgtsound.sound()
 		s.load(globalVars.appMain.sounds["change.ogg"])
 		s.pan=self.field.getPan(self.x)
 		s.play()
@@ -281,7 +281,7 @@ Moves this player to the specified position.
 		"""Called when this player gets hit by one of the enemies."""
 		self.lives-=1
 		self.field.log(_("You've been slapped! (%(lives)d HP remaining)") % {"lives": self.lives})
-		s=sound()
+		s=bgtsound.sound()
 		if self.lives>0:
 			s.load(globalVars.appMain.sounds["attacked.ogg"])
 			s.play()

@@ -2,7 +2,7 @@
 # Screaming Strike bonus counter handler
 # Copyright (C) 2019 Yukio Nozawa <personal@nyanchangames.com>
 
-from bgtsound import *
+import bgtsound
 import globalVars
 import window
 
@@ -26,7 +26,7 @@ class BonusCounter():
 	def frameUpdate(self):
 		if self.active is True and self.countTimer.elapsed>=self.nextCountTime: self.count()
 	def count(self):
-		s=sound()
+		s=bgtsound.sound()
 
 		if self.number>0:
 			self.current+=1

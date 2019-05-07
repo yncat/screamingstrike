@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Screaming Strike item effects
 # Copyright (C) 2019 Yukio Nozawa <personal@nyanchangames.com>
-from bgtsound import *
+import bgtsound
 import random
 
 import globalVars
@@ -23,7 +23,7 @@ class ItemEffectBase(object):
 		self.name=name
 
 	def activate(self):
-		s=sound()
+		s=bgtsound.sound()
 		s.load(self.onSound)
 		s.play()
 		self.active=True
@@ -31,14 +31,14 @@ class ItemEffectBase(object):
 		self.player.field.log(_("A new \"%(item)s\" effect is starting!") % {"item": self.name})
 
 	def deactivate(self):
-		s=sound()
+		s=bgtsound.sound()
 		s.load(self.offSound)
 		s.play()
 		self.active=False
 		self.player.field.log(_("One of your \"%(item)s\" effects is ending!") % {"item": self.name})
 
 	def extend(self,ms):
-		s=sound()
+		s=bgtsound.sound()
 		s.load(self.onSound)
 		s.pitch=130
 		s.play()

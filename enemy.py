@@ -2,7 +2,7 @@
 # Screaming Strike enemy handler
 # Copyright (C) 2019 Yukio Nozawa <personal@nyanchangames.com>
 
-from bgtsound import *
+import bgtsound
 import random
 import globalVars
 import window
@@ -44,7 +44,7 @@ class Enemy():
 	def step(self):
 		if self.attackCheck() is True: return
 		self.y-=1
-		s=sound()
+		s=bgtsound.sound()
 		num=0
 		while True:
 			num=random.randint(1,18)
@@ -64,7 +64,7 @@ class Enemy():
 		return True
 
 	def hit(self):
-		s=sound()
+		s=bgtsound.sound()
 		s.load(globalVars.appMain.sounds["hit.ogg"])
 		s.pan=self.field.getPan(self.x)
 		s.pitch=random.randint(70,130)
@@ -76,7 +76,7 @@ class Enemy():
 		self.field.player.addScore(score)
 
 	def playScream(self):
-		self.scream=sound()
+		self.scream=bgtsound.sound()
 		self.scream.load(globalVars.appMain.sounds["scream%d.ogg" % self.screamNum])
 		self.scream.pitch=random.randint(80,120)
 		self.scream.pan=self.field.getPan(self.x)
@@ -84,7 +84,7 @@ class Enemy():
 		self.scream.play()
 
 	def playBodyfall(self):
-		self.bodyfall=sound()
+		self.bodyfall=bgtsound.sound()
 		self.bodyfall.load(globalVars.appMain.sounds["dead.ogg"])
 		self.bodyfall.pitch=random.randint(70,130)
 		self.bodyfall.pan=self.field.getPan(self.x)

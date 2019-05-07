@@ -1,0 +1,3 @@
+C
+oding conventions in this project:
+- You shouldn't use from moduleName import syntax. If you do that, Sphinx autodoc generation will attempt to recurse the imported module, resulting in unnecessary and ruined documentation being generated.

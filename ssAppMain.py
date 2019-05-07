@@ -9,7 +9,7 @@ import threading
 import gettext
 import window
 import sound_lib.sample
-from bgtsound import *
+import bgtsound
 import bonusCounter
 import enemy
 import gameField
@@ -51,7 +51,7 @@ class ssAppMain():
 		self.initTranslation()
 		self.wnd = window.singletonWindow()
 		ret = self.wnd.initialize(640, 480, "Screaming Strike!")
-		self.music = sound()
+		self.music = bgtsound.sound()
 		self.music.stream("data/sounds/stream/bg.ogg")
 		self.music.volume = self.options.bgmVolume
 		self.numScreams = len(glob.glob("data/sounds/scream*.ogg"))
@@ -113,7 +113,7 @@ class ssAppMain():
 
 	def intro(self):
 		"""Plays the intro sound. It blocks when the sound is playing, then starts the game music. """
-		introsound=sound()
+		introsound=bgtsound.sound()
 		introsound.stream("data/sounds/stream/ssIntro.ogg")
 		introsound.play()
 		while(introsound.playing):
@@ -214,7 +214,7 @@ class ssAppMain():
 			if direction==-1 and self.options.leftPanningLimit==self.options.LEFTPANNINGLIMIT_NEGATIVE_BOUNDARY: return
 			if direction==1: self.options.leftPanningLimit+=5
 			if direction==-1: self.options.leftPanningLimit-=5
-			s=sound()
+			s=bgtsound.sound()
 			s.load(self.sounds["change.ogg"])
 			s.pan=self.options.leftPanningLimit
 			s.play()
@@ -225,7 +225,7 @@ class ssAppMain():
 			if direction==-1 and self.options.rightPanningLimit==self.options.RIGHTPANNINGLIMIT_NEGATIVE_BOUNDARY: return
 			if direction==1: self.options.rightPanningLimit+=5
 			if direction==-1: self.options.rightPanningLimit-=5
-			s=sound()
+			s=bgtsound.sound()
 			s.load(self.sounds["change.ogg"])
 			s.pan=self.options.rightPanningLimit
 			s.play()
@@ -282,7 +282,7 @@ class ssAppMain():
 		# end while
 		field.clear()
 		if self.wnd.wait(2000)==False: return GAME_RESULT_TERMINATE
-		s=sound()
+		s=bgtsound.sound()
 		s.load(self.sounds["dead.ogg"])
 		s.pitch=random.randint(70,130)
 		s.play()

@@ -3,7 +3,7 @@
 # Copyright (C) 2019 Yukio Nozawa <personal@nyanchangames.com>
 import random
 
-from bgtsound import *
+import bgtsound
 import globalVars
 from itemConstants import *
 import window
@@ -25,7 +25,7 @@ class Item():
 		self.speed=speed
 		self.state=STATE_ALIVE
 		self.stepTimer=window.Timer()
-		self.fallingBeep=sound()
+		self.fallingBeep=bgtsound.sound()
 		self.fallingBeep.load(globalVars.appMain.sounds["itemfalling.ogg"])
 		self.fallingBeep.pan=self.field.getPan(self.x)
 		self.fallingBeep.volume=self.field.getVolume(self.y)
@@ -58,12 +58,12 @@ class Item():
 
 	def hit(self):
 		self.field.log(_("Obtained a \"%(item)s\" item!") % {"item": NAMES[self.type][self.identifier]})
-		s=sound()
+		s=bgtsound.sound()
 		s.load(globalVars.appMain.sounds["hit.ogg"])
 		s.pan=self.field.getPan(self.x)
 		s.pitch=random.randint(70,130)
 		s.play()
-		s=sound()
+		s=bgtsound.sound()
 		s.load(globalVars.appMain.sounds["itemget.ogg"])
 		s.pan=self.field.getPan(self.x)
 		s.volume=self.field.getVolume(self.y)
@@ -78,7 +78,7 @@ class Item():
 
 	def playShatter(self):
 		self.field.itemVoicePlayer.play("lose %s.ogg" % NAMES[self.type][self.identifier], self.field.getPan(self.x))
-		self.shatter=sound()
+		self.shatter=bgtsound.sound()
 		self.shatter.load(globalVars.appMain.sounds["item_destroy%d.ogg" % random.randint(1,2)])
 		self.shatter.pitch=random.randint(70,130)
 		self.shatter.pan=self.field.getPan(self.x)

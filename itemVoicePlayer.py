@@ -4,8 +4,7 @@
 import glob
 import os
 import random
-from bgtsound import *
-
+import bgtsound
 class ItemVoicePlayer():
 	def __init__(self):
 		pass
@@ -19,7 +18,7 @@ class ItemVoicePlayer():
 		files=glob.glob("data/voices/%s/*.ogg" % name)
 		if len(files)==0: return False
 		for elem in files:
-			self.sounds[os.path.basename(elem)]=sound_lib.sample.Sample(elem)
+			self.sounds[os.path.basename(elem)]=bgtsound.sound_lib.sample.Sample(elem)
 		self.name=name
 		self.active=True
 
@@ -28,12 +27,12 @@ class ItemVoicePlayer():
 
 	def test(self):
 		if not self.active: return
-		playOneShot(random.choice(list(self.sounds)))
+		bgtsound.playOneShot(random.choice(list(self.sounds)))
 
 	def play(self,file, pan):
 		if not self.active: return
 		if file in self.sounds:
-			s=sound()
+			s=bgtsound.sound()
 			s.load(self.sounds[file])
 			s.pan=pan
 			s.play()

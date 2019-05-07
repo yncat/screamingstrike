@@ -2,7 +2,6 @@
 # Screaming Strike game mode handlers
 # Copyright (C) 2019 Yukio Nozawa <personal@nyanchangames.com>
 import random
-from bgtsound import *
 import item
 import itemConstants
 import window

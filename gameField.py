@@ -3,7 +3,7 @@
 # Copyright (C) 2019 Yukio Nozawa <personal@nyanchangames.com>
 import datetime
 import random
-from bgtsound import *
+import bgtsound
 import bonusCounter
 import enemy
 import gameModes
@@ -142,12 +142,12 @@ class GameField():
 
 	def startDestruction(self):
 		if self.destructing: return
-		playOneShot(globalVars.appMain.sounds["destructPowerup.ogg"])
+		bgtsound.playOneShot(globalVars.appMain.sounds["destructPowerup.ogg"])
 		self.destructTimer.restart()
 		self.destructing=True
 
 	def performDestruction(self):
-		playOneShot(globalVars.appMain.sounds["destruct.ogg"])
+		bgtsound.playOneShot(globalVars.appMain.sounds["destruct.ogg"])
 		self.log(_("Activating destruction!"))
 		for elem in self.enemies:
 			if elem is not None and elem.state==enemy.STATE_ALIVE: elem.hit()
