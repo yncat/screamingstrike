@@ -108,6 +108,7 @@ class GameField():
 		self.level+=1
 		self.enemies.append(None)
 		self.nextLevelup=int(1+(self.level*self.level*0.25))
+		globalVars.appMain.changeMusicPitch_relative(5)
 
 	def processLevelupBonus(self):
 		if not self.modeHandler.allowLevelupBonus: return

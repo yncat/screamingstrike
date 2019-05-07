@@ -4,3 +4,4 @@ data/options.dat
 *.po~
 ss.build/
 ss.dist/
+docs/api

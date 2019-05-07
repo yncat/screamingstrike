@@ -4,6 +4,7 @@
 import sys
 import random
 import glob
+import math
 import os
 import threading
 import gettext
@@ -122,6 +123,7 @@ class ssAppMain():
 			# end if
 			result=self.gamePlay(selected)
 			if result==GAME_RESULT_TERMINATE: return
+			self.resetMusicPitch()
 			if self.resultScreen(result) is False: return
 
 	def optionsMenu(self):
@@ -255,9 +257,25 @@ class ssAppMain():
 		# end while
 		return True
 
+	def changeMusicPitch_relative(self,p):
+		if self.music.pitch+p>400: return
+		self.music.pitch+=p
+	#end changeMusicPitch_relative
 
+	def resetMusicPitch(self):
+		while(True):
+		i	f math.abs(self.music.pitch-100)<=2: break
+			if self.music.pitch<100:
+				self.music.pitch+=2
+			else:
+				self.music.pitch-=2
+			self.wnd.wait(50)
+		#end while
+		self.music.pitch=100
+	#end resetMusicPitch
 
 # end class ssAppMain
+
 
 class GameResult:
 	def __init__(self):
@@ -270,36 +288,4 @@ class GameResult:
 		self.hits=field.player.hits
 		self.punches=field.player.punches
 		self.level=field.level
-
-class ItemVoicePlayer():
-	def __init__(self):
-		pass
-	def __del__(self):
-		pass
-
-	def initialize(self,name):
-		self.active=False
-		if not os.path.exists("data/voices/%s" % name): return False
-		self.sounds={}
-		files=glob.glob("data/voices/%s/*.ogg" % name)
-		if len(files)==0: return False
-		for elem in files:
-			self.sounds[os.path.basename(elem)]=sound_lib.sample.Sample(elem)
-		self.name=name
-		self.active=True
-
-	def clear(self):
-		self.sounds={}
-
-	def test(self):
-		if not self.active: return
-		playOneShot(random.choice(list(self.sounds)))
-
-	def play(self,file, pan):
-		if not self.active: return
-		if file in self.sounds:
-			s=sound()
-			s.load(self.sounds[file])
-			s.pan=pan
-			s.play()
 
