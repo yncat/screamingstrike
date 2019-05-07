@@ -264,7 +264,7 @@ class ssAppMain():
 
 	def resetMusicPitch(self):
 		while(True):
-		i	f math.abs(self.music.pitch-100)<=2: break
+			if math.abs(self.music.pitch-100)<=2: break
 			if self.music.pitch<100:
 				self.music.pitch+=2
 			else:

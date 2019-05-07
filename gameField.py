@@ -36,7 +36,7 @@ class GameField():
 		self.player=player.Player()
 		self.player.initialize(self)
 		self.defeats=0
-		self.nextLevelup=2
+		self.nextLevelup=self.modeHandler.calculateNextLevelup()
 		self.levelupBonus=bonusCounter.BonusCounter()
 		self.levelupBonus.initialize()
 		self.destructing=False
@@ -48,7 +48,7 @@ class GameField():
 
 	def setModeHandler(self,mode):
 		if mode==gameModes.NORMAL:
-			self.modeHandler=NormalModeHandler()
+			self.modeHandler=gameModes.NormalModeHandler()
 		elif mode==gameModes.ARCADE:
 			self.modeHandler=gameModes.ArcadeModeHandler()
 		elif mode==gameModes.CLASSIC:
@@ -107,8 +107,8 @@ class GameField():
 		self.processLevelupBonus()
 		self.level+=1
 		self.enemies.append(None)
-		self.nextLevelup=int(1+(self.level*self.level*0.25))
-		globalVars.appMain.changeMusicPitch_relative(5)
+		self.nextLevelup=self.modeHandler.calculateNextLevelup()
+		globalVars.appMain.changeMusicPitch_relative(2)
 
 	def processLevelupBonus(self):
 		if not self.modeHandler.allowLevelupBonus: return

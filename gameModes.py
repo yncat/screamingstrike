@@ -27,12 +27,19 @@ class ModeHandlerBase(object):
 	def frameUpdate(self):
 		pass
 
+	def calculateNextLevelup(self):
+		"""
+Calculates the number of enemies that should be defeated in this mode. This function implements the default formula. 
+"""
+		if self.field.level==1: return 2
+		return int(1+(self.field.level*self.field.level*0.25))
+
 class NormalModeHandler(ModeHandlerBase):
 	def __init__(self):
 		super().__init__()
 
 	def initialize(self,field):
-		super().Initialize(field)
+		super().initialize(field)
 
 class ArcadeModeHandler(ModeHandlerBase):
 	def __init__(self):
