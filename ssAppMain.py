@@ -15,6 +15,7 @@ import enemy
 import gameField
 import gameModes
 import gameOptions
+import gameResult
 import globalVars
 import item
 import itemConstants
@@ -269,7 +270,7 @@ class ssAppMain():
 		"""
 		Starts the gameplay. It returns when the gameplay is finished or exited. If it is finished with a result, returns the result. Otherwise, returns None.
 
-		:rtype: GameResult
+		:rtype: gameResult.GameResult
 		"""
 		self.wnd.say(_("%(playmode)s, start!") % {"playmode": gameModes.NAME_STR[mode]})
 		field=gameField.GameField()
@@ -289,7 +290,7 @@ class ssAppMain():
 		if self.wnd.wait(800)==False: return GAME_RESULT_TERMINATE
 		with open("result.txt", mode='a') as f:
 			f.write(field.exportLog())
-		r=GameResult()
+		r=gameResult.GameResult()
 		r.initialize(field)
 		return r
 
@@ -334,19 +335,4 @@ class ssAppMain():
 	#end resetMusicPitch
 
 # end class ssAppMain
-
-
-class GameResult:
-	"""This class stores a gameplay's result. """
-	def __init__(self):
-		pass
-	def __del__(self):
-		pass
-	def initialize(self,field):
-		"""Initializes all data."""
-		self.score=field.player.score
-		self.hitPercentage=field.player.hitPercentage
-		self.hits=field.player.hits
-		self.punches=field.player.punches
-		self.level=field.level
 

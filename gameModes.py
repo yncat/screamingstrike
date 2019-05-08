@@ -16,6 +16,7 @@ class ModeHandlerBase(object):
 		self.allowConsecutiveHitsBonus=True
 		self.allowConsecutiveMissesBonus=True
 		self.allowLevelupBonus=True
+		self.name="Base"
 
 	def __del__(self):
 		self.field=None
@@ -33,9 +34,18 @@ Calculates the number of enemies that should be defeated in this mode. This func
 		if self.field.level==1: return 2
 		return int(1+(self.field.level*self.field.level*0.25))
 
+	def getName(self):
+		"""
+		Retrieves the name of this mode. Normal, arcade or classic. There may be more future modes.
+
+		:rtype: str
+		"""
+		return self.name
+
 class NormalModeHandler(ModeHandlerBase):
 	def __init__(self):
 		super().__init__()
+		self.name=NAME_STR[0]
 
 	def initialize(self,field):
 		super().initialize(field)
@@ -43,6 +53,7 @@ class NormalModeHandler(ModeHandlerBase):
 class ArcadeModeHandler(ModeHandlerBase):
 	def __init__(self):
 		super().__init__()
+		self.name=NAME_STR[1]
 
 	def initialize(self,field):
 		super().initialize(field)
@@ -88,6 +99,7 @@ class ClassicModeHandler(ModeHandlerBase):
 		self.allowConsecutiveHitsBonus=False
 		self.allowConsecutiveMissesBonus=False
 		self.allowLevelupBonus=False
+		self.name=NAME_STR[2]
 
 	def calculateNextLevelup(self):
 		"""
