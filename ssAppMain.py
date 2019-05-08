@@ -20,6 +20,7 @@ import globalVars
 import item
 import itemConstants
 import player
+import scorePostingAdapter
 
 # constants
 GAME_RESULT_TERMINATE = 0
@@ -306,7 +307,46 @@ class ssAppMain():
 			r=m.frameUpdate()
 			if r is not None:break
 		# end while
+		if result.score>0:
+			if self.scorePostDialog(result) is False: return False
 		return True
+
+	def scorePostDialog(self,result):
+		"""
+		Shows the 'Do you want to post this score?' dialog. The result to post must be specified by the result parameter.
+
+Returns False when the game is closed. Otherwise True.
+
+		:param result: Result to post
+		:type result: gameResult.GameResult
+		"""
+		m=window.menu()
+		m.initialize(self.wnd,_("Score posting"),"",self.sounds["cursor.ogg"],self.sounds["confirm.ogg"],self.sounds["confirm.ogg"])
+		m.add(_("Do you want to post this score to the scoreboard?"))
+		m.add(_("Yes"))
+		m.add(_("No"))
+		while(True):
+			m.open()
+			while(True):
+				if self.wnd.frameUpdate() is False: return False
+				r=m.frameUpdate()
+				if r is not None:break
+			# end while the menu is active
+			if r>0:break
+		#end while, other than the top item is selected
+		if r==1:#post
+			adapter=scorePostingAdapter.AdapterBase()
+			ret=adapter.post(result)
+			if ret==scorePostingAdapter.RET_UNAVAILABLE:
+				self.wnd.message(_("This build of Screaming Strike does not support score posting. Sorry!"))
+				return True
+			#end unavailable
+			if ret==scorePostingAdapter.RET_CONNECTION_ERROR:
+				self.wnd.message(_("There was an error while posting your score. Please try again later."))
+				return True
+			#end connection error
+			self.wnd.message(_("Congratulations! Your score is ranked at %(pos)d! Keep up your great work!" % {"pos": ret}))
+			return True
 
 	def changeMusicPitch_relative(self,p):
 		"""

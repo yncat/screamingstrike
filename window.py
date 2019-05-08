@@ -17,9 +17,7 @@ class singletonWindow():
 
 	def initialize(self,x,y,ttl):
 		"""Initializes the game window. Returns True on success or False for failure. """
-		print("before initing pygame")
 		pygame.init()
-		print("pygame init OK")
 		self.clock=pygame.time.Clock()
 		self.screen = pygame.display.set_mode((x, y))
 		pygame.display.set_caption(ttl)
@@ -62,6 +60,13 @@ class singletonWindow():
 		"""tts speech"""
 		self.speech.speak(str)
 
+	def message(self,msg):
+		self.say(msg)
+		while(True):
+			self.frameUpdate()
+			if self.keyPressed(K_RETURN): return
+		#end while
+	#end message
 #end class singletonWindow
 
 
