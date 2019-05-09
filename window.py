@@ -8,17 +8,21 @@ import accessible_output2.outputs.auto
 from pygame.locals import *
 from dialog import *
 from bgtsound import *
-class singletonWindow():
-	"""Just a pygame window wrapper. As the name implies, you mustn't create multiple singletonWindow's in your game. """
+class SingletonWindow():
+	"""Just a pygame window wrapper. As the name implies, you mustn't create multiple singletonWindow's in your game. You should inherit this class and make your own app main class to make your code easy to read."""
 	def __init__(self):
-		pass#I want to avoid doing initialization at constructor as much as possible, just my liking
+		pygame.init()
+		self.clock=pygame.time.Clock()
+
 	def __del__(self):
 		pygame.quit()
 
 	def initialize(self,x,y,ttl):
-		"""Initializes the game window. Returns True on success or False for failure. """
-		pygame.init()
-		self.clock=pygame.time.Clock()
+		"""
+		Initializes the game window. Returns True on success or False for failure.
+
+		:rtype: bool
+		"""
 		self.screen = pygame.display.set_mode((x, y))
 		pygame.display.set_caption(ttl)
 		self.keys=[0]*255
@@ -27,62 +31,88 @@ class singletonWindow():
 		return True
 
 	def frameUpdate(self):
-		"""A function that must be called once per frame. Calling this function will keep the 60fps speed. Returns True while the game is running and returns False when the process should exit. When returning false, you can immediately exit the game without caring about pygame termination because it's done automatically at the destructor. """
+		"""
+A function that must be called once per frame. Calling this function will keep the 60fps speed.
+
+When user presses alt+f4 or the x icon, this function attempts to shut down the game by calling self.exit method. It is possible that the exit message is canceled by the onExit callback currently set.
+"""
 		self.clock.tick(60)
 		self.screen.fill((255,63,10,))
 		pygame.display.update()
 		self.previousKeys=copy(self.keys)
 		self.keys=pygame.key.get_pressed()
-		if self.keys[K_LALT] and self.keys[K_F4]: return False
+		if self.keys[K_LALT] and self.keys[K_F4]: self.exit()
 		for event in pygame.event.get():
-			if event.type == QUIT: return False
+			if event.type == QUIT: self.exit()
 		#end event
 	#end frameUpdate
 
 	def keyPressed(self,key):
-		"""Retrieves if the specified key has changed to "pressed" from "not pressed" at the last frame. Doesn't cause key repeats.  """
+		"""
+		Retrieves if the specified key has changed to "pressed" from "not pressed" at the last frame. Doesn't cause key repeats.
+
+		:rtype: bool
+"""
 		return self.keys[key] and not self.previousKeys[key]
 
 	def keyPressing(self,key):
-		"""Retrieves if the specified key is being pressed. Key repeats at 60rp/sec. """
+		"""
+		Retrieves if the specified key is being pressed. Key repeats at 60rp/sec.
+
+		:rtype: bool
+"""
 		return self.keys[key]
 
 	def wait(self,msec):
-		"""waits for a specified period of milliseconds while keeping the window looping. Same as frameUpdate(), you should exit your game when this function returned false. """
+		"""waits for a specified period of milliseconds while keeping the window looping. """
 		t=Timer()
 		while t.elapsed<msec:
-			if self.frameUpdate() is False: return False
+			self.frameUpdate()
 		#end loop
-		return True
 	#end wait
 
 	def say(self,str):
 		"""tts speech"""
 		self.speech.speak(str)
 
-	def message(self,msg):
-		self.say(msg)
-		while(True):
-			self.frameUpdate()
-			if self.keyPressed(K_RETURN): return
-		#end while
-	#end message
+	def exit(self):
+		"""Attempt to exit the game. It is canceled if the onExit callback is set and it returned False."""
+		if not self.onExit(): return
+		sys.exit()
+
+	def onExit(self):
+		"""
+		Override this method to define your own onExit code. It is automatically called from self.frameUpdate method when the game is being closed.
+
+		You should return True when game can exit normally or False if you want to cancel the exit event.
+
+		:rtype: bool
+		"""
+		return True#This is default
+
 #end class singletonWindow
 
-
 class Timer:
+	"""A simple timer class like bgt."""
 	def __init__(self):
 		self.restart()
 
 	def restart(self):
+		"""Restarts this timer."""
 		self.startTick=pygame.time.get_ticks()
 
 	@property
 	def elapsed(self):
+		"""
+		Returns the elapsed time in milliseconds.
+
+		:rtype: int
+		"""
 		return pygame.time.get_ticks()-self.startTick
 #end class Timer
 
 class menu:
+	"""A simple nonblocking menu class."""
 	def __init__(self):
 		pass
 	def __del__(self):

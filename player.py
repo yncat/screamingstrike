@@ -50,10 +50,10 @@ class Player():
 		"""Call this method once per frame to keep everything updated."""
 		self.consecutiveHitBonus.frameUpdate()
 		self.consecutiveMissUnbonus.frameUpdate()
-		if self.punching is False and globalVars.appMain.wnd.keyPressed(window.K_SPACE): self.punchLaunch()
+		if self.punching is False and globalVars.appMain.keyPressed(window.K_SPACE): self.punchLaunch()
 		if self.punching is True and self.punchTimer.elapsed>=self.punchSpeed: self.punchHit()
-		if self.x!=0 and globalVars.appMain.wnd.keyPressed(window.K_LEFT): self.moveTo(self.x-1)
-		if self.x!=self.field.getX()-1 and globalVars.appMain.wnd.keyPressed(window.K_RIGHT): self.moveTo(self.x+1)
+		if self.x!=0 and globalVars.appMain.keyPressed(window.K_LEFT): self.moveTo(self.x-1)
+		if self.x!=self.field.getX()-1 and globalVars.appMain.keyPressed(window.K_RIGHT): self.moveTo(self.x+1)
 		for elem in self.itemEffects[:]:
 			if not elem.frameUpdate(): self.itemEffects.remove(elem)
 

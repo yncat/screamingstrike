@@ -26,22 +26,25 @@ import scorePostingAdapter
 GAME_RESULT_TERMINATE = 0
 
 
-class ssAppMain():
+class ssAppMain(window.SingletonWindow):
 	"""
 	The game's main application class.
 
 	Instantiate this class, call initialize method, then call run method to start the application. Other methods are internally used and should not be called from outside of the class.
 	"""
 	def __init__(self):
-		pass
+		super().__init__()
 
 	def __del__(self):
-		pass
+		super().__del__()
 
 	def initialize(self):
 		"""
 		Initializes the app. returns True on success or False on failure.
+
+		:rtype: bool
 		"""
+		super().initialize(640, 480, "Screaming Strike!")
 		globalVars.appMain = self
 		self.thread_loadSounds = threading.Thread(target=self.loadSounds)
 		self.thread_loadSounds.setDaemon(True)
@@ -51,13 +54,11 @@ class ssAppMain():
 		self.itemVoices=self.getItemVoicesList()
 		self.locales=self.getLocalesList()
 		self.initTranslation()
-		self.wnd = window.singletonWindow()
-		ret = self.wnd.initialize(640, 480, "Screaming Strike!")
 		self.music = bgtsound.sound()
 		self.music.stream("data/sounds/stream/bg.ogg")
 		self.music.volume = self.options.bgmVolume
 		self.numScreams = len(glob.glob("data/sounds/scream*.ogg"))
-		return ret
+		return True
 
 	def initTranslation(self):
 		"""
@@ -119,10 +120,10 @@ class ssAppMain():
 		introsound.stream("data/sounds/stream/ssIntro.ogg")
 		introsound.play()
 		while(introsound.playing):
-			if self.wnd.frameUpdate() is False: sys.exit(0)
-			if self.wnd.keyPressed(window.K_RETURN):
+			self.frameUpdate()
+			if self.keyPressed(window.K_RETURN):
 				introsound.fadeout(900)
-				self.wnd.wait(1000)
+				self.wait(1000)
 				break
 			# end skipping with enter
 		# end while intro is playing
@@ -137,11 +138,11 @@ class ssAppMain():
 		:rtype: int
 		"""
 		m=window.menu()
-		m.initialize(self.wnd,_("Main menu. Use your up and down arrows to choose an option, then press enter to confirm"),_("Normal mode#Arcade mode#Classic mode#Options#Exit"),self.sounds["cursor.ogg"],self.sounds["confirm.ogg"],self.sounds["confirm.ogg"])
+		m.initialize(self,_("Main menu. Use your up and down arrows to choose an option, then press enter to confirm"),_("Normal mode#Arcade mode#Classic mode#Options#Exit"),self.sounds["cursor.ogg"],self.sounds["confirm.ogg"],self.sounds["confirm.ogg"])
 		m.open()
 		while(True):
-			if self.wnd.frameUpdate() is False: return False
-			if self.wnd.keyPressed(window.K_ESCAPE): return False
+			self.frameUpdate()
+			if self.keyPressed(window.K_ESCAPE): return False
 			selected=m.frameUpdate()
 			if selected is not None and selected>=0: return selected
 		# end loop
@@ -169,7 +170,7 @@ class ssAppMain():
 		backup=gameOptions.GameOptions()
 		backup.initialize(self.options)
 		m=window.menu()
-		m.initialize(self.wnd,_("Options Menu, use your up and down arrows to choose an option, left and right arrows to change values, enter to save or escape to discard changes"),"",self.sounds["cursor.ogg"],self.sounds["confirm.ogg"],self.sounds["confirm.ogg"])
+		m.initialize(self,_("Options Menu, use your up and down arrows to choose an option, left and right arrows to change values, enter to save or escape to discard changes"),"",self.sounds["cursor.ogg"],self.sounds["confirm.ogg"],self.sounds["confirm.ogg"])
 		m.add(_("Background music volume"))
 		m.add(_("Left panning limit"))
 		m.add(_("Right panning limit."))
@@ -177,20 +178,20 @@ class ssAppMain():
 		m.add(_("Language (restart to apply)"))
 		m.open()
 		while(True):
-			if self.wnd.frameUpdate() is False: return False
+			self.frameUpdate()
 			ret=m.frameUpdate()
-			if self.wnd.keyPressed(window.K_LEFT): self.optionChange(m.getCursorPos(),-1)
-			if self.wnd.keyPressed(window.K_RIGHT): self.optionChange(m.getCursorPos(),1)
+			if self.keyPressed(window.K_LEFT): self.optionChange(m.getCursorPos(),-1)
+			if self.keyPressed(window.K_RIGHT): self.optionChange(m.getCursorPos(),1)
 			if ret is None: continue
 			if ret==-1: 
 				self.options=gameOptions.GameOptions()
 				self.options.initialize(backup)
-				self.wnd.say(_("Changes discarded."))
+				self.say(_("Changes discarded."))
 				self.music.volume=self.options.bgmVolume
 				return True
 			# end if
 			if ret>=0:
-				self.wnd.say(_("Settings saved"))
+				self.say(_("Settings saved"))
 				self.options.save("data/options.dat")
 				return True
 
@@ -208,7 +209,7 @@ class ssAppMain():
 			if direction==1: self.options.bgmVolume+=2
 			if direction==-1: self.options.bgmVolume-=2
 			self.music.volume=self.options.bgmVolume
-			self.wnd.say("%d" % (abs(-30-self.options.bgmVolume)*0.5))
+			self.say("%d" % (abs(-30-self.options.bgmVolume)*0.5))
 			return
 		# end bgm volume
 		if cursor==1:#left panning limit
@@ -244,9 +245,9 @@ class ssAppMain():
 			c+=direction
 			pl = ItemVoicePlayer()
 			if not pl.initialize(self.itemVoices[c]):
-				self.wnd.say(_("%(voice)s cannot be loaded.") % {"voice": self.itemVoices[c]})
+				self.say(_("%(voice)s cannot be loaded.") % {"voice": self.itemVoices[c]})
 				return
-			self.wnd.say(self.itemVoices[c])
+			self.say(self.itemVoices[c])
 			pl.test()
 			self.options.itemVoice=self.itemVoices[c]
 			return
@@ -260,7 +261,7 @@ class ssAppMain():
 			if direction==1 and c==len(self.locales)-1: return#clipping
 			if direction==-1 and c==0: return#clipping
 			c+=direction
-			self.wnd.say(self.locales[c])
+			self.say(self.locales[c])
 			self.options.language=self.locales[c]
 			return
 		#end item voices
@@ -273,22 +274,22 @@ class ssAppMain():
 
 		:rtype: gameResult.GameResult
 		"""
-		self.wnd.say(_("%(playmode)s, start!") % {"playmode": gameModes.NAME_STR[mode]})
+		self.say(_("%(playmode)s, start!") % {"playmode": gameModes.NAME_STR[mode]})
 		field=gameField.GameField()
 		field.initialize(3,20,mode,self.options.itemVoice)
 		field.setLimits(self.options.leftPanningLimit,self.options.rightPanningLimit)
 		while(True):
-			if self.wnd.frameUpdate() is False: return GAME_RESULT_TERMINATE
-			if self.wnd.keyPressed(window.K_ESCAPE): return GAME_RESULT_TERMINATE
+			self.frameUpdate()
+			if self.keyPressed(window.K_ESCAPE): return GAME_RESULT_TERMINATE
 			if field.frameUpdate() is False:break
 		# end while
 		field.clear()
-		if self.wnd.wait(2000)==False: return GAME_RESULT_TERMINATE
+		self.wait(2000)
 		s=bgtsound.sound()
 		s.load(self.sounds["dead.ogg"])
 		s.pitch=random.randint(70,130)
 		s.play()
-		if self.wnd.wait(800)==False: return GAME_RESULT_TERMINATE
+		self.wait(800)
 		with open("result.txt", mode='a') as f:
 			f.write(field.exportLog())
 		r=gameResult.GameResult()
@@ -298,12 +299,12 @@ class ssAppMain():
 	def resultScreen(self,result):
 		"""Shows the game results screen."""
 		m=window.menu()
-		m.initialize(self.wnd,_("Game result"),"",self.sounds["cursor.ogg"],self.sounds["confirm.ogg"],self.sounds["confirm.ogg"])
+		m.initialize(self,_("Game result"),"",self.sounds["cursor.ogg"],self.sounds["confirm.ogg"],self.sounds["confirm.ogg"])
 		m.add(_("Final score: %(score)d") % {"score": result.score})
 		m.add(_("Punches: %(punches)d, hits: %(hits)d, accuracy: %(accuracy).2f%%") % {"punches": result.punches, "hits": result.hits, "accuracy": result.hitPercentage})
 		m.open()
 		while(True):
-			if self.wnd.frameUpdate() is False: return False
+			self.frameUpdate()
 			r=m.frameUpdate()
 			if r is not None:break
 		# end while
@@ -321,14 +322,14 @@ Returns False when the game is closed. Otherwise True.
 		:type result: gameResult.GameResult
 		"""
 		m=window.menu()
-		m.initialize(self.wnd,_("Score posting"),"",self.sounds["cursor.ogg"],self.sounds["confirm.ogg"],self.sounds["confirm.ogg"])
+		m.initialize(self,_("Score posting"),"",self.sounds["cursor.ogg"],self.sounds["confirm.ogg"],self.sounds["confirm.ogg"])
 		m.add(_("Do you want to post this score to the scoreboard?"))
 		m.add(_("Yes"))
 		m.add(_("No"))
 		while(True):
 			m.open()
 			while(True):
-				if self.wnd.frameUpdate() is False: return False
+				self.frameUpdate()
 				r=m.frameUpdate()
 				if r is not None:break
 			# end while the menu is active
@@ -338,14 +339,14 @@ Returns False when the game is closed. Otherwise True.
 			adapter=scorePostingAdapter.AdapterBase()
 			ret=adapter.post(result)
 			if ret==scorePostingAdapter.RET_UNAVAILABLE:
-				self.wnd.message(_("This build of Screaming Strike does not support score posting. Sorry!"))
+				self.message(_("This build of Screaming Strike does not support score posting. Sorry!"))
 				return True
 			#end unavailable
 			if ret==scorePostingAdapter.RET_CONNECTION_ERROR:
-				self.wnd.message(_("There was an error while posting your score. Please try again later."))
+				self.message(_("There was an error while posting your score. Please try again later."))
 				return True
 			#end connection error
-			self.wnd.message(_("Congratulations! Your score is ranked at %(pos)d! Keep up your great work!" % {"pos": ret}))
+			self.message(_("Congratulations! Your score is ranked at %(pos)d! Keep up your great work!" % {"pos": ret}))
 			return True
 
 	def changeMusicPitch_relative(self,p):
@@ -369,10 +370,25 @@ Returns False when the game is closed. Otherwise True.
 				self.music.pitch+=2
 			else:
 				self.music.pitch-=2
-			self.wnd.wait(50)
+			self.wait(50)
 		#end while
 		self.music.pitch=100
 	#end resetMusicPitch
 
+	def message(self,msg):
+		"""
+		Shows a simple message dialog. This method is blocking; it won't return until user dismisses the dialog. While this method is blocking, onExit still works as expected.
+
+		:param msg: Message to show.
+		:type msg: str
+		"""
+		self.say(msg)
+		while(True):
+			self.frameUpdate()
+			if True in (self.keyPressed(window.K_LEFT), self.keyPressed(window.K_RIGHT), self.keyPressed(window.K_UP), self.keyPressed(window.K_DOWN)): self.say(msg)#Message repeat
+			if self.keyPressed(window.K_RETURN): break
+		#end frame update
+		bgtsound.playOneShot(self.sounds["confirm"])
+	#end message
 # end class ssAppMain
 
