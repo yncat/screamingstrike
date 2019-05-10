@@ -103,8 +103,10 @@ class sound():
 			self.handle.free()
 
 #helper functions
-def playOneShot(sample):
+def playOneShot(sample, vol=0, pitch=100):
 	s=sound()
 	s.load(sample)
+	s.volume=vol
+	s.pitch=pitch
 	s.play()
 

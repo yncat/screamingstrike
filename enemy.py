@@ -13,6 +13,8 @@ STATE_SCREAMING = 1
 STATE_FALLING = 2
 STATE_SHOULDBEDELETED = 3
 
+SCREAM_PITCH_LOW=80
+SCREAM_PITCH_HIGH=120
 class Enemy():
 	"""This class represents an enemy."""
 	def __init__(self):
@@ -103,7 +105,7 @@ class Enemy():
 		"""Makes this enemy scream. Internally called."""
 		self.scream=bgtsound.sound()
 		self.scream.load(globalVars.appMain.sounds["scream%d.ogg" % self.screamNum])
-		self.scream.pitch=random.randint(80,120)
+		self.scream.pitch=random.randint(SCREAM_PITCH_LOW,SCREAM_PITCH_HIGH)
 		self.scream.pan=self.field.getPan(self.x)
 		self.scream.volume=self.field.getVolume(self.y)
 		self.scream.play()

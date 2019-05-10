@@ -138,7 +138,15 @@ class ssAppMain(window.SingletonWindow):
 		:rtype: int
 		"""
 		m=window.menu()
-		m.initialize(self,_("Main menu. Use your up and down arrows to choose an option, then press enter to confirm"),[_("Normal mode")+"&1", _("Arcade mode")+"&2",_("Classic mode")+"&3",_("Options")+"&o",_("Quit")+"&Q"],self.sounds["cursor.ogg"],self.sounds["confirm.ogg"],self.sounds["confirm.ogg"])
+		m.initialize(self,_("Main menu. Use your up and down arrows to choose an option, then press enter to confirm"),None,self.sounds["cursor.ogg"],self.sounds["confirm.ogg"],self.sounds["confirm.ogg"])
+		m.append(_("Normal mode")+"&1")
+		m.append(_("Arcade mode")+"&2")
+		m.append(_("Classic mode")+"&3")
+		m.append(_("Collection")+"&C")
+		m.append(_("Erase data")+"&E")
+		m.append(_("Options")+"&o")
+		m.append(_("Quit")+"&Q")
+
 		m.open()
 		while(True):
 			self.frameUpdate()
@@ -155,18 +163,67 @@ class ssAppMain(window.SingletonWindow):
 		if self.intro() is False: return
 		while(True):
 			selected=self.mainmenu()
-			if selected is False or selected==4: self.exit()
+			if selected is False or selected==6: self.exit()
 			if selected==3:
-				if self.optionsMenu() is False: return
+				self.collectionDialog()
 				continue
-			# end if
-			result=self.gamePlay(selected)
-			self.resetMusicPitch()
-			self.reviewCollection(result)
-			if result.getAboated(): continue
-			self.resultScreen(result)
+			if selected==4:
+				self.eraseDataDialog()
+				continue
+			#end erase data
+			if selected==5:
+				self.optionsDialog()
+				continue
+			#end options
+			self.play(selected)
+		#end while
+	#end run
 
-	def optionsMenu(self):
+	def play(self,mode):
+		"""Plays the specified mode.
+
+		:param mode: Mode in number.
+		:type mode: int
+		"""
+		result=self.gamePlay(mode)
+		self.resetMusicPitch()
+		self.reviewCollection(result)
+		self.resultScreen(result)
+		if result.score>0:
+			self.scorePostDialog(result)
+
+	def collectionDialog(self):
+		"""Shows the collection dialog. Returns when user pressed escape and left the dialog."""
+		c=collection.CollectionDialog()
+		c.run(self)
+
+	def eraseDataDialog(self):
+		"""Shows the erase data dialog. Returns when user leaves this menu."""
+		m=window.menu()
+		m.initialize(self,_("Select the data to irase"),[_("Highscores"),_("Collections"),_("Back")],self.sounds["cursor.ogg"],self.sounds["confirm.ogg"],self.sounds["confirm.ogg"])
+		m.open()
+		while(True):
+			self.frameUpdate()
+			r=m.frameUpdate()
+			if r is None: continue
+			if r==-1 or m.isLast(r): break
+			if not self.keyPressing(window.K_LSHIFT) and not self.keyPressing(window.K_RSHIFT):
+				self.say(_("Hold shift and enter to erase."))
+				continue
+			#end confirmation
+			if r==0:
+				self.hsStorage.reset()
+				self.say(_("Your highscores are all reset!"))
+				continue
+			if r==1:
+				self.collectionStorage.reset()
+				self.say(_("Your collections are all reset!"))
+				continue
+			#end what to reset
+		#end while
+	#end eraseDataDialog
+
+	def optionsDialog(self):
 		"""Shows the game options menu. It returns when the menu is closed and all required i/o is finished."""
 		backup=gameOptions.GameOptions()
 		backup.initialize(self.options)
@@ -347,10 +404,7 @@ class ssAppMain(window.SingletonWindow):
 			r=m.frameUpdate()
 			if r is not None:break
 		# end while
-		if result.score>0:
-			if self.scorePostDialog(result) is False: return False
-		return True
-
+	#end resultDialog
 	def scorePostDialog(self,result):
 		"""
 		Shows the 'Do you want to post this score?' dialog. The result to post must be specified by the result parameter.

@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 # Screaming Strike collection handler
 # Copyright (C) 2019 Yukio Nozawa <personal@nyanchangames.com>
-"""This module contains collectionStorage and collectionCounter. CollectionStorage is used as it implies, and CollectionCounter is created for every game session and that object accesses the storage."""
+"""This module contains collectionStorage, collectionCounter and collectionDialog. CollectionStorage is used as it implies, and CollectionCounter is created for every game session and that object accesses the storage. """
 import bgtsound
 import globalVars
 import window
+import enemy
 
 UNLOCK_TRIGGER=10
 UNLOCKED_SOUND_FILENAME="unlock.ogg"
@@ -28,6 +29,10 @@ class CollectionStorage(object):
 		:type file: str
 		"""
 		self.screams=[]
+		if file=="":
+			self.reserve(screamNum)
+			return
+		#end not given a file
 		try:
 			f=open(file,"r")
 		except IOError:
@@ -53,6 +58,13 @@ class CollectionStorage(object):
 			self.screams.append(0)
 		#end for
 	#end reserve
+
+	def reset(self):
+		"""Resets all the elements to 0."""
+		for i in range(len(self.screams)):
+			self.screams[i]=0
+		#end for
+	#end reset
 
 	def save(self,file):
 		"""Saves the current status to a file. The destination file is overwritten. If IO error occurs, this method returns False, otherwise True.
@@ -87,7 +99,14 @@ class CollectionStorage(object):
 		self.screams[number]+=1
 		return self.screams[number]==UNLOCK_TRIGGER
 
-	def isUnlocked(number):
+	def get(self,number):
+		"""Retrieves the number of plays of the specified scream.
+
+		:rtype: int
+		"""
+		return self.screams[number]
+
+	def isUnlocked(self,number):
 		"""Retrieves if the specified scream is unlocked.
 
 		:rtype: bool
@@ -150,3 +169,93 @@ class CollectionCounter(object):
 	#end getLog
 #end class CollectionCounter
 
+class CollectionDialog(object):
+	"""Instantiate this object and call the run method to open the collection dialog."""
+	def run(self,appMain):
+		"""Runs the collection dialog.
+
+		:param wnd: Window on which this dialog runs.
+		:type appMain: ssAppMain.SsAppMain
+		"""
+		self.appMain=appMain
+		self.sound=None
+		appMain.say(_("Use your left and right arrows to brows your collections, then press enter to make your unlocked one scream. You can move through your unlocked items with ctrl + left or right. To play with pitch changing, hold down up and down arrows. Press escape when you're satisfied."))
+		self.index=0
+		self.pitch=100
+		self.pitchTimer=window.Timer()
+		while(True):
+			appMain.frameUpdate()
+			if appMain.keyPressed(window.K_ESCAPE): break
+			if appMain.keyPressing(window.K_LCTRL) or appMain.keyPressing(window.K_RCTRL):
+				if appMain.keyPressed(window.K_LEFT): self.searchUnlocked(-1)
+				if appMain.keyPressed(window.K_RIGHT): self.searchUnlocked(1)
+			else:
+				if appMain.keyPressed(window.K_LEFT) and self.index!=0: self.moveTo(self.index-1)
+				if appMain.keyPressed(window.K_RIGHT) and self.index!=self.appMain.numScreams-1: self.moveTo(self.index+1)
+			#end ctrl or not
+			if appMain.keyPressed(window.K_SPACE): self.moveTo(self.index)
+			if appMain.keyPressed(window.K_RETURN) and appMain.collectionStorage.isUnlocked(self.index): self.play(self.index)
+			if appMain.keyPressing(window.K_UP) and self.pitchTimer.elapsed>=50 and self.pitch!=enemy.SCREAM_PITCH_HIGH: self.changePitch(self.pitch+1)
+			if appMain.keyPressing(window.K_DOWN) and self.pitchTimer.elapsed>=50 and self.pitch!=enemy.SCREAM_PITCH_LOW: self.changePitch(self.pitch-1)
+		#end while
+		bgtsound.playOneShot(appMain.sounds["confirm.ogg"])
+	#end run
+
+	def moveTo(self,index):
+		"""Updates the cursor position.
+
+		:param index: New position.
+		:type index: int
+		"""
+		self.index=index
+		unlocked=self.appMain.collectionStorage.isUnlocked(index)
+		if unlocked:
+			bgtsound.playOneShot(self.appMain.sounds["cursor.ogg"])
+			s=_("Unlocked")
+		else:
+			bgtsound.playOneShot(self.appMain.sounds["cursor.ogg"], pitch=80)
+			s=_("Locked")
+		#end if locked or not
+		self.appMain.say(_("No.%(no)d, %(status)s, %(plays)d") % {"no": index, "status": s, "plays": self.appMain.collectionStorage.get(index)})
+	#end moveTo
+
+	def searchUnlocked(self,direction):
+		"""Searches for the next / previous unlocked scream. 1=right, -1=left. Otherwise, ignored.
+
+		:param direction: Direction.
+		"""
+		if direction!=-1 and direction!=1: return
+		found=False
+		i=self.index
+		while True:
+			i+=direction
+			if i==-1 or i==self.appMain.numScreams: break
+			if self.appMain.collectionStorage.isUnlocked(i):
+				found=i
+				break
+			#end found?
+		#end while
+		if found: self.moveTo(i)
+	#end searchUnlocked
+
+	def play(self,index):
+		"""Plays a scream.
+
+		:param pos: Scream number.
+		"""
+		if self.sound: self.sound.stop()
+		self.sound=bgtsound.sound()
+		self.sound.load(self.appMain.sounds["scream%d.ogg" % index])
+		self.sound.pitch=self.pitch
+		self.sound.play()
+		bgtsound.playOneShot(self.appMain.sounds["confirm.ogg"])
+	#end play
+
+	def changePitch(self,pitch):
+		"""Changes the playback pitch.
+
+		:param pitch: New pitch.
+		"""
+		self.pitch=pitch
+		if self.sound: self.sound.pitch=self.pitch
+	#end changePitch
