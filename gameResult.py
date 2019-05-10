@@ -6,7 +6,7 @@
 class GameResult:
 	"""This class stores a gameplay's result. """
 	def __init__(self):
-		pass
+		self.aboated=False
 	def __del__(self):
 		pass
 	def initialize(self,field):
@@ -22,3 +22,17 @@ class GameResult:
 		self.punches=field.player.punches
 		self.level=field.level
 		self.mode=field.modeHandler.getName()
+		self.unlockedCollection=field.collectionCounter.getLog()
+
+	def getAboated(self):
+		"""Retrieves if this game was ended by aboat (ESC)."""
+		return self.aboated
+	#end aboated
+
+	def setAboated(self,abt):
+		"""Set the aboat status of this result.
+
+		:param abt: Aboated?
+		:type abt: bool
+		"""
+		self.aboated=abt

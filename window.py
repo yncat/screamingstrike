@@ -130,7 +130,7 @@ class menu:
 		self.enterSound=enterSound
 		self.cancelSound=cancelSound
 
-	def add(self,str):
+	def append(self,str):
 		"""Adds one or multiple menu items. # is used as the delimitor. """
 		lst=str.split("#")
 		for elem in lst:
@@ -171,9 +171,29 @@ class menu:
 		"""Returns the current cursor position. """
 		return self.cursor
 
+	def getString(self,index):
+		"""Retrieves the menu item string at the specified index. Returns empty string when out of bounds.
+
+		:param index: Index.
+		:rtype: str
+		"""
+		if index<0 or index>=len(self.items): return ""
+		return self.items[index]
+
 	def moveTo(self,c):
 		"""Moves the menu cursor to the specified position and reads out the cursor. """
 		if self.cursorSound is not None: playOneShot(self.cursorSound)
 		self.cursor=c
 		self.wnd.say(self.items[self.cursor])
+	#end moveTo
+
+	def isLast(self,index):
+		"""Retrieves if the the given index is the last item of the menu. This is particularly useful when you want to bind the last action to exit or close.
+
+		:param index: index.
+		:type index: int
+		:rtype: bool
+		"""
+		return self.cursor==len(self.items)-1
+
 #end class menu

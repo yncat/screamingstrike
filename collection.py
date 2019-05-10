@@ -121,8 +121,12 @@ class CollectionCounter(object):
 		if self.storage is None: return
 		if self.storage.inclement(number) is True: self.unlock(number)
 
-	def unlock(self):
-		"""Triggers one unlock sound. You can call this method multiple times really quickly; this object delays the following playbacks not to make them overlap."""
+	def unlock(self,number):
+		"""Triggers one unlock sound. You can call this method multiple times really quickly; this object delays the following playbacks not to make them overlap.
+
+		:param number: Scream number to unlock.
+		:type number: int
+		"""
 		self.stack+=1
 		self.log.append(number)
 	#end trigger

@@ -17,8 +17,6 @@ import gameResult
 import globalVars
 import scorePostingAdapter
 import collection
-# constants
-GAME_RESULT_TERMINATE = 0
 
 COLLECTION_DATA_FILENAME="data/collection.dat"
 
@@ -160,7 +158,8 @@ class ssAppMain(window.SingletonWindow):
 			# end if
 			result=self.gamePlay(selected)
 			self.resetMusicPitch()
-			if result==GAME_RESULT_TERMINATE: continue
+			self.reviewCollection(result)
+			if result.getAboated(): continue
 			self.resultScreen(result)
 
 	def optionsMenu(self):
@@ -169,11 +168,11 @@ class ssAppMain(window.SingletonWindow):
 		backup.initialize(self.options)
 		m=window.menu()
 		m.initialize(self,_("Options Menu, use your up and down arrows to choose an option, left and right arrows to change values, enter to save or escape to discard changes"),"",self.sounds["cursor.ogg"],self.sounds["confirm.ogg"],self.sounds["confirm.ogg"])
-		m.add(_("Background music volume"))
-		m.add(_("Left panning limit"))
-		m.add(_("Right panning limit."))
-		m.add(_("Item announcement voice"))
-		m.add(_("Language (restart to apply)"))
+		m.append(_("Background music volume"))
+		m.append(_("Left panning limit"))
+		m.append(_("Right panning limit."))
+		m.append(_("Item announcement voice"))
+		m.append(_("Language (restart to apply)"))
 		m.open()
 		while(True):
 			self.frameUpdate()
@@ -278,7 +277,12 @@ class ssAppMain(window.SingletonWindow):
 		field.setLimits(self.options.leftPanningLimit,self.options.rightPanningLimit)
 		while(True):
 			self.frameUpdate()
-			if self.keyPressed(window.K_ESCAPE): return GAME_RESULT_TERMINATE
+			if self.keyPressed(window.K_ESCAPE):
+				result=gameResult.GameResult()
+				result.initialize(field)
+				result.aboated=True
+				return result
+			#end aboat
 			if field.frameUpdate() is False:break
 		# end while
 		field.clear()
@@ -294,12 +298,39 @@ class ssAppMain(window.SingletonWindow):
 		r.initialize(field)
 		return r
 
+	def reviewCollection(self,result):
+		"""Shows unlocked collections, if any.
+
+		:param result: result to look.
+		:type result: gameResult.GameResult
+		"""
+		num=len(result.unlockedCollection)
+		if num==0: return
+		bgtsound.playOneShot(self.sounds["unlock.ogg"])
+		self.wait(500)
+		m=window.menu()
+		s=_("collection") if num==1 else _("collections")
+		m.initialize(self,_("Unlocked %(number)d %(collection)s!" % {"number": num, "collection": s}),"",self.sounds["cursor.ogg"],self.sounds["confirm.ogg"],self.sounds["confirm.ogg"])
+		for elem in result.unlockedCollection:
+			m.append(str(elem))
+		#end for
+		m.append(_("Close"))
+		m.open()
+		while(True):
+			self.frameUpdate()
+			r=m.frameUpdate()
+			if r is None:continue
+			if r==-1 or m.isLast(r): break
+			bgtsound.playOneShot(self.sounds["scream%s.ogg" % m.getString(m.getCursorPos())])
+		#end while
+	#end reviewCollection
+
 	def resultScreen(self,result):
 		"""Shows the game results screen."""
 		m=window.menu()
 		m.initialize(self,_("Game result"),"",self.sounds["cursor.ogg"],self.sounds["confirm.ogg"],self.sounds["confirm.ogg"])
-		m.add(_("Final score: %(score)d") % {"score": result.score})
-		m.add(_("Punches: %(punches)d, hits: %(hits)d, accuracy: %(accuracy).2f%%") % {"punches": result.punches, "hits": result.hits, "accuracy": result.hitPercentage})
+		m.append(_("Final score: %(score)d") % {"score": result.score})
+		m.append(_("Punches: %(punches)d, hits: %(hits)d, accuracy: %(accuracy).2f%%") % {"punches": result.punches, "hits": result.hits, "accuracy": result.hitPercentage})
 		m.open()
 		while(True):
 			self.frameUpdate()
@@ -321,9 +352,9 @@ Returns False when the game is closed. Otherwise True.
 		"""
 		m=window.menu()
 		m.initialize(self,_("Score posting"),"",self.sounds["cursor.ogg"],self.sounds["confirm.ogg"],self.sounds["confirm.ogg"])
-		m.add(_("Do you want to post this score to the scoreboard?"))
-		m.add(_("Yes"))
-		m.add(_("No"))
+		m.append(_("Do you want to post this score to the scoreboard?"))
+		m.append(_("Yes"))
+		m.append(_("No"))
 		while(True):
 			m.open()
 			while(True):
