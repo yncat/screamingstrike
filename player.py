@@ -75,7 +75,7 @@ class Player():
 		hit=0
 		for pos in range(int(self.punchRange)+1):
 			for elem in self.field.enemies:
-				if elem.state==enemy.STATE_ALIVE and self.x==elem.x and elem.y==pos:
+				if elem is not None and elem.state==enemy.STATE_ALIVE and self.x==elem.x and elem.y==pos:
 					elem.hit()
 					hit+=1
 					self.hits+=1

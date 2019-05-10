@@ -5,6 +5,7 @@ import datetime
 import random
 import bgtsound
 import bonusCounter
+import collection
 import enemy
 import gameModes
 import globalVars
@@ -20,6 +21,7 @@ class GameField():
 	def __del__(self):
 		self.Enemies=None
 		self.player=None
+		self.collectionCounter=None
 
 	def initialize(self, x,y,mode, voice):
 		self.x=x
@@ -32,9 +34,12 @@ class GameField():
 		self.level=1
 		self.enemies=[]
 		self.items=[]
-		self.enemies.append(None)
+		for i in range(self.level):
+			self.enemies.append(None)
 		self.player=player.Player()
 		self.player.initialize(self)
+		self.collectionCounter=collection.CollectionCounter()
+		self.collectionCounter.initialize(globalVars.appMain.collectionStorage)
 		self.defeats=0
 		self.nextLevelup=self.modeHandler.calculateNextLevelup()
 		self.levelupBonus=bonusCounter.BonusCounter()
@@ -61,6 +66,12 @@ class GameField():
 		self.rightPanningLimit=rpLimit
 
 	def frameUpdate(self):
+		self.collectionCounter.frameUpdate()
+		self.modeHandler.frameUpdate()
+		self.levelupBonus.frameUpdate()
+		for elem in self.items[:]:
+			if elem is not None and elem.state==itemConstants.STATE_SHOULDBEDELETED: self.items.remove(elem)
+			if elem is not None: elem.frameUpdate()
 		if self.destructing:
 			if self.destructTimer.elapsed>=1800: self.performDestruction()
 			return True
@@ -70,21 +81,16 @@ class GameField():
 			self.log(_("Game over! Final score: %(score)d") % {"score": self.player.score})
 			return False
 		# end if
-		self.modeHandler.frameUpdate()
-		self.levelupBonus.frameUpdate()
 		for i in range(self.level):
 			if self.enemies[i] is not None and self.enemies[i].state==enemy.STATE_SHOULDBEDELETED: self.enemies[i]=None
 			if self.enemies[i] is not None: self.enemies[i].frameUpdate()
 			if self.enemies[i] is None: self.spawnEnemy(i)
 		# end for
-		for elem in self.items[:]:
-			if elem is not None and elem.state==itemConstants.STATE_SHOULDBEDELETED: self.items.remove(elem)
-			if elem is not None: elem.frameUpdate()
 		return True
 
 	def spawnEnemy(self,slot):
 		e=enemy.Enemy()
-		e.initialize(self,random.randint(0,self.x-1),random.randint(300,900),random.randint(1,globalVars.appMain.getNumScreams()))
+		e.initialize(self,random.randint(0,self.x-1),random.randint(300,900),random.randint(0,globalVars.appMain.getNumScreams()-1))
 		self.enemies[slot]=e
 
 	def logDefeat(self):

@@ -10,21 +10,17 @@ import gettext
 import window
 import sound_lib.sample
 import bgtsound
-import bonusCounter
-import enemy
 import gameField
 import gameModes
 import gameOptions
 import gameResult
 import globalVars
-import item
-import itemConstants
-import player
 import scorePostingAdapter
 import collection
 # constants
 GAME_RESULT_TERMINATE = 0
 
+COLLECTION_DATA_FILENAME="data/collection.dat"
 
 class ssAppMain(window.SingletonWindow):
 	"""
@@ -58,8 +54,8 @@ class ssAppMain(window.SingletonWindow):
 		self.music.stream("data/sounds/stream/bg.ogg")
 		self.music.volume = self.options.bgmVolume
 		self.numScreams = len(glob.glob("data/sounds/scream*.ogg"))
-		self.collection=collection.CollectionHandler()
-		self.collection.initialize(self.numScreams,"data/collection.dat")
+		self.collectionStorage=collection.CollectionStorage()
+		self.collectionStorage.initialize(self.numScreams,COLLECTION_DATA_FILENAME)
 		return True
 
 	def initTranslation(self):
@@ -157,15 +153,15 @@ class ssAppMain(window.SingletonWindow):
 		if self.intro() is False: return
 		while(True):
 			selected=self.mainmenu()
-			if selected is False or selected==4: return
+			if selected is False or selected==4: self.exit()
 			if selected==3:
 				if self.optionsMenu() is False: return
 				continue
 			# end if
 			result=self.gamePlay(selected)
-			if result==GAME_RESULT_TERMINATE: return
 			self.resetMusicPitch()
-			if self.resultScreen(result) is False: return
+			if result==GAME_RESULT_TERMINATE: continue
+			self.resultScreen(result)
 
 	def optionsMenu(self):
 		"""Shows the game options menu. It returns when the menu is closed and all required i/o is finished."""
@@ -392,5 +388,10 @@ Returns False when the game is closed. Otherwise True.
 		#end frame update
 		bgtsound.playOneShot(self.sounds["confirm"])
 	#end message
+
+	def onExit(self):
+		"""Extended onExit callback."""
+		self.collectionStorage.save(COLLECTION_DATA_FILENAME)
+		return True
 # end class ssAppMain
 

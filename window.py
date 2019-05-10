@@ -4,6 +4,7 @@
 
 from copy import copy
 import pygame
+import sys
 import accessible_output2.outputs.auto
 from pygame.locals import *
 from dialog import *
@@ -77,6 +78,7 @@ When user presses alt+f4 or the x icon, this function attempts to shut down the 
 
 	def exit(self):
 		"""Attempt to exit the game. It is canceled if the onExit callback is set and it returned False."""
+		print("exiting")
 		if not self.onExit(): return
 		sys.exit()
 
