@@ -9,12 +9,12 @@ import window
 NORMAL=0
 ARCADE=1
 CLASSIC=2
-NAME_STR = ["Normal", "Arcade", "Classic"]
+ALL_MODES_STR = ["Normal", "Arcade", "Classic"]
 
 class ModeHandlerBase(object):
 	def __init__(self):
 		self.allowConsecutiveHitsBonus=True
-		self.allowConsecutiveMissesBonus=True
+		self.allowConsecutiveMissesBonus=False#Originally this was true, but I decided to disable it because the one of my friends (a professional game designer) said "In the game designing theory, subtracting scores is a totally bad idea!". And the penalty was very irritating, actually. lol!
 		self.allowLevelupBonus=True
 		self.name="Base"
 
@@ -45,7 +45,7 @@ Calculates the number of enemies that should be defeated in this mode. This func
 class NormalModeHandler(ModeHandlerBase):
 	def __init__(self):
 		super().__init__()
-		self.name=NAME_STR[0]
+		self.name=ALL_MODES_STR[0]
 
 	def initialize(self,field):
 		super().initialize(field)
@@ -53,7 +53,7 @@ class NormalModeHandler(ModeHandlerBase):
 class ArcadeModeHandler(ModeHandlerBase):
 	def __init__(self):
 		super().__init__()
-		self.name=NAME_STR[1]
+		self.name=ALL_MODES_STR[1]
 
 	def initialize(self,field):
 		super().initialize(field)
@@ -99,7 +99,7 @@ class ClassicModeHandler(ModeHandlerBase):
 		self.allowConsecutiveHitsBonus=False
 		self.allowConsecutiveMissesBonus=False
 		self.allowLevelupBonus=False
-		self.name=NAME_STR[2]
+		self.name=ALL_MODES_STR[2]
 
 	def calculateNextLevelup(self):
 		"""

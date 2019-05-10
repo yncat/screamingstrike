@@ -45,6 +45,8 @@ class Player():
 		self.consecutiveMisses=0
 		self.itemEffects=[]
 		self.penetrate=False
+		self.lastHighscore=globalVars.appMain.hsStorage.get(self.field.modeHandler.getName())
+		self.gotHighscore=False
 
 	def frameUpdate(self):
 		"""Call this method once per frame to keep everything updated."""
@@ -292,13 +294,35 @@ Moves this player to the specified position.
 
 	def addScore(self,score):
 		"""
-Add a specified amount of score to this player.
+Add a specified amount of score to this player. Also checks for high score.
 
 :param score: Score to add.
 :type score: int
 """
 		self.score+=score
+		if self.gotHighscore is False and self.score>=self.lastHighscore: self.processHighscore()
 		which=_("added")
 		if score<=0: which=_("subtracted")
 		self.field.log(_("Point: %(added).1f %(changestr)s (%(total).1f)") % {"added": score, "changestr": which, "total": self.score})
+	#end addScore
+
+	def processHighscore(self):
+		"""Plays the highscore sound and logs that this player has achieved high score."""
+		bgtsound.playOneShot(globalVars.appMain.sounds["highscore.ogg"])
+		self.gotHighscore=True
+	#end processHighscore
+
+	def getNewHighscore(self):
+		"""Returns the new high score if this player got one, otherwise None."""
+		return None if self.gotHighscore is False else int(self.score)
+	#end getNewHighscore
+
+	def getPreviousHighscore(self):
+		"""Retrieves the previous high score. If this player has achieved a new high score, the previous one is returned. Otherwise, the currently standing highscore is returned.
+
+		:rtype: int
+		"""
+		return self.lastHighscore
+	#end getPreviousHighscore
 # end class Player
+

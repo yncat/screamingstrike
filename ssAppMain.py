@@ -15,10 +15,12 @@ import gameModes
 import gameOptions
 import gameResult
 import globalVars
+import highscore
 import scorePostingAdapter
 import collection
 
 COLLECTION_DATA_FILENAME="data/collection.dat"
+HIGHSCORE_DATA_FILENAME="data/highscore.dat"
 
 class ssAppMain(window.SingletonWindow):
 	"""
@@ -54,6 +56,8 @@ class ssAppMain(window.SingletonWindow):
 		self.numScreams = len(glob.glob("data/sounds/scream*.ogg"))
 		self.collectionStorage=collection.CollectionStorage()
 		self.collectionStorage.initialize(self.numScreams,COLLECTION_DATA_FILENAME)
+		self.hsStorage=highscore.HsStorage()
+		self.hsStorage.initialize(HIGHSCORE_DATA_FILENAME)
 		return True
 
 	def initTranslation(self):
@@ -134,7 +138,7 @@ class ssAppMain(window.SingletonWindow):
 		:rtype: int
 		"""
 		m=window.menu()
-		m.initialize(self,_("Main menu. Use your up and down arrows to choose an option, then press enter to confirm"),_("Normal mode#Arcade mode#Classic mode#Options#Exit"),self.sounds["cursor.ogg"],self.sounds["confirm.ogg"],self.sounds["confirm.ogg"])
+		m.initialize(self,_("Main menu. Use your up and down arrows to choose an option, then press enter to confirm"),[_("Normal mode")+"&1", _("Arcade mode")+"&2",_("Classic mode")+"&3",_("Options")+"&o",_("Quit")+"&Q"],self.sounds["cursor.ogg"],self.sounds["confirm.ogg"],self.sounds["confirm.ogg"])
 		m.open()
 		while(True):
 			self.frameUpdate()
@@ -271,7 +275,7 @@ class ssAppMain(window.SingletonWindow):
 
 		:rtype: gameResult.GameResult
 		"""
-		self.say(_("%(playmode)s, start!") % {"playmode": gameModes.NAME_STR[mode]})
+		self.say(_("%(playmode)s, high score %(highscore)s, start!") % {"playmode": gameModes.ALL_MODES_STR[mode], "highscore":self.hsStorage.get(gameModes.ALL_MODES_STR[mode])})
 		field=gameField.GameField()
 		field.initialize(3,20,mode,self.options.itemVoice)
 		field.setLimits(self.options.leftPanningLimit,self.options.rightPanningLimit)
@@ -281,6 +285,7 @@ class ssAppMain(window.SingletonWindow):
 				result=gameResult.GameResult()
 				result.initialize(field)
 				result.aboated=True
+				field.clear()
 				return result
 			#end aboat
 			if field.frameUpdate() is False:break
@@ -330,6 +335,11 @@ class ssAppMain(window.SingletonWindow):
 		m=window.menu()
 		m.initialize(self,_("Game result"),"",self.sounds["cursor.ogg"],self.sounds["confirm.ogg"],self.sounds["confirm.ogg"])
 		m.append(_("Final score: %(score)d") % {"score": result.score})
+		if result.highscore is not None:
+			m.append(_("New high score! Plus %(distance)d (last: %(last)d)") % {"distance": result.highscore-result.previousHighscore, "last": result.previousHighscore})
+			bgtsound.playOneShot(self.sounds["highscore.ogg"])
+			self.hsStorage.set(result.mode,result.highscore)
+		#end if highscore
 		m.append(_("Punches: %(punches)d, hits: %(hits)d, accuracy: %(accuracy).2f%%") % {"punches": result.punches, "hits": result.hits, "accuracy": result.hitPercentage})
 		m.open()
 		while(True):
@@ -423,6 +433,7 @@ Returns False when the game is closed. Otherwise True.
 	def onExit(self):
 		"""Extended onExit callback."""
 		self.collectionStorage.save(COLLECTION_DATA_FILENAME)
+		self.hsStorage.save(HIGHSCORE_DATA_FILENAME)
 		return True
 # end class ssAppMain
 
