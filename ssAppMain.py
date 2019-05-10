@@ -21,7 +21,7 @@ import item
 import itemConstants
 import player
 import scorePostingAdapter
-
+import collection
 # constants
 GAME_RESULT_TERMINATE = 0
 
@@ -58,6 +58,8 @@ class ssAppMain(window.SingletonWindow):
 		self.music.stream("data/sounds/stream/bg.ogg")
 		self.music.volume = self.options.bgmVolume
 		self.numScreams = len(glob.glob("data/sounds/scream*.ogg"))
+		self.collection=collection.CollectionHandler()
+		self.collection.initialize(self.numScreams,"data/collection.dat")
 		return True
 
 	def initTranslation(self):
