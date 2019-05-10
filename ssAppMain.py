@@ -417,8 +417,8 @@ Returns False when the game is closed. Otherwise True.
 		m=window.menu()
 		m.initialize(self,_("Score posting"),"",self.sounds["cursor.ogg"],self.sounds["confirm.ogg"],self.sounds["confirm.ogg"])
 		m.append(_("Do you want to post this score to the scoreboard?"))
-		m.append(_("Yes"))
-		m.append(_("No"))
+		m.append(_("Yes")+"&Y")
+		m.append(_("No")+"&N")
 		while(True):
 			m.open()
 			while(True):
@@ -481,7 +481,7 @@ Returns False when the game is closed. Otherwise True.
 			if True in (self.keyPressed(window.K_LEFT), self.keyPressed(window.K_RIGHT), self.keyPressed(window.K_UP), self.keyPressed(window.K_DOWN)): self.say(msg)#Message repeat
 			if self.keyPressed(window.K_RETURN): break
 		#end frame update
-		bgtsound.playOneShot(self.sounds["confirm"])
+		bgtsound.playOneShot(self.sounds["confirm.ogg"])
 	#end message
 
 	def onExit(self):
