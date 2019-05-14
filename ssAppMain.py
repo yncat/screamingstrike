@@ -175,16 +175,18 @@ class ssAppMain(window.SingletonWindow):
 				self.optionsDialog()
 				continue
 			#end options
-			self.play(selected)
+			self.play(gameModes.ALL_MODES_STR[selected])
 		#end while
 	#end run
 
 	def play(self,mode):
 		"""Plays the specified mode.
 
-		:param mode: Mode in number.
-		:type mode: int
+		:param mode: Mode in string.
+		:type mode: str
 		"""
+		self.checkTip(mode)
+;asd
 		result=self.gamePlay(mode)
 		self.resetMusicPitch()
 		self.reviewCollection(result)
@@ -192,6 +194,12 @@ class ssAppMain(window.SingletonWindow):
 		if result.score>0:
 			self.scorePostDialog(result)
 
+	def checkTip(self,mode):
+		"""Shows the mode-specific tip.
+		k="playcount_"+gameModes.ALL_MODES_STR[mode]
+		if self.statsStorage.get(k)==0:
+			self.statsStorage.inclement(k)
+			self.showTip(_("
 	def collectionDialog(self):
 		"""Shows the collection dialog. Returns when user pressed escape and left the dialog."""
 		c=collection.CollectionDialog()

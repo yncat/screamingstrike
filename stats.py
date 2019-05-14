@@ -68,6 +68,34 @@ class StatsStorage(object):
 		self.items[key]=value
 	#end set
 
+	def inclement(self,key, unit=1):
+		"""Inclements the specified value by unit. If the key doesn't exist, create one.
+
+		:param unit: Unit. Default is 1.
+		:type unit: int
+		"""
+		self.checkKey(key)
+		self.items[key]=self.items[key]+unit
+	#end inclement
+
+	def declement(self,key, unit=1):
+		"""Declements the specified value by unit. If the key doesn't exist, does nothing.
+
+		:param unit: Unit. Default is 1.
+		:type unit: int
+		"""
+		self.keyCheck(key)
+		self.items[key]=self.items[key]-unit
+	#end inclement
+
+	def checkKey(self,key):
+		"""Checks the specified key. If it doesn't exist, create a new one with 0.
+
+		:param key: Key to check.
+		:type key: str
+		"""
+		if key in self.items: self.items[key]=0
+
 	def save(self,filename):
 		"""Saves the storage to a file. If IO error occurs, saving is skipped.
 
