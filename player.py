@@ -91,8 +91,12 @@ class Player():
 			if not self.penetrate and hit>0: break
 			for elem in self.field.items:
 				if elem.state==itemConstants.STATE_ALIVE and self.x==elem.x and elem.y==pos:
-					elem.hit()
-					self.processItemHit(elem)
+					if globalVars.appMain.keyPressing(window.K_UP):
+						elem.destroy()
+					else:
+						elem.obtain()
+						self.processItemHit(elem)
+					#end item hit
 					hit=True
 					self.hits+=1
 					self.consecutiveHits+=1

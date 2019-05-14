@@ -3,6 +3,7 @@
 # Copyright (C) 2019 Yukio Nozawa <personal@nyanchangames.com>
 import locale
 import os
+import pickle
 class GameOptions:
 	def __init__(self):
 		self.BGMVOLUME_NEGATIVE_BOUNDARY=-30

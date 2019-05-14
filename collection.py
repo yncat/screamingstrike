@@ -2,6 +2,8 @@
 # Screaming Strike collection handler
 # Copyright (C) 2019 Yukio Nozawa <personal@nyanchangames.com>
 """This module contains collectionStorage, collectionCounter and collectionDialog. CollectionStorage is used as it implies, and CollectionCounter is created for every game session and that object accesses the storage. """
+import zlib
+
 import bgtsound
 import globalVars
 import window
@@ -34,12 +36,12 @@ class CollectionStorage(object):
 			return
 		#end not given a file
 		try:
-			f=open(file,"r")
+			f=open(file,"rb")
 		except IOError:
 			self.reserve(screamNum)
 			return
 		#end except
-		nums=f.read().split(",")
+		nums=zlib.decompress(f.read()).decode().split(",")
 		for elem in nums:
 			self.screams.append(int(elem))
 		#end for
@@ -79,11 +81,11 @@ class CollectionStorage(object):
 		#end for
 		tmp=tmp.rstrip(",")
 		try:
-			f=open(file,"w")
+			f=open(file,"wb")
 		except IOError:
 			return False
 		#end except
-		f.write(tmp)
+		f.write(zlib.compress(tmp.encode()))
 		f.close()
 		return True
 
