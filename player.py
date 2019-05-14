@@ -45,7 +45,7 @@ class Player():
 		self.consecutiveMisses=0
 		self.itemEffects=[]
 		self.penetrate=False
-		self.lastHighscore=globalVars.appMain.hsStorage.get(self.field.modeHandler.getName())
+		self.lastHighscore=globalVars.appMain.statsStorage.get("hs_"+self.field.modeHandler.getName())
 		self.gotHighscore=False
 
 	def frameUpdate(self):

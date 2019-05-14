@@ -15,12 +15,12 @@ import gameModes
 import gameOptions
 import gameResult
 import globalVars
-import highscore
+import stats
 import scorePostingAdapter
 import collection
 
 COLLECTION_DATA_FILENAME="data/collection.dat"
-HIGHSCORE_DATA_FILENAME="data/highscore.dat"
+STATS_DATA_FILENAME="data/stats.dat"
 
 class ssAppMain(window.SingletonWindow):
 	"""
@@ -56,8 +56,8 @@ class ssAppMain(window.SingletonWindow):
 		self.numScreams = len(glob.glob("data/sounds/scream*.ogg"))
 		self.collectionStorage=collection.CollectionStorage()
 		self.collectionStorage.initialize(self.numScreams,COLLECTION_DATA_FILENAME)
-		self.hsStorage=highscore.HsStorage()
-		self.hsStorage.initialize(HIGHSCORE_DATA_FILENAME)
+		self.statsStorage=stats.StatsStorage()
+		self.statsStorage.initialize(STATS_DATA_FILENAME)
 		return True
 
 	def initTranslation(self):
@@ -212,7 +212,7 @@ class ssAppMain(window.SingletonWindow):
 				continue
 			#end confirmation
 			if r==0:
-				self.hsStorage.reset()
+				self.statsStorage.resetHighscore()
 				self.say(_("Your highscores are all reset!"))
 				continue
 			if r==1:
@@ -332,7 +332,7 @@ class ssAppMain(window.SingletonWindow):
 
 		:rtype: gameResult.GameResult
 		"""
-		self.say(_("%(playmode)s, high score %(highscore)s, start!") % {"playmode": gameModes.ALL_MODES_STR[mode], "highscore":self.hsStorage.get(gameModes.ALL_MODES_STR[mode])})
+		self.say(_("%(playmode)s, high score %(highscore)s, start!") % {"playmode": gameModes.ALL_MODES_STR[mode], "highscore":self.statsStorage.get("hs_"+gameModes.ALL_MODES_STR[mode])})
 		field=gameField.GameField()
 		field.initialize(3,20,mode,self.options.itemVoice)
 		field.setLimits(self.options.leftPanningLimit,self.options.rightPanningLimit)
@@ -395,7 +395,7 @@ class ssAppMain(window.SingletonWindow):
 		if result.highscore is not None:
 			m.append(_("New high score! Plus %(distance)d (last: %(last)d)") % {"distance": result.highscore-result.previousHighscore, "last": result.previousHighscore})
 			bgtsound.playOneShot(self.sounds["highscore.ogg"])
-			self.hsStorage.set(result.mode,result.highscore)
+			self.statsStorage.set("hs_"+result.mode,result.highscore)
 		#end if highscore
 		m.append(_("Punches: %(punches)d, hits: %(hits)d, accuracy: %(accuracy).2f%%") % {"punches": result.punches, "hits": result.hits, "accuracy": result.hitPercentage})
 		m.open()
@@ -489,7 +489,7 @@ Returns False when the game is closed. Otherwise True.
 	def onExit(self):
 		"""Extended onExit callback."""
 		self.collectionStorage.save(COLLECTION_DATA_FILENAME)
-		self.hsStorage.save(HIGHSCORE_DATA_FILENAME)
+		self.statsStorage.save(STATS_DATA_FILENAME)
 		return True
 # end class ssAppMain
 

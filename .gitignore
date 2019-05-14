@@ -3,6 +3,7 @@ result.txt
 data/options.dat
 data/collection.dat
 data/highscore.dat
+data/stats.dat
 data/errorLog.txt
 *.po~
 ss.build/
