@@ -4,6 +4,7 @@
 
 from copy import copy
 import pygame
+import wx
 import sys
 import accessible_output2.outputs.auto
 from pygame.locals import *
@@ -12,6 +13,7 @@ from bgtsound import *
 class SingletonWindow():
 	"""Just a pygame window wrapper. As the name implies, you mustn't create multiple singletonWindow's in your game. You should inherit this class and make your own app main class to make your code easy to read."""
 	def __init__(self):
+		self.wxInstance=wx.App()
 		pygame.init()
 		self.clock=pygame.time.Clock()
 
@@ -92,6 +94,14 @@ When user presses alt+f4 or the x icon, this function attempts to shut down the 
 		"""
 		return True#This is default
 
+	def input(self,title,message):
+		"""Shows a text input dialog and returns what was input by the user. Returns None when canceled."""
+		ret=None
+		dlg=wx.TextEntryDialog(None, message,title)
+		if dlg.ShowModal()==wx.ID_OK: ret=dlg.GetValue()
+		dlg.Destroy()
+		return ret
+	#end input
 #end class singletonWindow
 
 class Timer:
