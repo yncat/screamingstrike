@@ -72,6 +72,16 @@ class Item():
 		self.fallingBeep.stop()
 		self.switchState(STATE_SHOULDBEDELETED)
 
+	def punch(self):
+		"""Called when this item was punched and destroyed."""
+		s=bgtsound.sound()
+		s.load(globalVars.appMain.sounds["hit.ogg"])
+		s.pan=self.field.getPan(self.x)
+		s.pitch=random.randint(70,130)
+		s.play()
+		self.destroy()
+
+
 	def destroy(self):
 		self.field.log(_("A \"%(item)s\" item was shattered into peaces!") % {"item": NAMES[self.type][self.identifier]})
 		self.switchState(STATE_BROKEN)

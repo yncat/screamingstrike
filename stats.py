@@ -36,7 +36,7 @@ class StatsStorage(object):
 		self.items={}
 	#end resetAll
 
-	def resetHighscore(self):
+	def resetHighscores(self):
 		"""Resets highscores only."""
 		for mode in gameModes.ALL_MODES_STR:
 			self.items["hs_"+mode]=0

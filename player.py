@@ -92,7 +92,7 @@ class Player():
 			for elem in self.field.items:
 				if elem.state==itemConstants.STATE_ALIVE and self.x==elem.x and elem.y==pos:
 					if globalVars.appMain.keyPressing(window.K_UP):
-						elem.destroy()
+						elem.punch()
 					else:
 						elem.obtain()
 						self.processItemHit(elem)
