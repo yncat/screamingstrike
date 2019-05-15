@@ -456,7 +456,7 @@ Returns False when the game is closed. Otherwise True.
 		if r==1:#post
 			name=self.input(_("Name entry"),_("Please input your name."))
 			if name is None: return
-			adapter=scorePostingAdapter.AdapterBase()
+			adapter=scorePostingAdapter.NyanchanGames()
 			ret=adapter.post(name,result)
 			if ret==scorePostingAdapter.RET_UNAVAILABLE:
 				self.message(_("This build of Screaming Strike does not support score posting. Sorry!"))
@@ -466,7 +466,11 @@ Returns False when the game is closed. Otherwise True.
 				self.message(_("There was an error while posting your score. Please try again later."))
 				return
 			#end connection error
-			self.message(_("Congratulations! Your score is ranked at %(pos)d! Keep up your great work!" % {"pos": ret}))
+			if ret==scorePostingAdapter.RET_TOO_LOW:
+				self.message(_("Your score was posted, but you were not ranked in. Better luck next time!"))
+				return
+			#end connection error
+			self.message(_("Congratulations! Your score is ranked in position %(pos)d! Keep up your great work!" % {"pos": ret}))
 			return
 
 	def changeMusicPitch_relative(self,p):

@@ -7,6 +7,7 @@ import gameResult
 #return values of post method
 RET_UNAVAILABLE=0
 RET_CONNECTION_ERROR=-1
+RET_TOO_LOW=-2
 
 class AdapterBase(object):
 	"""Inherit this class and override all methods to make your own adapter."""
