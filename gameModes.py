@@ -106,3 +106,14 @@ class ClassicModeHandler(ModeHandlerBase):
 This function provides classic mode specific formula.
 """
 		return int((2+self.field.level)*0.7)
+
+def getModeHandler(mode):
+	"""Receives a mode in string and returns the associated modeHandler object without initializing it.
+
+	:param mode: Mode.
+	:type mode: str
+	"""
+	if mode==ALL_MODES_STR[0]: return NormalModeHandler()
+	if mode==ALL_MODES_STR[1]: return ArcadeModeHandler()
+	if mode==ALL_MODES_STR[2]: return ClassicModeHandler()
+	return None

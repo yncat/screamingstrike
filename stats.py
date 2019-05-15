@@ -36,7 +36,7 @@ class StatsStorage(object):
 		self.items={}
 	#end resetAll
 
-	def resetHighscores(self):
+	def resetHighscore(self):
 		"""Resets highscores only."""
 		for mode in gameModes.ALL_MODES_STR:
 			self.items["hs_"+mode]=0
@@ -94,7 +94,7 @@ class StatsStorage(object):
 		:param key: Key to check.
 		:type key: str
 		"""
-		if key in self.items: self.items[key]=0
+		if not key in self.items: self.items[key]=0
 
 	def save(self,filename):
 		"""Saves the storage to a file. If IO error occurs, saving is skipped.

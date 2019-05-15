@@ -185,8 +185,7 @@ class ssAppMain(window.SingletonWindow):
 		:param mode: Mode in string.
 		:type mode: str
 		"""
-		self.checkTip(mode)
-;asd
+		self.triggerBeforeStartTips(mode)
 		result=self.gamePlay(mode)
 		self.resetMusicPitch()
 		self.reviewCollection(result)
@@ -194,12 +193,30 @@ class ssAppMain(window.SingletonWindow):
 		if result.score>0:
 			self.scorePostDialog(result)
 
-	def checkTip(self,mode):
+	def triggerBeforeStartTips(self,mode):
 		"""Shows the mode-specific tip.
-		k="playcount_"+gameModes.ALL_MODES_STR[mode]
+
+		:param mode: Mode.
+		:type mode: str
+		"""
+		k="playcount_"+mode
 		if self.statsStorage.get(k)==0:
 			self.statsStorage.inclement(k)
-			self.showTip(_("
+			if mode==gameModes.ALL_MODES_STR[0]:
+				self.showTip(_("This is the new standard mode of Screaming Strike 2. Compared to the previous version, you get bonus points when leveling up. Also, you have chances to get bonuses if you achieve more than 5 consecutive hits!"))
+			elif mode==gameModes.ALL_MODES_STR[1]:
+				self.showTip(_("This is the new arcade mode of Screaming Strike 2! From the new version, items that fall faster are more likely to be good, and slower ones are more likely to be bad. You can obtain an item by punching it, or destroy it by combining your up arrow when punching. Carefully choose which item to obtain!"))
+			elif mode==gameModes.ALL_MODES_STR[2]:
+				self.showTip(_("This is the old-fassioned game mode! You don't get bonuses based on accuracy, so you can punch, punch, punch punch punch and punch! This mode has shirper levelup curb, meaning that you can collect screams really fast!"))
+
+	def showTip(self,tip):
+		"""Shows the ingame tip.
+
+		:param tip: Tip to show.
+		:type tip: str
+		"""
+		self.message(_("Tip: %s (Press enter to close this tip)") % tip)
+
 	def collectionDialog(self):
 		"""Shows the collection dialog. Returns when user pressed escape and left the dialog."""
 		c=collection.CollectionDialog()
@@ -340,7 +357,7 @@ class ssAppMain(window.SingletonWindow):
 
 		:rtype: gameResult.GameResult
 		"""
-		self.say(_("%(playmode)s, high score %(highscore)s, start!") % {"playmode": gameModes.ALL_MODES_STR[mode], "highscore":self.statsStorage.get("hs_"+gameModes.ALL_MODES_STR[mode])})
+		self.say(_("%(playmode)s, high score %(highscore)s, start!") % {"playmode": mode, "highscore":self.statsStorage.get("hs_"+mode)})
 		field=gameField.GameField()
 		field.initialize(3,20,mode,self.options.itemVoice)
 		field.setLimits(self.options.leftPanningLimit,self.options.rightPanningLimit)

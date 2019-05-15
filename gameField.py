@@ -52,13 +52,7 @@ class GameField():
 		self.log(_("Game started at %(startedtime)s!") % {"startedtime": datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S")})
 
 	def setModeHandler(self,mode):
-		if mode==gameModes.NORMAL:
-			self.modeHandler=gameModes.NormalModeHandler()
-		elif mode==gameModes.ARCADE:
-			self.modeHandler=gameModes.ArcadeModeHandler()
-		elif mode==gameModes.CLASSIC:
-			self.modeHandler=gameModes.ClassicModeHandler()
-		# end if
+		self.modeHandler=gameModes.getModeHandler(mode)
 		self.modeHandler.initialize(self)
 
 	def setLimits(self,lpLimit, rpLimit):
