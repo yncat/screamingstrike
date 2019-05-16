@@ -2,6 +2,7 @@
 #BGT-ish Sound_lib wrapper
 #Original author: Carter Temm
 #Edited by Yukio Nozawa <personal@nyanchangames.com>
+# License: GPL V2.0 (See copying.txt for details)
 
 import math
 import sound_lib

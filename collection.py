@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # Screaming Strike collection handler
 # Copyright (C) 2019 Yukio Nozawa <personal@nyanchangames.com>
+# License: GPL V2.0 (See copying.txt for details)
 """This module contains collectionStorage, collectionCounter and collectionDialog. CollectionStorage is used as it implies, and CollectionCounter is created for every game session and that object accesses the storage. """
 import zlib
 

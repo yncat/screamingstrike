@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # Screaming Strike item constant values
 # Copyright (C) 2019 Yukio Nozawa <personal@nyanchangames.com>
+# License: GPL V2.0 (See copying.txt for details)
 STATE_ALIVE = 0
 STATE_BROKEN = 1
 STATE_SHOULDBEDELETED = 2

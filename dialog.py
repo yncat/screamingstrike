@@ -1,4 +1,8 @@
 ﻿# -*- coding: utf-8 -*-
+# Simple crossplatform dialog
+# Copyright (C) 2019 Yukio Nozawa <personal@nyanchangames.com>
+# License: GPL V2.0 (See copying.txt for details)
+
 import platform
 import ctypes
 import subprocess

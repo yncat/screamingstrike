@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # Screaming Strike bonus counter handler
 # Copyright (C) 2019 Yukio Nozawa <personal@nyanchangames.com>
+# License: GPL V2.0 (See copying.txt for details)
 
 import bgtsound
 import globalVars

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # Screaming Strike game field
 # Copyright (C) 2019 Yukio Nozawa <personal@nyanchangames.com>
+# License: GPL V2.0 (See copying.txt for details)
 import datetime
 import random
 import bgtsound

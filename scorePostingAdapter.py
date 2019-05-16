@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # Screaming Strike score posting adapters
 # Copyright (C) 2019 Yukio Nozawa <personal@nyanchangames.com>
+# License: GPL V2.0 (See copying.txt for details)
 """This module contains the base class of adapters for score posting. You need to make your own adapter by inheriting this class. You may add your extended class in this module, but distributing the modified module is not recommended."""
 import gameResult
 

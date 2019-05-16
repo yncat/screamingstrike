@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 #Screaming Strike startup file
 #Copyright (C) 2019 Yukio Nozawa <personal@nyanchangames.com>
+# License: GPL V2.0 (See copying.txt for details)
 #See SsAppMain.py for application entry point
 import sys
 import os
