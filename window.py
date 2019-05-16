@@ -1,7 +1,6 @@
 ﻿# -*- coding: utf-8 -*-
 #Basic window, timer, speech, menu handling
 #Copyright (C) 2019 Yukio Nozawa <personal@nyanchangames.com>
-# License: GPL V2.0 (See copying.txt for details)
 
 from copy import copy
 import pygame
@@ -45,7 +44,7 @@ When user presses alt+f4 or the x icon, this function attempts to shut down the 
 		pygame.display.update()
 		self.previousKeys=copy(self.keys)
 		self.keys=pygame.key.get_pressed()
-		if self.keys[K_LALT] and self.keys[K_F4]: self.exit()
+		if self.keyPressing(K_LALT) and self.keyPressed(K_F4): self.exit()
 		for event in pygame.event.get():
 			if event.type == QUIT: self.exit()
 		#end event
@@ -81,7 +80,6 @@ When user presses alt+f4 or the x icon, this function attempts to shut down the 
 
 	def exit(self):
 		"""Attempt to exit the game. It is canceled if the onExit callback is set and it returned False."""
-		print("exiting")
 		if not self.onExit(): return
 		sys.exit()
 
@@ -104,6 +102,15 @@ When user presses alt+f4 or the x icon, this function attempts to shut down the 
 		return ret
 	#end input
 #end class singletonWindow
+
+	def folderSelect(self,text):
+		"""Shows the folder select dialog. Returns the selected folder or None for cancel.
+
+		:param text: Explanation to show.
+		:type text: str
+		"""
+		dlg=wx.DirDialog(None, text, "")
+		return dlg.GetPath() if dlg.ShowModal()==wx.ID_OK else None
 
 class Timer:
 	"""A simple timer class like bgt."""
@@ -199,14 +206,24 @@ class menu:
 	def append(self,lst):
 		"""Adds one or multiple menu items. """
 		if isinstance(lst,str):
-			self.append_internal(lst)
+			self.items.append(self.append_internal(lst))
 			return
 		#end single append
 		for elem in lst:
-			self.append_internal(elem)
+			self.items.append(self.append_internal(elem))
+
+	def insert(self,index,item):
+		"""Inserts an item at the specified position.
+
+		:param index: Index to add.
+		:type index: int
+		:item: Item to add.
+		:type item: str
+		"""
+		self.items.insert(index,self.append_internal(item))
 
 	def append_internal(self,elem):
-		"""Parses and adds a single item. Called from append.
+		"""Parses and makes a single item tuple. Called from append.
 
 		:param elem: Element to add.
 		"""
@@ -215,7 +232,7 @@ class menu:
 			elem=elem[0:len(elem)-2]
 			self.shortcuts.append((shortcut,len(self.items)))
 		#end if shortcut registration
-		self.items.append((elem,shortcut_str,shortcut))
+		return (elem,shortcut_str,shortcut)
 
 	def parseShortcut(self,elem):
 		"""Parses the menu item string and returns shortcut keycode and string if detected. Otherwise, set both as None.
@@ -237,6 +254,27 @@ class menu:
 			#end else
 		#end if shortcut input exists
 		return shortcut, shortcut_str
+
+	def delete(self,index):
+		"""Deletes the item at the specified index.
+
+		:param index: index to delete.
+		:type index: int
+		"""
+		for elem in self.shortcuts[:]:
+			if elem[1] == index: self.shortcuts.remove(elem)
+		self.items.pop(index)
+
+	def modify(self,index,new):
+		"""Modifies the existing menu item.
+
+		:param index: Index to modify.
+		:type index: int
+		:param new: New menu item
+		:type new: str
+		"""
+		self.delete(index)
+		self.insert(index,new)
 
 	def open(self):
 		"""Starts the menu. You should call frameUpdate() to keep the menu operate after this. """

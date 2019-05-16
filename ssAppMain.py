@@ -2,15 +2,17 @@
 # Screaming Strike main implementation
 # Copyright (C) 2019 Yukio Nozawa <personal@nyanchangames.com>
 # License: GPL V2.0 (See copying.txt for details)
-import sys
+import dialog
 import random
 import glob
 import os
 import threading
 import gettext
-import window
+import platform
+import urllib.request
 import sound_lib.sample
 import bgtsound
+import collection
 import gameField
 import gameModes
 import gameOptions
@@ -18,10 +20,23 @@ import gameResult
 import globalVars
 import stats
 import scorePostingAdapter
-import collection
+import updateClient
+import window
 
+import dialog
 COLLECTION_DATA_FILENAME="data/collection.dat"
 STATS_DATA_FILENAME="data/stats.dat"
+
+GAME_VERSION=2.00
+UPDATE_SERVER_ADDRESS=""
+UPDATE_PACKAGE_URL={
+	"Windows": "",
+	"Darwin": ""
+}
+UPDATE_PACKAGE_LOCAL_NAME={
+	"Windows": "",
+	"Darwin": ""
+}
 
 class ssAppMain(window.SingletonWindow):
 	"""
@@ -43,6 +58,11 @@ class ssAppMain(window.SingletonWindow):
 		"""
 		super().initialize(640, 480, "Screaming Strike!")
 		globalVars.appMain = self
+		#Load sounds
+		self.updateChecker=updateClient.Checker()
+		self.updateChecker.initialize(GAME_VERSION,UPDATE_SERVER_ADDRESS)
+		self.updateChecker.run()
+		self.updateDownloader=None#Not downloading
 		self.thread_loadSounds = threading.Thread(target=self.loadSounds)
 		self.thread_loadSounds.setDaemon(True)
 		self.thread_loadSounds.start()
@@ -59,6 +79,7 @@ class ssAppMain(window.SingletonWindow):
 		self.collectionStorage.initialize(self.numScreams,COLLECTION_DATA_FILENAME)
 		self.statsStorage=stats.StatsStorage()
 		self.statsStorage.initialize(STATS_DATA_FILENAME)
+		self.exiting=False#True only within the onExit trap
 		return True
 
 	def initTranslation(self):
@@ -129,6 +150,7 @@ class ssAppMain(window.SingletonWindow):
 			# end skipping with enter
 		# end while intro is playing
 		self.thread_loadSounds.join()
+		self.updateChecker.wait()
 		self.music.play_looped()
 	# end intro
 
@@ -138,8 +160,10 @@ class ssAppMain(window.SingletonWindow):
 
 		:rtype: int
 		"""
+		updateProgressTimer=window.Timer()
 		m=window.menu()
 		m.initialize(self,_("Main menu. Use your up and down arrows to choose an option, then press enter to confirm"),None,self.sounds["cursor.ogg"],self.sounds["confirm.ogg"],self.sounds["confirm.ogg"])
+		self.appendUpdateMessage(m)
 		m.append(_("Normal mode")+"&1")
 		m.append(_("Arcade mode")+"&2")
 		m.append(_("Classic mode")+"&3")
@@ -151,11 +175,48 @@ class ssAppMain(window.SingletonWindow):
 		m.open()
 		while(True):
 			self.frameUpdate()
+			if self.updateDownloader:
+				if updateProgressTimer.elapsed>=300:
+					updateProgressTimer.restart()
+					m.modify(0,self.generateUpdateProgress())
+				#end timer
+			#end update downloading
 			if self.keyPressed(window.K_ESCAPE): return False
 			selected=m.frameUpdate()
 			if selected is not None and selected>=0: return selected
 		# end loop
 	# end mainmenu
+
+	def appendUpdateMessage(self,m):
+		"""Appends update-related top message to the specified menu."""
+		upresult=self.updateChecker.getLastResult()
+		if upresult==updateClient.RET_NOT_SUPPORTED:
+			m.append(_("Update checking is disabled in this build of Screaming Strike."))
+		elif upresult==updateClient.RET_CONNECTION_ERROR:
+			m.append(_("There was an error while retrieving software update information (%(error)s). Please try again later.") % {"error": self.updateChecker.getLastError()})
+		elif upresult==updateClient.RET_USING_LATEST:
+			m.append(_("You're playing the latest version! When a new update is found, it will be notified here."))
+		elif upresult==updateClient.RET_NEW_VERSION_AVAILABLE:
+			if not self.updateDownloader:#Not yet downloaded
+				m.append(_("There is a new version of the game! Press enter here to download it."))
+			else:
+				m.append(self.generateUpdateProgress())
+			#end whether downloading
+		#end new version is available
+		#end appendUpdateMessage
+
+	def generateUpdateProgress(self):
+		"""Generates a string representing the progress of update downloading.
+
+		:rtype: str
+		"""
+		if self.updateDownloader.isWorking():
+			return _("Downloading the new version (%(current)dK/%(total)dK (%(percent)d%%)") % {"current": self.updateDownloader.getReceivedSize()/1024, "total": self.updateDownloader.getTotalSize()/1024, "percent":self.updateDownloader.getPercentage()}
+		else:
+			if self.updateDownloader.hasSucceeded():
+				return _("The new version has been downloaded to %(location)s.") % {"location": self.updateDownloader.getLocalName()}
+			else:
+				return _("Failed to download the new update (%(reason)s). Press enter to retry.") % {"reason": self.updateDownloader.getLastError()}
 
 	def run(self):
 		"""
@@ -164,21 +225,55 @@ class ssAppMain(window.SingletonWindow):
 		if self.intro() is False: return
 		while(True):
 			selected=self.mainmenu()
-			if selected is False or selected==6: self.exit()
-			if selected==3:
+			if selected is False or selected==7: self.exit()
+			if selected==0:
+				if self.updateChecker.getLastResult()==updateClient.RET_NEW_VERSION_AVAILABLE: self.downloadUpdate()
+				continue
+			#end the update notification area
+			if selected==4:
 				self.collectionDialog()
 				continue
-			if selected==4:
+			if selected==5:
 				self.eraseDataDialog()
 				continue
 			#end erase data
-			if selected==5:
+			if selected==6:
 				self.optionsDialog()
 				continue
 			#end options
-			self.play(gameModes.ALL_MODES_STR[selected])
+			self.play(gameModes.ALL_MODES_STR[selected-1])
 		#end while
 	#end run
+
+	def downloadUpdate(self):
+		"""Sets the download of the new update."""
+		if self.updateDownloader and self.updateDownloader.hasSucceeded(): return
+		url=UPDATE_PACKAGE_URL[platform.system()]
+		local=UPDATE_PACKAGE_LOCAL_NAME[platform.system()]
+		if url=="" or local=="":
+			self.message(_("This build of Screaming Strike doesn't have download location set."))
+			return
+		#end download location not set
+		fld=self.folderSelect(_("Select the folder you want to download the installer."))
+		if not fld: return
+		local=os.path.join(fld,local)
+		if os.path.isfile(local):
+			if not self.yesno(_("Warning"),local+_(" already exists. Do you want to overwrite?")): return
+		#end overwriting confirmation
+		self.updateDownloader=updateClient.Downloader()
+		self.updateDownloader.initialize(url,local,self._downloadComplete)
+		self.updateDownloader.run()
+
+	def _downloadComplete(self):
+		#Little bit dirty, but unless I do this, the sound object is gc-ed.
+		if self.updateDownloader.hasSucceeded():
+			self.downloadcomp=bgtsound.sound()
+			self.downloadcomp.stream("data/sounds/stream/download.ogg")
+			self.downloadcomp.play()
+		else:
+			self.downloadcomp=bgtsound.sound()
+			self.downloadcomp.stream("data/sounds/stream/error.ogg")
+			self.downloadcomp.play()
 
 	def play(self,mode):
 		"""Plays the specified mode.
@@ -440,21 +535,7 @@ Returns False when the game is closed. Otherwise True.
 		:param result: Result to post
 		:type result: gameResult.GameResult
 		"""
-		m=window.menu()
-		m.initialize(self,_("Score posting"),"",self.sounds["cursor.ogg"],self.sounds["confirm.ogg"],self.sounds["confirm.ogg"])
-		m.append(_("Do you want to post this score to the scoreboard?"))
-		m.append(_("Yes")+"&Y")
-		m.append(_("No")+"&N")
-		while(True):
-			m.open()
-			while(True):
-				self.frameUpdate()
-				r=m.frameUpdate()
-				if r is not None:break
-			# end while the menu is active
-			if r>0:break
-		#end while, other than the top item is selected
-		if r==1:#post
+		if self.yesno(_("Score posting"),_("Do you want to post this score to the scoreboard?")) is True:#post
 			name=self.input(_("Name entry"),_("Please input your name."))
 			if name is None: return
 			adapter=scorePostingAdapter.NyanchanGames()
@@ -500,6 +581,32 @@ Returns False when the game is closed. Otherwise True.
 		self.music.pitch=100
 	#end resetMusicPitch
 
+	def yesno(self,title, top):
+		"""Shows the yes/ no dialog.
+
+		:param title: Menu title.
+		:type title: str
+		:param top: Message shown at the top of the menu.
+		:type top: str
+		:rtype: bool
+		"""
+		m=window.menu()
+		m.initialize(self,title,"",self.sounds["cursor.ogg"],self.sounds["confirm.ogg"],self.sounds["confirm.ogg"])
+		m.append(top)
+		m.append(_("Yes")+"&Y")
+		m.append(_("No")+"&N")
+		while(True):
+			self.frameUpdate()
+			r=m.frameUpdate()
+			if not r: continue
+			if r>0:break
+			if r==-1:
+				r=2
+				break
+			#end escape
+		#end loop
+		return True if r==1 else False
+
 	def message(self,msg):
 		"""
 		Shows a simple message dialog. This method is blocking; it won't return until user dismisses the dialog. While this method is blocking, onExit still works as expected.
@@ -518,8 +625,40 @@ Returns False when the game is closed. Otherwise True.
 
 	def onExit(self):
 		"""Extended onExit callback."""
+		exiting=self.exiting
+		self.exiting=True
+		if not exiting:#alt+f4 twice will forcefully shut down the app, otherwise, ask player to wait for update download
+			if self.updateDownloader: self.checkUpdateDownloadFinish()
 		self.collectionStorage.save(COLLECTION_DATA_FILENAME)
 		self.statsStorage.save(STATS_DATA_FILENAME)
 		return True
+
+	def checkUpdateDownloadFinish(self):
+		"""Shows a menu where players can wait the update download to finish."""
+		if not self.updateDownloader.isWorking(): return
+		m=window.menu()
+		m.initialize(self,_("Update downloading is still in progress"),None,self.sounds["cursor.ogg"],self.sounds["confirm.ogg"],self.sounds["confirm.ogg"])
+		m.append(self.generateUpdateProgress())
+		m.append(_("Forcefully shutdown"))
+		updateProgressTimer=window.Timer()
+		m.open()
+		while(True):
+			self.frameUpdate()
+			r=m.frameUpdate()
+			if self.updateDownloader:
+				if self.updateDownloader.isWorking() is False:
+					self.message(_("Download job has ended! Press enter to close the application."))
+					break
+				#end complete
+				if updateProgressTimer.elapsed>=300:
+					updateProgressTimer.restart()
+					m.modify(0,self.generateUpdateProgress())
+				#end timer
+			#end update downloading
+			if r is None:continue
+			if r==1: break
+			self.say(_("Choose 'Forcefully shutdown' or alt+f4 to aboat the download."))
+		#end loop
+	#end checkUpdateDownloadFinish
 # end class ssAppMain
 
