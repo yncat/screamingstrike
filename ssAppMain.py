@@ -290,7 +290,7 @@ class ssAppMain(window.SingletonWindow):
 		if self.statsStorage.get(k)==0:
 			self.statsStorage.inclement(k)
 			if mode==gameModes.ALL_MODES_STR[0]:
-				self.showTip(_("This is the new standard mode of Screaming Strike 2. Compared to the previous version, you get bonus points when leveling up. Also, you have chances to get bonuses if you achieve more than 5 consecutive hits!"))
+				self.showTip(_("This is the new standard mode of Screaming Strike 2. Use your left and right arrows to move to the same position as an enemy and spacebar to punch! But remember, they need to be close as your fist can reach! Compared to the previous version, you get bonus points when leveling up. Also, you have chances to get bonuses if you achieve more than 5 consecutive hits!"))
 			elif mode==gameModes.ALL_MODES_STR[1]:
 				self.showTip(_("This is the new arcade mode of Screaming Strike 2! From the new version, items that fall faster are more likely to be good, and slower ones are more likely to be bad. You can obtain an item by punching it, or destroy it by combining your up arrow when punching. Carefully choose which item to obtain!"))
 			elif mode==gameModes.ALL_MODES_STR[2]:

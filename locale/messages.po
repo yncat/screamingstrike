@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: screamingStrike\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-16 17:44+0900\n"
+"POT-Creation-Date: 2019-05-16 23:56+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,7 +38,12 @@ msgstr ""
 msgid "No.%(no)d, %(status)s, %(plays)d"
 msgstr ""
 
-#: enemy.py:102
+#: enemy.py:104
+#, python-format
+msgid "Hit! (speed %(speed)d, distance %(distance)d, penetration bonus added)"
+msgstr ""
+
+#: enemy.py:106
 #, python-format
 msgid "Hit! (speed %(speed)d, distance %(distance)d)"
 msgstr ""
@@ -252,7 +257,9 @@ msgstr ""
 
 #: ssAppMain.py:293
 msgid ""
-"This is the new standard mode of Screaming Strike 2. Compared to the "
+"This is the new standard mode of Screaming Strike 2. Use your left and right "
+"arrows to move to the same position as an enemy and spacebar to punch! But "
+"remember, they need to be close as your fist can reach! Compared to the "
 "previous version, you get bonus points when leveling up. Also, you have "
 "chances to get bonuses if you achieve more than 5 consecutive hits!"
 msgstr ""

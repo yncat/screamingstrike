@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: screamingStrike\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-16 17:44+0900\n"
+"POT-Creation-Date: 2019-05-16 23:56+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Yukio Nozawa <support@nyanchangames.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -42,7 +42,12 @@ msgstr "未解放"
 msgid "No.%(no)d, %(status)s, %(plays)d"
 msgstr "No.%(no)d, %(status)s, %(plays)d"
 
-#: enemy.py:102
+#: enemy.py:104
+#, fuzzy, python-format
+msgid "Hit! (speed %(speed)d, distance %(distance)d, penetration bonus added)"
+msgstr "ヒット! (スピード %(speed)d, 距離 %(distance)d)"
+
+#: enemy.py:106
 #, python-format
 msgid "Hit! (speed %(speed)d, distance %(distance)d)"
 msgstr "ヒット! (スピード %(speed)d, 距離 %(distance)d)"
@@ -55,7 +60,7 @@ msgstr "%(startedtime)sにゲームを開始!"
 #: gameField.py:57
 #, fuzzy, python-format
 msgid "Game mode: %(mode)s, high score: %(highscore)d."
-msgstr "%(playmode)s、ハイスコア%(highscore)d、スタート!"
+msgstr "ゲームモード: %(mode)s、ハイスコア: %(highscore)d。"
 
 #: gameField.py:77
 #, python-format
@@ -209,30 +214,40 @@ msgstr "終了"
 
 #: ssAppMain.py:184
 msgid "Update checking is disabled in this build of Screaming Strike."
-msgstr "この Screaming Strike のビルドでは、アップデートチェック機能は無効化されています。"
+msgstr ""
+"この Screaming Strike のビルドでは、アップデートチェック機能は無効化されてい"
+"ます。"
 
 #: ssAppMain.py:186
 #, fuzzy, python-format
 msgid ""
 "There was an error while retrieving software update information (%(error)s). "
 "Please try again later."
-msgstr "更新情報の取得中にエラーが発生しました(%(error)s)。しばらくしてからもう一度お試しください。"
-"スコア送信中にエラーが発生しました。しばらくしてからもう一度お試しください。"
+msgstr ""
+"更新情報の取得中にエラーが発生しました(%(error)s)。しばらくしてからもう一度お"
+"試しください。スコア送信中にエラーが発生しました。しばらくしてからもう一度お"
+"試しください。"
 
 #: ssAppMain.py:188
 msgid ""
 "You're playing the latest version! When a new update is found, it will be "
 "notified here."
-msgstr "最新版をお使いのようです！新しいアップデートがあるときは、ここに通知が出ます。"
+msgstr ""
+"最新版をお使いのようです！新しいアップデートがあるときは、ここに通知が出ま"
+"す。"
 
 #: ssAppMain.py:191
 msgid "There is a new version of the game! Press enter here to download it."
-msgstr "新しいバージョンがあります！ここでエンターを押すと、新バージョンをダウンロードできます。"
+msgstr ""
+"新しいバージョンがあります！ここでエンターを押すと、新バージョンをダウンロー"
+"ドできます。"
 
 #: ssAppMain.py:204
 #, python-format
 msgid "Downloading the new version (%(current)dK/%(total)dK (%(percent)d%%)"
-msgstr "新しいバージョンをダウンロードしています (%(current)dK/%(total)dK (%(percent)d%%)"
+msgstr ""
+"新しいバージョンをダウンロードしています (%(current)dK/%(total)dK "
+"(%(percent)d%%)"
 
 #: ssAppMain.py:207
 #, python-format
@@ -242,14 +257,17 @@ msgstr "新しいバージョンが、 %(location)s にダウンロードされ�
 #: ssAppMain.py:209
 #, python-format
 msgid "Failed to download the new update (%(reason)s). Press enter to retry."
-msgstr "新しいバージョンのダウンロードに失敗しました (%(reason)s)。 エンターを押すと再試行できます。"
+msgstr ""
+"新しいバージョンのダウンロードに失敗しました (%(reason)s)。 エンターを押すと"
+"再試行できます。"
 
 #: ssAppMain.py:245
 #, fuzzy
 msgid "This build of Screaming Strike doesn't have download location set."
-msgstr "このビルドの Screaming Strike では、ダウンロード先が設定されていません。"
-"このScreaming Strikeのビルドでは、スコア送信はサポートされていません。ごめん"
-"なさい！"
+msgstr ""
+"このビルドの Screaming Strike では、ダウンロード先が設定されていません。この"
+"Screaming Strikeのビルドでは、スコア送信はサポートされていません。ごめんなさ"
+"い！"
 
 #: ssAppMain.py:248
 msgid "Select the folder you want to download the installer."
@@ -264,12 +282,15 @@ msgid " already exists. Do you want to overwrite?"
 msgstr "は、すでに存在します。上書きしますか？"
 
 #: ssAppMain.py:293
+#, fuzzy
 msgid ""
-"This is the new standard mode of Screaming Strike 2. Compared to the "
+"This is the new standard mode of Screaming Strike 2. Use your left and right "
+"arrows to move to the same position as an enemy and spacebar to punch! But "
+"remember, they need to be close as your fist can reach! Compared to the "
 "previous version, you get bonus points when leveling up. Also, you have "
 "chances to get bonuses if you achieve more than 5 consecutive hits!"
 msgstr ""
-"これは、新しいScreaming Strikeのスタンダードなモードです！以前のバージョン"
+"これは、新しいScreaming Strikeのスタンダードなモードです！左右の矢印キーで敵と同じ位置に移動し、スペースでパンチ！でも、パンチは近い敵にしか当たりません！以前のバージョン"
 "に、レベルアップ時のヒット率ボーナスが加わっています。また、5回以上の連続ヒッ"
 "トを達成すると、それもボーナスポイントになります！"
 
@@ -442,7 +463,9 @@ msgstr ""
 #: ssAppMain.py:544
 msgid ""
 "Your score was posted, but you were not ranked in. Better luck next time!"
-msgstr "スコアは送信されましたが、ランクインとはなりませんでした。次はがんばってください！"
+msgstr ""
+"スコアは送信されましたが、ランクインとはなりませんでした。次はがんばってくだ"
+"さい！"
 
 #: ssAppMain.py:547
 #, fuzzy, python-format
@@ -471,11 +494,13 @@ msgstr "強制終了"
 
 #: ssAppMain.py:642
 msgid "Download job has ended! Press enter to close the application."
-msgstr "ダウンロード処理が終了しました！エンターキーを押すと、ゲームを終了します。"
+msgstr ""
+"ダウンロード処理が終了しました！エンターキーを押すと、ゲームを終了します。"
 
 #: ssAppMain.py:652
 msgid "Choose 'Forcefully shutdown' or alt+f4 to aboat the download."
-msgstr "'強制終了' を選択するか、もう一度alt+f4を推すと、ダウンロードを中断できます。"
+msgstr ""
+"'強制終了' を選択するか、もう一度alt+f4を推すと、ダウンロードを中断できます。"
 
 #~ msgid "Normal mode#Arcade mode#Options#Exit"
 #~ msgstr "ノーマルモード#アーケードモード#設定#終了"
