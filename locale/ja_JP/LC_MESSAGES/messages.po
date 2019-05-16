@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: screamingStrike\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-15 14:19+0900\n"
+"POT-Creation-Date: 2019-05-16 17:44+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Yukio Nozawa <support@nyanchangames.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,43 +17,52 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: collection.py:184
+#: collection.py:185
 msgid ""
 "Use your left and right arrows to brows your collections, then press enter "
 "to make your unlocked one scream. You can move through your unlocked items "
 "with ctrl + left or right. To play with pitch changing, hold down up and "
 "down arrows. Press escape when you're satisfied."
-msgstr "左右の矢印キーで、コレクションを閲覧できます。解放されているコレクションの上でエンターキーを押すと、叫ばせることができます。コントロール+左右矢印キーで、解放したコレクションにカーソルを移動します。ピッチ変更で遊ぶには、上下の矢印キーを押します。満足したら、エスケープキーを押してください。"
+msgstr ""
+"左右の矢印キーで、コレクションを閲覧できます。解放されているコレクションの上"
+"でエンターキーを押すと、叫ばせることができます。コントロール+左右矢印キーで、"
+"解放したコレクションにカーソルを移動します。ピッチ変更で遊ぶには、上下の矢印"
+"キーを押します。満足したら、エスケープキーを押してください。"
 
-#: collection.py:216
+#: collection.py:217
 msgid "Unlocked"
 msgstr "解放"
 
-#: collection.py:219
+#: collection.py:220
 msgid "Locked"
 msgstr "未解放"
 
-#: collection.py:221
+#: collection.py:222
 #, python-format
 msgid "No.%(no)d, %(status)s, %(plays)d"
 msgstr "No.%(no)d, %(status)s, %(plays)d"
 
-#: enemy.py:101
+#: enemy.py:102
 #, python-format
 msgid "Hit! (speed %(speed)d, distance %(distance)d)"
 msgstr "ヒット! (スピード %(speed)d, 距離 %(distance)d)"
 
-#: gameField.py:52
+#: gameField.py:29
 #, python-format
 msgid "Game started at %(startedtime)s!"
 msgstr "%(startedtime)sにゲームを開始!"
 
-#: gameField.py:75
+#: gameField.py:57
+#, fuzzy, python-format
+msgid "Game mode: %(mode)s, high score: %(highscore)d."
+msgstr "%(playmode)s、ハイスコア%(highscore)d、スタート!"
+
+#: gameField.py:77
 #, python-format
 msgid "Game over! Final score: %(score)d"
 msgstr "ゲームオーバー! 最終得点: %(score)d"
 
-#: gameField.py:102
+#: gameField.py:111
 #, fuzzy, python-format
 msgid ""
 "Leveled up to %(newlevel)d! (Accuracy %(accuracy).1f%%, with %(lives)d hp "
@@ -61,40 +70,44 @@ msgid ""
 msgstr ""
 "レベル%(newlevel)にアップ! (ヒット率 %(accuracy).1f%%, 残りHP %(lives)d"
 
-#: gameField.py:147
+#: gameField.py:146
+msgid "Game aboated."
+msgstr "ゲームを中断しました。"
+
+#: gameField.py:161
 msgid "Activating destruction!"
 msgstr "デストラクションが発動!"
 
-#: gameField.py:154
+#: gameField.py:168
 msgid "End destruction!"
 msgstr "デストラクション終了!"
 
-#: item.py:56
+#: item.py:57
 #, python-format
 msgid "A \"%(item)s\" item fell on the ground and shattered into peaces!"
 msgstr "アイテム \"%(item)s\" が地面に落ちて、粉々に砕けた!"
 
-#: item.py:60
+#: item.py:61
 #, python-format
 msgid "Obtained a \"%(item)s\" item!"
 msgstr "アイテム \"%(item)s\"をゲット!"
 
-#: item.py:86
+#: item.py:87
 #, fuzzy, python-format
 msgid "A \"%(item)s\" item was shattered into peaces!"
 msgstr "アイテム \"%(item)s\" が粉々に砕かれた!!"
 
-#: itemEffects.py:31
+#: itemEffects.py:32
 #, python-format
 msgid "A new \"%(item)s\" effect is starting!"
 msgstr "新しいアイテム \"%(item)s\" の効果がスタート!"
 
-#: itemEffects.py:38
+#: itemEffects.py:39
 #, python-format
 msgid "One of your \"%(item)s\" effects is ending!"
 msgstr "\"%(item)s\" の効果の一つが消失!"
 
-#: itemEffects.py:46
+#: itemEffects.py:47
 #, python-format
 msgid ""
 "Your \"%(item)s\" effect has been extended for %(extended)d milliseconds! "
@@ -103,148 +116,221 @@ msgstr ""
 "発動中のアイテム \"%(item)s\" の効果が %(extended)d ミリ秒延長! (現在 "
 "%(newtime)d)"
 
-#: player.py:122
+#: player.py:123
 #, python-format
 msgid "%(hits)d consecutive hits bonus!"
 msgstr "%(hits)d回の連続ヒットボーナス!"
 
-#: player.py:132
+#: player.py:133
 #, python-format
 msgid "%(misses)d consecutive misses penalty!"
 msgstr "%(misses)d回の連続ミスペナルティー!"
 
-#: player.py:214
+#: player.py:215
 #, python-format
 msgid "Extra life! (now %(lives)d lives)"
 msgstr "エクストラライフ! (現在 %(lives)d"
 
-#: player.py:242
+#: player.py:243
 #, python-format
 msgid "The effective range of your Punch is now %(range)d (from %(from)d)"
 msgstr "パンチが届く範囲が、%(from)dから%(range)dに変化!"
 
-#: player.py:253
+#: player.py:254
 #, python-format
 msgid "The speed of your punch is now %(speed)d milliseconds (from %(from)d)"
 msgstr "パンチのスピードが、%(from)dから%(speed)dミリ秒に変化!"
 
-#: player.py:264
+#: player.py:265
 msgid "Your punches now penetrate enemies and items!"
 msgstr "しばらくの間、パンチが敵とアイテムを貫通するぞ!"
 
-#: player.py:266
+#: player.py:267
 msgid "Your punches no longer penetrate enemies and items!"
 msgstr "パンチの貫通効果が消失!"
 
-#: player.py:289
+#: player.py:290
 #, python-format
 msgid "You've been slapped! (%(lives)d HP remaining)"
 msgstr "ひっぱたかれた!(残りHP %(lives)d)"
 
-#: player.py:308
+#: player.py:296
+#, fuzzy
+msgid "Game over!"
+msgstr "名前入力"
+
+#: player.py:310
 msgid "added"
 msgstr "プラス"
 
-#: player.py:309
+#: player.py:311
 msgid "subtracted"
 msgstr "マイナス"
 
-#: player.py:310
+#: player.py:312
 #, python-format
 msgid "Point: %(added).1f %(changestr)s (%(total).1f)"
 msgstr "ポイント: %(added).1f %(changestr)s (%(total).1f)"
 
-#: ssAppMain.py:141
+#: ssAppMain.py:155
 msgid ""
 "Main menu. Use your up and down arrows to choose an option, then press enter "
 "to confirm"
 msgstr ""
 "メインメニューです。上下の矢印キーで項目を選択し、エンターキーで決定します。"
 
-#: ssAppMain.py:142
+#: ssAppMain.py:157
 msgid "Normal mode"
 msgstr "ノーマルモード"
 
-#: ssAppMain.py:143
+#: ssAppMain.py:158
 msgid "Arcade mode"
 msgstr "アーケードモード"
 
-#: ssAppMain.py:144
+#: ssAppMain.py:159
 msgid "Classic mode"
 msgstr "クラシックモード"
 
-#: ssAppMain.py:145
+#: ssAppMain.py:160
 msgid "Collection"
 msgstr "コレクション"
 
-#: ssAppMain.py:146
+#: ssAppMain.py:161
 msgid "Erase data"
 msgstr "データ削除"
 
-#: ssAppMain.py:147
+#: ssAppMain.py:162
 msgid "Options"
 msgstr "オプション"
 
-#: ssAppMain.py:148
+#: ssAppMain.py:163
 msgid "Quit"
 msgstr "終了"
 
-#: ssAppMain.py:206
+#: ssAppMain.py:184
+msgid "Update checking is disabled in this build of Screaming Strike."
+msgstr "この Screaming Strike のビルドでは、アップデートチェック機能は無効化されています。"
+
+#: ssAppMain.py:186
+#, fuzzy, python-format
+msgid ""
+"There was an error while retrieving software update information (%(error)s). "
+"Please try again later."
+msgstr "更新情報の取得中にエラーが発生しました(%(error)s)。しばらくしてからもう一度お試しください。"
+"スコア送信中にエラーが発生しました。しばらくしてからもう一度お試しください。"
+
+#: ssAppMain.py:188
+msgid ""
+"You're playing the latest version! When a new update is found, it will be "
+"notified here."
+msgstr "最新版をお使いのようです！新しいアップデートがあるときは、ここに通知が出ます。"
+
+#: ssAppMain.py:191
+msgid "There is a new version of the game! Press enter here to download it."
+msgstr "新しいバージョンがあります！ここでエンターを押すと、新バージョンをダウンロードできます。"
+
+#: ssAppMain.py:204
+#, python-format
+msgid "Downloading the new version (%(current)dK/%(total)dK (%(percent)d%%)"
+msgstr "新しいバージョンをダウンロードしています (%(current)dK/%(total)dK (%(percent)d%%)"
+
+#: ssAppMain.py:207
+#, python-format
+msgid "The new version has been downloaded to %(location)s."
+msgstr "新しいバージョンが、 %(location)s にダウンロードされました。"
+
+#: ssAppMain.py:209
+#, python-format
+msgid "Failed to download the new update (%(reason)s). Press enter to retry."
+msgstr "新しいバージョンのダウンロードに失敗しました (%(reason)s)。 エンターを押すと再試行できます。"
+
+#: ssAppMain.py:245
+#, fuzzy
+msgid "This build of Screaming Strike doesn't have download location set."
+msgstr "このビルドの Screaming Strike では、ダウンロード先が設定されていません。"
+"このScreaming Strikeのビルドでは、スコア送信はサポートされていません。ごめん"
+"なさい！"
+
+#: ssAppMain.py:248
+msgid "Select the folder you want to download the installer."
+msgstr "インストーラーをダウンロードするフォルダーを指定してください。"
+
+#: ssAppMain.py:252
+msgid "Warning"
+msgstr "渓谷"
+
+#: ssAppMain.py:252
+msgid " already exists. Do you want to overwrite?"
+msgstr "は、すでに存在します。上書きしますか？"
+
+#: ssAppMain.py:293
 msgid ""
 "This is the new standard mode of Screaming Strike 2. Compared to the "
 "previous version, you get bonus points when leveling up. Also, you have "
 "chances to get bonuses if you achieve more than 5 consecutive hits!"
-msgstr "これは、新しいScreaming Strikeのスタンダードなモードです！以前のバージョンに、レベルアップ時のヒット率ボーナスが加わっています。また、5回以上の連続ヒットを達成すると、それもボーナスポイントになります！"
+msgstr ""
+"これは、新しいScreaming Strikeのスタンダードなモードです！以前のバージョン"
+"に、レベルアップ時のヒット率ボーナスが加わっています。また、5回以上の連続ヒッ"
+"トを達成すると、それもボーナスポイントになります！"
 
-#: ssAppMain.py:208
+#: ssAppMain.py:295
 msgid ""
 "This is the new arcade mode of Screaming Strike 2! From the new version, "
 "items that fall faster are more likely to be good, and slower ones are more "
 "likely to be bad. You can obtain an item by punching it, or destroy it by "
 "combining your up arrow when punching. Carefully choose which item to obtain!"
-msgstr "これは、新しいScreaming Strikeのアーケードモードです！今回のバージョンから、早く落ちてくるアイテムは良い効果を持っている可能性が高く、ゆっくり落ちてくるアイテムは、悪い効果を持っている可能性が高いというルールになりました。普通にパンチするとアイテムを取ることができ、上矢印キーを押しながらパンチすると、アイテムを壊すことができます。どのアイテムを撮るか、身長に選びましょう！"
+msgstr ""
+"これは、新しいScreaming Strikeのアーケードモードです！今回のバージョンから、"
+"早く落ちてくるアイテムは良い効果を持っている可能性が高く、ゆっくり落ちてくる"
+"アイテムは、悪い効果を持っている可能性が高いというルールになりました。普通に"
+"パンチするとアイテムを取ることができ、上矢印キーを押しながらパンチすると、ア"
+"イテムを壊すことができます。どのアイテムを撮るか、身長に選びましょう！"
 
-#: ssAppMain.py:210
+#: ssAppMain.py:297
 msgid ""
 "This is the old-fassioned game mode! You don't get bonuses based on "
 "accuracy, so you can punch, punch, punch punch punch and punch! This mode "
 "has shirper levelup curb, meaning that you can collect screams really fast!"
-msgstr "これは、昔ながらのモードです。ヒット率関係のボーナスは根こそぎ削除してあるので、パンチして、パンチして、パンチしてパンチしてパンチしまくることができます！あと、他のモードよりも早く敵の数が増えるようになっていますので、コレクションを荒稼ぎするのにもってこいのモードです！"
+msgstr ""
+"これは、昔ながらのモードです。ヒット率関係のボーナスは根こそぎ削除してあるの"
+"で、パンチして、パンチして、パンチしてパンチしてパンチしまくることができま"
+"す！あと、他のモードよりも早く敵の数が増えるようになっていますので、コレク"
+"ションを荒稼ぎするのにもってこいのモードです！"
 
-#: ssAppMain.py:218
+#: ssAppMain.py:305
 #, python-format
 msgid "Tip: %s (Press enter to close this tip)"
 msgstr "ヒント: %s (エンターで閉じます)"
 
-#: ssAppMain.py:228
+#: ssAppMain.py:315
 msgid "Select the data to irase"
 msgstr "削除するデータを選んでください"
 
-#: ssAppMain.py:228
+#: ssAppMain.py:315
 msgid "Highscores"
 msgstr "ハイスコア"
 
-#: ssAppMain.py:228
+#: ssAppMain.py:315
 msgid "Collections"
 msgstr "コレクション"
 
-#: ssAppMain.py:228
+#: ssAppMain.py:315
 msgid "Back"
 msgstr "戻る"
 
-#: ssAppMain.py:236
+#: ssAppMain.py:323
 msgid "Hold shift and enter to erase."
 msgstr "シフトキーを押しながら確定すると、削除を実行します。"
 
-#: ssAppMain.py:241
+#: ssAppMain.py:328
 msgid "Your highscores are all reset!"
 msgstr "ハイスコアをクリアしました。"
 
-#: ssAppMain.py:245
+#: ssAppMain.py:332
 msgid "Your collections are all reset!"
 msgstr "コレクションをクリアしました。"
 
-#: ssAppMain.py:256
+#: ssAppMain.py:343
 msgid ""
 "Options Menu, use your up and down arrows to choose an option, left and "
 "right arrows to change values, enter to save or escape to discard changes"
@@ -252,117 +338,144 @@ msgstr ""
 "設定メニューです。上下の矢印キーで設定項目を移動し、左右矢印で値を変更しま"
 "す。エンターキーで設定を保存し、エスケープキーで変更を破棄します。"
 
-#: ssAppMain.py:257
+#: ssAppMain.py:344
 msgid "Background music volume"
 msgstr "BGMの音量"
 
-#: ssAppMain.py:258
+#: ssAppMain.py:345
 msgid "Left panning limit"
 msgstr "左側のパンニング・リミット"
 
-#: ssAppMain.py:259
+#: ssAppMain.py:346
 msgid "Right panning limit."
 msgstr "右側のパンニング・リミット"
 
-#: ssAppMain.py:260
+#: ssAppMain.py:347
 msgid "Item announcement voice"
 msgstr "アイテム・アナウンスの声"
 
-#: ssAppMain.py:261
+#: ssAppMain.py:348
 msgid "Language (restart to apply)"
 msgstr "言語(再起動後に適用)"
 
-#: ssAppMain.py:272
+#: ssAppMain.py:359
 msgid "Changes discarded."
 msgstr "変更を破棄しました。"
 
-#: ssAppMain.py:277
+#: ssAppMain.py:364
 msgid "Settings saved"
 msgstr "設定を保存しました。"
 
-#: ssAppMain.py:331
+#: ssAppMain.py:418
 #, python-format
 msgid "%(voice)s cannot be loaded."
 msgstr "%(voice)s を読み込めません。"
 
-#: ssAppMain.py:360
+#: ssAppMain.py:447
 #, fuzzy, python-format
 msgid "%(playmode)s, high score %(highscore)s, start!"
 msgstr "%(playmode)s、ハイスコア%(highscore)d、スタート!"
 
-#: ssAppMain.py:399
+#: ssAppMain.py:486
 msgid "collection"
 msgstr ""
 
-#: ssAppMain.py:399
+#: ssAppMain.py:486
 msgid "collections"
 msgstr ""
 
-#: ssAppMain.py:400
+#: ssAppMain.py:487
 #, python-format
 msgid "Unlocked %(number)d %(collection)s!"
 msgstr "%(number)d個の%(collection)sを会報!"
 
-#: ssAppMain.py:404
+#: ssAppMain.py:491
 msgid "Close"
 msgstr "閉じる"
 
-#: ssAppMain.py:418
+#: ssAppMain.py:505
 msgid "Game result"
 msgstr "今回の結果"
 
-#: ssAppMain.py:419
+#: ssAppMain.py:506
 #, python-format
 msgid "Final score: %(score)d"
 msgstr "最終得点: %(score)d"
 
-#: ssAppMain.py:421
+#: ssAppMain.py:508
 #, python-format
 msgid "New high score! Plus %(distance)d (last: %(last)d)"
 msgstr "ハイスコア達成! プラス%(distance)d (以前のハイスコア: %(last)d)"
 
-#: ssAppMain.py:425
+#: ssAppMain.py:512
 #, python-format
 msgid "Punches: %(punches)d, hits: %(hits)d, accuracy: %(accuracy).2f%%"
 msgstr "パンチ: %(punches)d, ヒット: %(hits)d, ヒット率: %(accuracy).2f%%"
 
-#: ssAppMain.py:443
+#: ssAppMain.py:530
 msgid "Score posting"
 msgstr "スコア送信"
 
-#: ssAppMain.py:444
+#: ssAppMain.py:530
 msgid "Do you want to post this score to the scoreboard?"
 msgstr "このスコアをスコアボードに送信しますか？"
 
-#: ssAppMain.py:445
-msgid "Yes"
-msgstr "はい"
-
-#: ssAppMain.py:446
-msgid "No"
-msgstr "いいえ"
-
-#: ssAppMain.py:457
+#: ssAppMain.py:531
 msgid "Name entry"
 msgstr "名前入力"
 
-#: ssAppMain.py:457
+#: ssAppMain.py:531
 msgid "Please input your name."
 msgstr "貴方の名前を入力してください。"
 
-#: ssAppMain.py:462
+#: ssAppMain.py:536
 msgid "This build of Screaming Strike does not support score posting. Sorry!"
-msgstr "このScreaming Strikeのビルドでは、スコア送信はサポートされていません。ごめんなさい！"
+msgstr ""
+"このScreaming Strikeのビルドでは、スコア送信はサポートされていません。ごめん"
+"なさい！"
 
-#: ssAppMain.py:466
+#: ssAppMain.py:540
 msgid "There was an error while posting your score. Please try again later."
-msgstr "スコア送信中にエラーが発生しました。しばらくしてからもう一度お試しください。"
+msgstr ""
+"スコア送信中にエラーが発生しました。しばらくしてからもう一度お試しください。"
 
-#: ssAppMain.py:469
-#, python-format
+#: ssAppMain.py:544
 msgid ""
-"Congratulations! Your score is ranked at %(pos)d! Keep up your great work!"
-msgstr "おめでとうございます！%(pos)d位にランクインしました！これからもがんばってください！"
+"Your score was posted, but you were not ranked in. Better luck next time!"
+msgstr ""
+
+#: ssAppMain.py:547
+#, fuzzy, python-format
+msgid ""
+"Congratulations! Your score is ranked in position %(pos)d! Keep up your "
+"great work!"
+msgstr ""
+"おめでとうございます！%(pos)d位にランクインしました！これからもがんばってくだ"
+"さい！"
+
+#: ssAppMain.py:588
+msgid "Yes"
+msgstr "はい"
+
+#: ssAppMain.py:589
+msgid "No"
+msgstr "いいえ"
+
+#: ssAppMain.py:632
+msgid "Update downloading is still in progress"
+msgstr ""
+
+#: ssAppMain.py:634
+msgid "Forcefully shutdown"
+msgstr ""
+
+#: ssAppMain.py:642
+msgid "Download job has ended! Press enter to close the application."
+msgstr ""
+
+#: ssAppMain.py:652
+msgid "Choose 'Forcefully shutdown' or alt+f4 to aboat the download."
+msgstr ""
 
 #~ msgid "Normal mode#Arcade mode#Options#Exit"
 #~ msgstr "ノーマルモード#アーケードモード#設定#終了"
