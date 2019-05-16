@@ -12,31 +12,21 @@ import platform
 import urllib.request
 import sound_lib.sample
 import bgtsound
+import buildSettings
 import collection
 import gameField
 import gameModes
 import gameOptions
 import gameResult
 import globalVars
-import stats
 import scorePostingAdapter
+import stats
 import updateClient
 import window
 
 import dialog
 COLLECTION_DATA_FILENAME="data/collection.dat"
 STATS_DATA_FILENAME="data/stats.dat"
-
-GAME_VERSION=2.00
-UPDATE_SERVER_ADDRESS=""
-UPDATE_PACKAGE_URL={
-	"Windows": "",
-	"Darwin": ""
-}
-UPDATE_PACKAGE_LOCAL_NAME={
-	"Windows": "",
-	"Darwin": ""
-}
 
 class ssAppMain(window.SingletonWindow):
 	"""
@@ -60,7 +50,7 @@ class ssAppMain(window.SingletonWindow):
 		globalVars.appMain = self
 		#Load sounds
 		self.updateChecker=updateClient.Checker()
-		self.updateChecker.initialize(GAME_VERSION,UPDATE_SERVER_ADDRESS)
+		self.updateChecker.initialize(buildSettings.GAME_VERSION,buildSettings.UPDATE_SERVER_ADDRESS)
 		self.updateChecker.run()
 		self.updateDownloader=None#Not downloading
 		self.thread_loadSounds = threading.Thread(target=self.loadSounds)
@@ -248,8 +238,9 @@ class ssAppMain(window.SingletonWindow):
 	def downloadUpdate(self):
 		"""Sets the download of the new update."""
 		if self.updateDownloader and self.updateDownloader.hasSucceeded(): return
-		url=UPDATE_PACKAGE_URL[platform.system()]
-		local=UPDATE_PACKAGE_LOCAL_NAME[platform.system()]
+		if self.updateDownloader.isWorking(): return
+		url=buildSettings.UPDATE_PACKAGE_URL[platform.system()]
+		local=buildSettings.UPDATE_PACKAGE_LOCAL_NAME[platform.system()]
 		if url=="" or local=="":
 			self.message(_("This build of Screaming Strike doesn't have download location set."))
 			return
@@ -538,7 +529,7 @@ Returns False when the game is closed. Otherwise True.
 		if self.yesno(_("Score posting"),_("Do you want to post this score to the scoreboard?")) is True:#post
 			name=self.input(_("Name entry"),_("Please input your name."))
 			if name is None: return
-			adapter=scorePostingAdapter.NyanchanGames()
+			adapter=buildSettings.getScorePostingAdapter()
 			ret=adapter.post(name,result)
 			if ret==scorePostingAdapter.RET_UNAVAILABLE:
 				self.message(_("This build of Screaming Strike does not support score posting. Sorry!"))
