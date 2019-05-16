@@ -451,10 +451,10 @@ class ssAppMain(window.SingletonWindow):
 		while(True):
 			self.frameUpdate()
 			if self.keyPressed(window.K_ESCAPE):
+				field.aboat()
 				result=gameResult.GameResult()
 				result.initialize(field)
 				result.aboated=True
-				field.clear()
 				return result
 			#end aboat
 			if field.frameUpdate() is False:break
@@ -510,6 +510,7 @@ class ssAppMain(window.SingletonWindow):
 			self.statsStorage.set("hs_"+result.mode,result.highscore)
 		#end if highscore
 		m.append(_("Punches: %(punches)d, hits: %(hits)d, accuracy: %(accuracy).2f%%") % {"punches": result.punches, "hits": result.hits, "accuracy": result.hitPercentage})
+		m.append(result.log,shortcut=False)
 		m.open()
 		while(True):
 			self.frameUpdate()

@@ -203,14 +203,14 @@ class menu:
 		self.enterSound=enterSound
 		self.cancelSound=cancelSound
 
-	def append(self,lst):
-		"""Adds one or multiple menu items. """
+	def append(self,lst, shortcut=True):
+		"""Adds one or multiple menu items. By setting shortcut false, you can skip parsing for shortcut key registration."""
 		if isinstance(lst,str):
-			self.items.append(self.append_internal(lst))
+			self.items.append(self.append_internal(lst,shortcut))
 			return
 		#end single append
 		for elem in lst:
-			self.items.append(self.append_internal(elem))
+			self.items.append(self.append_internal(elem,shortcut))
 
 	def insert(self,index,item):
 		"""Inserts an item at the specified position.
@@ -222,11 +222,12 @@ class menu:
 		"""
 		self.items.insert(index,self.append_internal(item))
 
-	def append_internal(self,elem):
+	def append_internal(self,elem,processShortcut=True):
 		"""Parses and makes a single item tuple. Called from append.
 
 		:param elem: Element to add.
 		"""
+		if processShortcut: return (elem, None, None)
 		shortcut, shortcut_str=self.parseShortcut(elem)
 		if shortcut:
 			elem=elem[0:len(elem)-2]

@@ -26,6 +26,7 @@ class GameResult:
 		self.unlockedCollection=field.collectionCounter.getLog()
 		self.highscore=field.player.getNewHighscore()
 		self.previousHighscore=field.player.getPreviousHighscore()
+		self.log=field.getLog()
 	#end initialize
 	def getAboated(self):
 		"""Retrieves if this game was ended by aboat (ESC)."""

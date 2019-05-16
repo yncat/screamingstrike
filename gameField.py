@@ -25,6 +25,8 @@ class GameField():
 		self.collectionCounter=None
 
 	def initialize(self, x,y,mode, voice):
+		self.logs=[]
+		self.log(_("Game started at %(startedtime)s!") % {"startedtime": datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S")})
 		self.x=x
 		self.y=y
 		self.setModeHandler(mode)
@@ -49,12 +51,11 @@ class GameField():
 		self.destructTimer=window.Timer()
 		self.itemVoicePlayer=itemVoicePlayer.ItemVoicePlayer()
 		self.itemVoicePlayer.initialize(voice)
-		self.logs=[]
-		self.log(_("Game started at %(startedtime)s!") % {"startedtime": datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S")})
-
 	def setModeHandler(self,mode):
 		self.modeHandler=gameModes.getModeHandler(mode)
 		self.modeHandler.initialize(self)
+		self.log(_("Game mode: %(mode)s, high score: %(highscore)d.") % {"mode": self.modeHandler.getName(), "highscore": globalVars.appMain.statsStorage.get("hs_"+self.modeHandler.getName())})
+
 
 	def setLimits(self,lpLimit, rpLimit):
 		self.leftPanningLimit=lpLimit
@@ -96,6 +97,13 @@ class GameField():
 	def log(self,s):
 		self.logs.append(s)
 
+	def getLog(self):
+		"""Retrieves the list in which the log is written.
+
+		:rtype: list
+		"""
+		return self.logs
+
 	def exportLog(self):
 		return "\n".join(self.logs)
 
@@ -132,6 +140,11 @@ class GameField():
 
 	def getY(self):
 		return self.y
+
+	def aboat(self):
+		"""Aboats the gameplay."""
+		self.log(_("Game aboated."))
+		self.clear()
 
 	def clear(self):
 		self.enemies=[]

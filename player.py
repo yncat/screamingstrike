@@ -293,6 +293,7 @@ Moves this player to the specified position.
 			s.load(globalVars.appMain.sounds["attacked.ogg"])
 			s.play()
 		else:
+			self.field.log(_("Game over!"))
 			s.load(globalVars.appMain.sounds["gameover.ogg"])
 			s.volume=-10
 			s.play()
