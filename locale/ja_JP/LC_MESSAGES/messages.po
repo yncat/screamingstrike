@@ -442,7 +442,7 @@ msgstr ""
 #: ssAppMain.py:544
 msgid ""
 "Your score was posted, but you were not ranked in. Better luck next time!"
-msgstr ""
+msgstr "スコアは送信されましたが、ランクインとはなりませんでした。次はがんばってください！"
 
 #: ssAppMain.py:547
 #, fuzzy, python-format
@@ -463,19 +463,19 @@ msgstr "いいえ"
 
 #: ssAppMain.py:632
 msgid "Update downloading is still in progress"
-msgstr ""
+msgstr "アップデートのダウンロードがまだ実行中です"
 
 #: ssAppMain.py:634
 msgid "Forcefully shutdown"
-msgstr ""
+msgstr "強制終了"
 
 #: ssAppMain.py:642
 msgid "Download job has ended! Press enter to close the application."
-msgstr ""
+msgstr "ダウンロード処理が終了しました！エンターキーを押すと、ゲームを終了します。"
 
 #: ssAppMain.py:652
 msgid "Choose 'Forcefully shutdown' or alt+f4 to aboat the download."
-msgstr ""
+msgstr "'強制終了' を選択するか、もう一度alt+f4を推すと、ダウンロードを中断できます。"
 
 #~ msgid "Normal mode#Arcade mode#Options#Exit"
 #~ msgstr "ノーマルモード#アーケードモード#設定#終了"
