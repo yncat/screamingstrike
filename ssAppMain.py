@@ -587,6 +587,7 @@ Returns False when the game is closed. Otherwise True.
 		m.append(top)
 		m.append(_("Yes")+"&Y")
 		m.append(_("No")+"&N")
+		m.open()
 		while(True):
 			self.frameUpdate()
 			r=m.frameUpdate()

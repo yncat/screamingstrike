@@ -202,6 +202,8 @@ class menu:
 		self.cursorSound=cursorSound
 		self.enterSound=enterSound
 		self.cancelSound=cancelSound
+		self.holdTimer=Timer()
+		self.lastHold=0
 
 	def append(self,lst, shortcut=True):
 		"""Adds one or multiple menu items. By setting shortcut false, you can skip parsing for shortcut key registration."""
@@ -284,10 +286,25 @@ class menu:
 
 	def frameUpdate(self):
 		"""The frame updating function for this menu. You should call your window's frameUpdate prior to call this function. Returns None for no action, -1 for cancellation and 0-based index for being selected. """
-		if self.wnd.keyPressed(K_UP) and self.cursor!=0: self.moveTo(self.cursor-1)
-		if self.wnd.keyPressed(K_DOWN) and self.cursor!=len(self.items)-1: self.moveTo(self.cursor+1)
+		up=self.wnd.keyPressing(K_UP)
+		dn=self.wnd.keyPressing(K_DOWN)
+		processArrows=False
+		if not up and not dn: self.lastHold=0
+		if self.lastHold==0: processArrows=True
+		if self.lastHold==1 and self.holdTimer.elapsed>=600:
+			processArrows=True
+		#end 600 ms hold
+		if self.lastHold==2 and self.holdTimer.elapsed>=50:
+			processArrows=True
+		#end 50 ms hold
+		if processArrows:
+			if up: self.moveTo(self.cursor-1)
+			if dn: self.moveTo(self.cursor+1)
+		#end arrow keys
 		if self.wnd.keyPressed(K_HOME) and self.cursor!=0: self.moveTo(0)
 		if self.wnd.keyPressed(K_END) and self.cursor!=len(self.items): self.moveTo(len(self.items)-1)
+		if self.wnd.keyPressed(K_PAGEUP): self.moveTo(self.cursor-(len(self.items)/20))
+		if self.wnd.keyPressed(K_PAGEDOWN): self.moveTo(self.cursor+int((len(self.items)/20)))
 		if self.wnd.keyPressed(K_SPACE): self.moveTo(self.cursor)
 		if self.wnd.keyPressed(K_ESCAPE):
 			self.cancel()
@@ -369,7 +386,10 @@ class menu:
 		return self.items[index][0]
 
 	def moveTo(self,c):
-		"""Moves the menu cursor to the specified position and reads out the cursor. """
+		"""Moves the menu cursor to the specified position and reads out the cursor. It also sets the lastHold status, which triggers key repeats. I decided not to use pygame key repeat functions. """
+		if self.lastHold<2: self.lastHold+=1
+		if c<0 or c>len(self.items)-1: return
+		self.holdTimer.restart()
 		if self.cursorSound is not None: playOneShot(self.cursorSound)
 		self.cursor=c
 		self.wnd.say(self.getReadStr())

@@ -186,6 +186,9 @@ class CollectionDialog(object):
 		self.index=0
 		self.pitch=100
 		self.pitchTimer=window.Timer()
+		self.lastHold=0
+		self.holdTimer=window.Timer()
+
 		while(True):
 			appMain.frameUpdate()
 			if appMain.keyPressed(window.K_ESCAPE): break
@@ -193,8 +196,11 @@ class CollectionDialog(object):
 				if appMain.keyPressed(window.K_LEFT): self.searchUnlocked(-1)
 				if appMain.keyPressed(window.K_RIGHT): self.searchUnlocked(1)
 			else:
-				if appMain.keyPressed(window.K_LEFT) and self.index!=0: self.moveTo(self.index-1)
-				if appMain.keyPressed(window.K_RIGHT) and self.index!=self.appMain.numScreams-1: self.moveTo(self.index+1)
+				left=appMain.keyPressing(window.K_LEFT)
+				right=appMain.keyPressing(window.K_RIGHT)
+				if not left and not right: self.lastHold=0
+				if left and self.index!=0: self.moveTo(self.index-1)
+				if right and self.index!=self.appMain.numScreams-1: self.moveTo(self.index+1)
 			#end ctrl or not
 			if appMain.keyPressed(window.K_SPACE): self.moveTo(self.index)
 			if appMain.keyPressed(window.K_RETURN) and appMain.collectionStorage.isUnlocked(self.index): self.play(self.index)
@@ -210,6 +216,11 @@ class CollectionDialog(object):
 		:param index: New position.
 		:type index: int
 		"""
+		#key hold. Should have reused the menu class one, but I'm lazy.
+		if self.lastHold==1 and self.holdTimer.elapsed<600: return
+		if self.lastHold==2 and self.holdTimer.elapsed<50: return
+		self.holdTimer.restart()
+		if self.lastHold<2: self.lastHold+=1
 		self.index=index
 		unlocked=self.appMain.collectionStorage.isUnlocked(index)
 		if unlocked:
