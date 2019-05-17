@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: screamingStrike\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-16 23:56+0900\n"
+"POT-Creation-Date: 2019-05-17 10:49+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -204,7 +204,8 @@ msgid "Quit"
 msgstr ""
 
 #: ssAppMain.py:184
-msgid "Update checking is disabled in this build of Screaming Strike."
+#, python-format
+msgid "Update checking is disabled in this build of %(gamename)s."
 msgstr ""
 
 #: ssAppMain.py:186
@@ -240,7 +241,8 @@ msgid "Failed to download the new update (%(reason)s). Press enter to retry."
 msgstr ""
 
 #: ssAppMain.py:245
-msgid "This build of Screaming Strike doesn't have download location set."
+#, python-format
+msgid "This build of %(gamename)s doesn't have download location set."
 msgstr ""
 
 #: ssAppMain.py:248
@@ -256,8 +258,9 @@ msgid " already exists. Do you want to overwrite?"
 msgstr ""
 
 #: ssAppMain.py:293
+#, python-format
 msgid ""
-"This is the new standard mode of Screaming Strike 2. Use your left and right "
+"This is the new standard mode of %(gamename)s. Use your left and right "
 "arrows to move to the same position as an enemy and spacebar to punch! But "
 "remember, they need to be close as your fist can reach! Compared to the "
 "previous version, you get bonus points when leveling up. Also, you have "
@@ -265,11 +268,12 @@ msgid ""
 msgstr ""
 
 #: ssAppMain.py:295
+#, python-format
 msgid ""
-"This is the new arcade mode of Screaming Strike 2! From the new version, "
-"items that fall faster are more likely to be good, and slower ones are more "
-"likely to be bad. You can obtain an item by punching it, or destroy it by "
-"combining your up arrow when punching. Carefully choose which item to obtain!"
+"This is the new arcade mode of %(gamename)s! From the new version, items "
+"that fall faster are more likely to be good, and slower ones are more likely "
+"to be bad. You can obtain an item by punching it, or destroy it by combining "
+"your up arrow when punching. Carefully choose which item to obtain!"
 msgstr ""
 
 #: ssAppMain.py:297
@@ -409,7 +413,8 @@ msgid "Please input your name."
 msgstr ""
 
 #: ssAppMain.py:536
-msgid "This build of Screaming Strike does not support score posting. Sorry!"
+#, python-format
+msgid "This build of %(gamename)s does not support score posting. Sorry!"
 msgstr ""
 
 #: ssAppMain.py:540

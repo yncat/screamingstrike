@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: screamingStrike\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-16 23:56+0900\n"
+"POT-Creation-Date: 2019-05-17 10:49+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Yukio Nozawa <support@nyanchangames.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -213,10 +213,8 @@ msgid "Quit"
 msgstr "終了"
 
 #: ssAppMain.py:184
-msgid "Update checking is disabled in this build of Screaming Strike."
-msgstr ""
-"この Screaming Strike のビルドでは、アップデートチェック機能は無効化されてい"
-"ます。"
+msgid "Update checking is disabled in this build of %(gamename)s."
+msgstr "この %(gamename)s のビルドでは、アップデートチェック機能は無効化されています。"
 
 #: ssAppMain.py:186
 #, fuzzy, python-format
@@ -262,10 +260,10 @@ msgstr ""
 "再試行できます。"
 
 #: ssAppMain.py:245
-#, fuzzy
-msgid "This build of Screaming Strike doesn't have download location set."
+#, fuzzy, python-format
+msgid "This build of %(gamename)s doesn't have download location set."
 msgstr ""
-"このビルドの Screaming Strike では、ダウンロード先が設定されていません。この"
+"このビルドの %(gamename)s では、ダウンロード先が設定されていません。この"
 "Screaming Strikeのビルドでは、スコア送信はサポートされていません。ごめんなさ"
 "い！"
 
@@ -282,26 +280,28 @@ msgid " already exists. Do you want to overwrite?"
 msgstr "は、すでに存在します。上書きしますか？"
 
 #: ssAppMain.py:293
-#, fuzzy
+#, fuzzy, python-format
 msgid ""
-"This is the new standard mode of Screaming Strike 2. Use your left and right "
+"This is the new standard mode of %(gamename)s. Use your left and right "
 "arrows to move to the same position as an enemy and spacebar to punch! But "
 "remember, they need to be close as your fist can reach! Compared to the "
 "previous version, you get bonus points when leveling up. Also, you have "
 "chances to get bonuses if you achieve more than 5 consecutive hits!"
 msgstr ""
-"これは、新しいScreaming Strikeのスタンダードなモードです！左右の矢印キーで敵と同じ位置に移動し、スペースでパンチ！でも、パンチは近い敵にしか当たりません！以前のバージョン"
-"に、レベルアップ時のヒット率ボーナスが加わっています。また、5回以上の連続ヒッ"
-"トを達成すると、それもボーナスポイントになります！"
+"これは、新しい%(gamename)sのスタンダードなモードです！左右の矢印キーで敵"
+"と同じ位置に移動し、スペースでパンチ！でも、パンチは近い敵にしか当たりませ"
+"ん！以前のバージョンに、レベルアップ時のヒット率ボーナスが加わっています。ま"
+"た、5回以上の連続ヒットを達成すると、それもボーナスポイントになります！"
 
 #: ssAppMain.py:295
+#, fuzzy, python-format
 msgid ""
-"This is the new arcade mode of Screaming Strike 2! From the new version, "
-"items that fall faster are more likely to be good, and slower ones are more "
-"likely to be bad. You can obtain an item by punching it, or destroy it by "
-"combining your up arrow when punching. Carefully choose which item to obtain!"
+"This is the new arcade mode of %(gamename)s! From the new version, items "
+"that fall faster are more likely to be good, and slower ones are more likely "
+"to be bad. You can obtain an item by punching it, or destroy it by combining "
+"your up arrow when punching. Carefully choose which item to obtain!"
 msgstr ""
-"これは、新しいScreaming Strikeのアーケードモードです！今回のバージョンから、"
+"これは、新しい%(gamename)sのアーケードモードです！今回のバージョンから、"
 "早く落ちてくるアイテムは良い効果を持っている可能性が高く、ゆっくり落ちてくる"
 "アイテムは、悪い効果を持っている可能性が高いというルールになりました。普通に"
 "パンチするとアイテムを取ることができ、上矢印キーを押しながらパンチすると、ア"
@@ -450,9 +450,10 @@ msgid "Please input your name."
 msgstr "貴方の名前を入力してください。"
 
 #: ssAppMain.py:536
-msgid "This build of Screaming Strike does not support score posting. Sorry!"
+#, fuzzy, python-format
+msgid "This build of %(gamename)s does not support score posting. Sorry!"
 msgstr ""
-"このScreaming Strikeのビルドでは、スコア送信はサポートされていません。ごめん"
+"この %(gamename)s のビルドでは、スコア送信はサポートされていません。ごめん"
 "なさい！"
 
 #: ssAppMain.py:540

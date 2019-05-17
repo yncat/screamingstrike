@@ -46,7 +46,7 @@ class ssAppMain(window.SingletonWindow):
 
 		:rtype: bool
 		"""
-		super().initialize(640, 480, "Screaming Strike!")
+		super().initialize(640, 480, buildSettings.GAME_NAME+" ("+str(buildSettings.GAME_VERSION)+")")
 		globalVars.appMain = self
 		#Load sounds
 		self.updateChecker=updateClient.Checker()
@@ -181,7 +181,7 @@ class ssAppMain(window.SingletonWindow):
 		"""Appends update-related top message to the specified menu."""
 		upresult=self.updateChecker.getLastResult()
 		if upresult==updateClient.RET_NOT_SUPPORTED:
-			m.append(_("Update checking is disabled in this build of Screaming Strike."))
+			m.append(_("Update checking is disabled in this build of %(gamename)s.") % {"gamename": buildSettings.GAME_NAME})
 		elif upresult==updateClient.RET_CONNECTION_ERROR:
 			m.append(_("There was an error while retrieving software update information (%(error)s). Please try again later.") % {"error": self.updateChecker.getLastError()})
 		elif upresult==updateClient.RET_USING_LATEST:
@@ -242,7 +242,7 @@ class ssAppMain(window.SingletonWindow):
 		url=buildSettings.UPDATE_PACKAGE_URL[platform.system()]
 		local=buildSettings.UPDATE_PACKAGE_LOCAL_NAME[platform.system()]
 		if url=="" or local=="":
-			self.message(_("This build of Screaming Strike doesn't have download location set."))
+			self.message(_("This build of %(gamename)s doesn't have download location set.") % {"gamename": buildSettings.GAME_NAME})
 			return
 		#end download location not set
 		fld=self.folderSelect(_("Select the folder you want to download the installer."))
@@ -290,9 +290,9 @@ class ssAppMain(window.SingletonWindow):
 		if self.statsStorage.get(k)==0:
 			self.statsStorage.inclement(k)
 			if mode==gameModes.ALL_MODES_STR[0]:
-				self.showTip(_("This is the new standard mode of Screaming Strike 2. Use your left and right arrows to move to the same position as an enemy and spacebar to punch! But remember, they need to be close as your fist can reach! Compared to the previous version, you get bonus points when leveling up. Also, you have chances to get bonuses if you achieve more than 5 consecutive hits!"))
+				self.showTip(_("This is the new standard mode of %(gamename)s. Use your left and right arrows to move to the same position as an enemy and spacebar to punch! But remember, they need to be close as your fist can reach! Compared to the previous version, you get bonus points when leveling up. Also, you have chances to get bonuses if you achieve more than 5 consecutive hits!") % {"gamename": buildSettings.GAME_NAME})
 			elif mode==gameModes.ALL_MODES_STR[1]:
-				self.showTip(_("This is the new arcade mode of Screaming Strike 2! From the new version, items that fall faster are more likely to be good, and slower ones are more likely to be bad. You can obtain an item by punching it, or destroy it by combining your up arrow when punching. Carefully choose which item to obtain!"))
+				self.showTip(_("This is the new arcade mode of %(gamename)s! From the new version, items that fall faster are more likely to be good, and slower ones are more likely to be bad. You can obtain an item by punching it, or destroy it by combining your up arrow when punching. Carefully choose which item to obtain!") % {"gamename": buildSettings.GAME_NAME})
 			elif mode==gameModes.ALL_MODES_STR[2]:
 				self.showTip(_("This is the old-fassioned game mode! You don't get bonuses based on accuracy, so you can punch, punch, punch punch punch and punch! This mode has shirper levelup curb, meaning that you can collect screams really fast!"))
 
@@ -533,7 +533,7 @@ Returns False when the game is closed. Otherwise True.
 			adapter=buildSettings.getScorePostingAdapter()
 			ret=adapter.post(name,result)
 			if ret==scorePostingAdapter.RET_UNAVAILABLE:
-				self.message(_("This build of Screaming Strike does not support score posting. Sorry!"))
+				self.message(_("This build of %(gamename)s does not support score posting. Sorry!") % {"gamename": buildSettings.GAME_NAME})
 				return
 			#end unavailable
 			if ret==scorePostingAdapter.RET_CONNECTION_ERROR:

@@ -5,13 +5,12 @@
 #See SsAppMain.py for application entry point
 import sys
 import os
+import buildSettings
 import platform_utils.paths
 if platform_utils.paths.is_mac and platform_utils.paths.is_frozen(): os.chdir("../Resources")
 from ssAppMain import *
 
 def main():
-
-#	sys.stderr = open('data/errorLog.txt', 'w') # uncomment this line when releasing
 	app=ssAppMain()
 	app.initialize()
 	app.run()
