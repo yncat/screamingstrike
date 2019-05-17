@@ -5,6 +5,7 @@ import os
 import platform
 import sys
 import shutil
+import glob
 import common
 
 win=True
@@ -41,5 +42,15 @@ print("Copying accessible_output2 dlls...")
 shutil.copytree("accessible_output2/lib", "%s/accessible_output2/lib" % copydir)
 print("Copying data files...")
 shutil.copytree("data", "%s/data" % (copydir),
-                ignore=shutil.ignore_patterns("options.dat"))
+                ignore=shutil.ignore_patterns("options.dat","collection.dat","stats.dat"))
+print("Copying locale files...")
+shutil.copytree("locale", "%s/locale" % (copydir))
+print("Copying readme")
+readmes=glob.glob("readme_*.txt")
+for elem in readmes:
+	shutil.copyfile(elem, "%s/%s" % (copydir, elem))
+
+if win:
+	print("Renaming to play.exe")
+	os.rename(PROJECT+".dist/"+PROJECT+".exe",PROJECT+".dist/play.exe")
 print("Done!")

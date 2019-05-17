@@ -26,7 +26,8 @@ class Sample(FlagObject):
 		if self.handle: self.free()
 
 	def free(self):
-		return bass_call(BASS_SampleFree, self.handle)
+		bass_call(BASS_SampleFree, self.handle)
+		self.handle=None
 
 	def setup_flag_mapping(self):
 		super(Sample, self).setup_flag_mapping()

@@ -11,7 +11,10 @@ RET_CONNECTION_ERROR=-1
 RET_TOO_LOW=-2
 
 class AdapterBase(object):
-	"""Inherit this class and override all methods to make your own adapter."""
+	"""Inherit this class and override the post methods to make your own adapter."""
+	def __init__(self):
+		self.lastError=None
+
 	def post(self,name,result):
 		"""Posts the given game result using this adapter. This base class does nothing and returns RET_UNAVAILABLE.
 		You must return the position on the scoreboard (>0) on success, or RET_CONNECTION_ERROR when connection error occured.
@@ -25,3 +28,9 @@ class AdapterBase(object):
 		"""
 		return RET_UNAVAILABLE
 
+	def getLastError(self):
+		"""Retrieves the last error.
+
+		:rtype: str
+		"""
+		return self.lastError

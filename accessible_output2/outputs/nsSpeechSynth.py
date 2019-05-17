@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+# NsSpeechSynthesizer output
+# Copyright (C) 2019 Yukio Nozawa <personal@nyanchangames.com>
+
 from __future__ import absolute_import
 
 from .base import Output
@@ -9,7 +13,6 @@ class NSSpeechSynth(Output):
 	name = 'NSSpeechSynthesizer'
 	def __init__(self, *args, **kwargs):
 		self.speechSynthesizer = NSSpeechSynthesizer.alloc().initWithVoice_(None)
-		print("synth init")
 
 	def speak(self, text, interrupt=False):
 		self.speechSynthesizer.startSpeakingString_(text)

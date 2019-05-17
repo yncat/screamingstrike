@@ -182,7 +182,7 @@ class CollectionDialog(object):
 		"""
 		self.appMain=appMain
 		self.sound=None
-		appMain.say(_("Use your left and right arrows to brows your collections, then press enter to make your unlocked one scream. You can move through your unlocked items with ctrl + left or right. To play with pitch changing, hold down up and down arrows. Press escape when you're satisfied."))
+		appMain.say(_("Use your left and right arrows to brows your collections, then press enter to make your unlocked one scream. You can move through your unlocked items with shift + left or right. To play with pitch changing, hold down up and down arrows. Press escape when you're satisfied."))
 		self.index=0
 		self.pitch=100
 		self.pitchTimer=window.Timer()
@@ -192,7 +192,7 @@ class CollectionDialog(object):
 		while(True):
 			appMain.frameUpdate()
 			if appMain.keyPressed(window.K_ESCAPE): break
-			if appMain.keyPressing(window.K_LCTRL) or appMain.keyPressing(window.K_RCTRL):
+			if appMain.keyPressing(window.K_LSHIFT) or appMain.keyPressing(window.K_RSHIFT):
 				if appMain.keyPressed(window.K_LEFT): self.searchUnlocked(-1)
 				if appMain.keyPressed(window.K_RIGHT): self.searchUnlocked(1)
 			else:
@@ -201,7 +201,7 @@ class CollectionDialog(object):
 				if not left and not right: self.lastHold=0
 				if left and self.index!=0: self.moveTo(self.index-1)
 				if right and self.index!=self.appMain.numScreams-1: self.moveTo(self.index+1)
-			#end ctrl or not
+			#end shift or not
 			if appMain.keyPressed(window.K_SPACE): self.moveTo(self.index)
 			if appMain.keyPressed(window.K_RETURN) and appMain.collectionStorage.isUnlocked(self.index): self.play(self.index)
 			if appMain.keyPressing(window.K_UP) and self.pitchTimer.elapsed>=50 and self.pitch!=enemy.SCREAM_PITCH_HIGH: self.changePitch(self.pitch+1)

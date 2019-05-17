@@ -21,11 +21,11 @@ msgstr ""
 msgid ""
 "Use your left and right arrows to brows your collections, then press enter "
 "to make your unlocked one scream. You can move through your unlocked items "
-"with ctrl + left or right. To play with pitch changing, hold down up and "
+"with shift + left or right. To play with pitch changing, hold down up and "
 "down arrows. Press escape when you're satisfied."
 msgstr ""
 "左右の矢印キーで、コレクションを閲覧できます。解放されているコレクションの上"
-"でエンターキーを押すと、叫ばせることができます。コントロール+左右矢印キーで、"
+"でエンターキーを押すと、叫ばせることができます。シフト+左右矢印キーで、"
 "解放したコレクションにカーソルを移動します。ピッチ変更で遊ぶには、上下の矢印"
 "キーを押します。満足したら、エスケープキーを押してください。"
 
@@ -43,7 +43,7 @@ msgid "No.%(no)d, %(status)s, %(plays)d"
 msgstr "No.%(no)d, %(status)s, %(plays)d"
 
 #: enemy.py:104
-#, fuzzy, python-format
+#, python-format
 msgid "Hit! (speed %(speed)d, distance %(distance)d, penetration bonus added)"
 msgstr "ヒット! (スピード %(speed)d, 距離 %(distance)d)"
 
@@ -98,7 +98,7 @@ msgid "Obtained a \"%(item)s\" item!"
 msgstr "アイテム \"%(item)s\"をゲット!"
 
 #: item.py:87
-#, fuzzy, python-format
+#, python-format
 msgid "A \"%(item)s\" item was shattered into peaces!"
 msgstr "アイテム \"%(item)s\" が粉々に砕かれた!!"
 
@@ -217,13 +217,12 @@ msgid "Update checking is disabled in this build of %(gamename)s."
 msgstr "この %(gamename)s のビルドでは、アップデートチェック機能は無効化されています。"
 
 #: ssAppMain.py:186
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "There was an error while retrieving software update information (%(error)s). "
 "Please try again later."
 msgstr ""
 "更新情報の取得中にエラーが発生しました(%(error)s)。しばらくしてからもう一度お"
-"試しください。スコア送信中にエラーが発生しました。しばらくしてからもう一度お"
 "試しください。"
 
 #: ssAppMain.py:188
@@ -260,7 +259,7 @@ msgstr ""
 "再試行できます。"
 
 #: ssAppMain.py:245
-#, fuzzy, python-format
+#, python-format
 msgid "This build of %(gamename)s doesn't have download location set."
 msgstr ""
 "このビルドの %(gamename)s では、ダウンロード先が設定されていません。この"
@@ -280,7 +279,7 @@ msgid " already exists. Do you want to overwrite?"
 msgstr "は、すでに存在します。上書きしますか？"
 
 #: ssAppMain.py:293
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "This is the new standard mode of %(gamename)s. Use your left and right "
 "arrows to move to the same position as an enemy and spacebar to punch! But "
@@ -294,7 +293,7 @@ msgstr ""
 "た、5回以上の連続ヒットを達成すると、それもボーナスポイントになります！"
 
 #: ssAppMain.py:295
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "This is the new arcade mode of %(gamename)s! From the new version, items "
 "that fall faster are more likely to be good, and slower ones are more likely "
@@ -455,9 +454,9 @@ msgid "This build of %(gamename)s does not support score posting. Sorry!"
 msgstr "この %(gamename)s のビルドでは、スコア送信はサポートされていません。ごめんなさい！"
 
 #: ssAppMain.py:540
-msgid "There was an error while posting your score. Please try again later."
+msgid "There was an error while posting your score (%(error)s). Please try again later."
 msgstr ""
-"スコア送信中にエラーが発生しました。しばらくしてからもう一度お試しください。"
+"スコア送信中にエラーが発生しました(%(error)s)。しばらくしてからもう一度お試しください。"
 
 #: ssAppMain.py:544
 msgid ""
@@ -467,9 +466,9 @@ msgstr ""
 "さい！"
 
 #: ssAppMain.py:547
-#, fuzzy, python-format
+#, python-format
 msgid ""
-"Congratulations! Your score is ranked in position %(pos)d! Keep up your "
+"Congratulations! Your score has ranked in position %(pos)d! Keep up your "
 "great work!"
 msgstr ""
 "おめでとうございます！%(pos)d位にランクインしました！これからもがんばってくだ"

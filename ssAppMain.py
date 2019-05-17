@@ -238,7 +238,7 @@ class ssAppMain(window.SingletonWindow):
 	def downloadUpdate(self):
 		"""Sets the download of the new update."""
 		if self.updateDownloader and self.updateDownloader.hasSucceeded(): return
-		if self.updateDownloader.isWorking(): return
+		if self.updateDownloader and self.updateDownloader.isWorking(): return
 		url=buildSettings.UPDATE_PACKAGE_URL[platform.system()]
 		local=buildSettings.UPDATE_PACKAGE_LOCAL_NAME[platform.system()]
 		if url=="" or local=="":
@@ -537,14 +537,14 @@ Returns False when the game is closed. Otherwise True.
 				return
 			#end unavailable
 			if ret==scorePostingAdapter.RET_CONNECTION_ERROR:
-				self.message(_("There was an error while posting your score. Please try again later."))
+				self.message(_("There was an error while posting your score (%(error)s). Please try again later.") % {"error": adapter.getLastError()})
 				return
 			#end connection error
 			if ret==scorePostingAdapter.RET_TOO_LOW:
 				self.message(_("Your score was posted, but you were not ranked in. Better luck next time!"))
 				return
 			#end connection error
-			self.message(_("Congratulations! Your score is ranked in position %(pos)d! Keep up your great work!" % {"pos": ret}))
+			self.message(_("Congratulations! Your score has ranked in position %(pos)d! Keep up your great work!") % {"pos": ret})
 			return
 
 	def changeMusicPitch_relative(self,p):
@@ -624,6 +624,9 @@ Returns False when the game is closed. Otherwise True.
 			if self.updateDownloader: self.checkUpdateDownloadFinish()
 		self.collectionStorage.save(COLLECTION_DATA_FILENAME)
 		self.statsStorage.save(STATS_DATA_FILENAME)
+		#Manually free samples here because leaving them for GC causes lots of exceptions when frozen
+		for elem in self.sounds.values():
+			elem.free()
 		return True
 
 	def checkUpdateDownloadFinish(self):

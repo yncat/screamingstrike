@@ -39,7 +39,7 @@ Blurred: You'll get your position blurred and can't aim at enemies accurately. W
 
 4: Collection
 This game is shipped with lots of screams and you can collect them in the game. Enemies you punched 10 times will be unlocked (collected) and you can make unlocked enemies scream anytime from the collection menu which can be accessed from the main menu.
-In the collection screen, use your left and right arrows to browse your collections. You can press enter on one of your unlocked collections to make them scream. Pressing your up and down arrows will change the pitch. The pitch shifting range is same as the ingame range. Alternatively, you can press ctrl+left/right to search for the next / previous unlocked collections.
+In the collection screen, use your left and right arrows to browse your collections. You can press enter on one of your unlocked collections to make them scream. Pressing your up and down arrows will change the pitch. The pitch shifting range is same as the ingame range. Alternatively, you can press shift+left/right to search for the next / previous unlocked collections.
 
 5: Erasing data
 The "Erase data" option in the main menu enables you to clear your high score and collection data separately. In order to actually delete the data, you need to hold shift and enter.
