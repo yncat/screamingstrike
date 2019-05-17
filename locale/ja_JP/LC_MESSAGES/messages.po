@@ -58,7 +58,7 @@ msgid "Game started at %(startedtime)s!"
 msgstr "%(startedtime)sにゲームを開始!"
 
 #: gameField.py:57
-#, fuzzy, python-format
+#, python-format
 msgid "Game mode: %(mode)s, high score: %(highscore)d."
 msgstr "ゲームモード: %(mode)s、ハイスコア: %(highscore)d。"
 
@@ -68,12 +68,12 @@ msgid "Game over! Final score: %(score)d"
 msgstr "ゲームオーバー! 最終得点: %(score)d"
 
 #: gameField.py:111
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Leveled up to %(newlevel)d! (Accuracy %(accuracy).1f%%, with %(lives)d hp "
 "remaining)"
 msgstr ""
-"レベル%(newlevel)にアップ! (ヒット率 %(accuracy).1f%%, 残りHP %(lives)d"
+"レベル%(newlevel)dにアップ! (ヒット率 %(accuracy).1f%%, 残りHP %(lives)d"
 
 #: gameField.py:146
 msgid "Game aboated."
@@ -309,7 +309,7 @@ msgstr ""
 
 #: ssAppMain.py:297
 msgid ""
-"This is the old-fassioned game mode! You don't get bonuses based on "
+"This is the old-fashioned game mode! You don't get bonuses based on "
 "accuracy, so you can punch, punch, punch punch punch and punch! This mode "
 "has shirper levelup curb, meaning that you can collect screams really fast!"
 msgstr ""
@@ -393,7 +393,7 @@ msgid "%(voice)s cannot be loaded."
 msgstr "%(voice)s を読み込めません。"
 
 #: ssAppMain.py:447
-#, fuzzy, python-format
+#, python-format
 msgid "%(playmode)s, high score %(highscore)s, start!"
 msgstr "%(playmode)s、ハイスコア%(highscore)d、スタート!"
 
@@ -450,11 +450,9 @@ msgid "Please input your name."
 msgstr "貴方の名前を入力してください。"
 
 #: ssAppMain.py:536
-#, fuzzy, python-format
+#, python-format
 msgid "This build of %(gamename)s does not support score posting. Sorry!"
-msgstr ""
-"この %(gamename)s のビルドでは、スコア送信はサポートされていません。ごめん"
-"なさい！"
+msgstr "この %(gamename)s のビルドでは、スコア送信はサポートされていません。ごめんなさい！"
 
 #: ssAppMain.py:540
 msgid "There was an error while posting your score. Please try again later."
@@ -503,12 +501,3 @@ msgid "Choose 'Forcefully shutdown' or alt+f4 to aboat the download."
 msgstr ""
 "'強制終了' を選択するか、もう一度alt+f4を推すと、ダウンロードを中断できます。"
 
-#~ msgid "Normal mode#Arcade mode#Options#Exit"
-#~ msgstr "ノーマルモード#アーケードモード#設定#終了"
-
-#, fuzzy
-#~ msgid ""
-#~ "Leveled up to %(newlevel)d! (Accuracy %(accuracy).1f%%, with %(lives)d "
-#~ "lives remaining)"
-#~ msgstr ""
-#~ "レベル%(newlevel)にアップ! (ヒット率 %(accuracy).1f%%, 残りHP %(lives)d"

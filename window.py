@@ -229,7 +229,7 @@ class menu:
 
 		:param elem: Element to add.
 		"""
-		if processShortcut: return (elem, None, None)
+		if not processShortcut: return (elem, None, None)
 		shortcut, shortcut_str=self.parseShortcut(elem)
 		if shortcut:
 			elem=elem[0:len(elem)-2]
@@ -303,8 +303,14 @@ class menu:
 		#end arrow keys
 		if self.wnd.keyPressed(K_HOME) and self.cursor!=0: self.moveTo(0)
 		if self.wnd.keyPressed(K_END) and self.cursor!=len(self.items): self.moveTo(len(self.items)-1)
-		if self.wnd.keyPressed(K_PAGEUP): self.moveTo(self.cursor-(len(self.items)/20))
-		if self.wnd.keyPressed(K_PAGEDOWN): self.moveTo(self.cursor+int((len(self.items)/20)))
+		if self.wnd.keyPressed(K_PAGEUP):
+			n=int(len(self.items)/20)
+			if n>0: self.moveTo(self.cursor-n)
+		#end pageup
+		if self.wnd.keyPressed(K_PAGEDOWN):
+			n=int(len(self.items)/20)
+			if n>0: self.moveTo(self.cursor+n)
+		#end pagedown
 		if self.wnd.keyPressed(K_SPACE): self.moveTo(self.cursor)
 		if self.wnd.keyPressed(K_ESCAPE):
 			self.cancel()
