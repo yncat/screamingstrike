@@ -407,7 +407,7 @@ msgstr ""
 #: ssAppMain.py:487
 #, python-format
 msgid "Unlocked %(number)d %(collection)s!"
-msgstr "%(number)d個の%(collection)sを会報!"
+msgstr "%(number)d個の%(collection)sを解放!"
 
 #: ssAppMain.py:491
 msgid "Close"
