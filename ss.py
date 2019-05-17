@@ -5,9 +5,9 @@
 #See SsAppMain.py for application entry point
 import sys
 import os
-import buildSettings
 import platform_utils.paths
 if platform_utils.paths.is_mac and platform_utils.paths.is_frozen(): os.chdir("../Resources")
+import buildSettings
 from ssAppMain import *
 
 def main():

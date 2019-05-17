@@ -247,6 +247,7 @@ class ssAppMain(window.SingletonWindow):
 		#end download location not set
 		fld=self.folderSelect(_("Select the folder you want to download the installer."))
 		if not fld: return
+		bgtsound.playOneShot(self.sounds["confirm.ogg"])
 		local=os.path.join(fld,local)
 		if os.path.isfile(local):
 			if not self.yesno(_("Warning"),local+_(" already exists. Do you want to overwrite?")): return
@@ -484,7 +485,7 @@ class ssAppMain(window.SingletonWindow):
 		self.wait(500)
 		m=window.menu()
 		s=_("collection") if num==1 else _("collections")
-		m.initialize(self,_("Unlocked %(number)d %(collection)s!" % {"number": num, "collection": s}),"",self.sounds["cursor.ogg"],self.sounds["confirm.ogg"],self.sounds["confirm.ogg"])
+		m.initialize(self,_("Unlocked %(number)d %(collection)s!") % {"number": num, "collection": s},"",self.sounds["cursor.ogg"],self.sounds["confirm.ogg"],self.sounds["confirm.ogg"])
 		for elem in result.unlockedCollection:
 			m.append(str(elem))
 		#end for
