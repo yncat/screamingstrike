@@ -31,6 +31,7 @@ class GameOptions:
 		self.rightPanningLimit=100
 		self.itemVoice="chris"
 		self.language=locale.getdefaultlocale()[0]
+		if self.language is None: self.language="en_US"#OSX may fail to auto language detect when frozen
 
 	def copyFrom(self,importer):
 		self.bgmVolume=importer.bgmVolume

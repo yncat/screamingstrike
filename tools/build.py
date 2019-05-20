@@ -57,8 +57,9 @@ if win:
 if win:
 	print("Creating installer exe")
 	common.run("WinRAR a -cfg- -ed -ep1 -k -m5 -r -sfx \"-ztools\\rar_options.txt\" \"%s.exe\" \"%s.dist\\*\"" % (PROJECT_FULL_NAME, PROJECT), shell=True)
-if mac:
+if not win:
 	print("Creating image dmg")
+	os.remove("dist/%s" % PROJECT)
 	common.run("hdiutil create -volname %s -srcfolder ./dist -ov -format UDZO %s.dmg" % PROJECT_FULL_NAME)
 
 print("Done!")
