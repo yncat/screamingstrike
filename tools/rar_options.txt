@@ -1,0 +1,4 @@
+Overwrite=1
+Path=C:\nyanchangame\Screaming Strike 2
+Text=Please select the path to install.
+Title=Screaming Strike 2 setup

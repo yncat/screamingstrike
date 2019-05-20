@@ -14,6 +14,7 @@ if platform.system() == 'Darwin':
 
 print("win=%s, cwd=%s" % (win, os.getcwd()))
 PROJECT = "ss"  # Change this line accordingly
+PROJECT_FULL_NAME="screamingStrike2"
 PYTHON_PATH="C:/python37"#Windows only
 
 if not os.path.exists("data"):
@@ -53,4 +54,11 @@ for elem in readmes:
 if win:
 	print("Renaming to play.exe")
 	os.rename(PROJECT+".dist/"+PROJECT+".exe",PROJECT+".dist/play.exe")
+if win:
+	print("Creating installer exe")
+	common.run("WinRAR a -cfg- -ed -ep1 -k -m5 -r -sfx \"-ztools\\rar_options.txt\" \"%s.exe\" \"%s.dist\\*\"" % (PROJECT_FULL_NAME, PROJECT), shell=True)
+if mac:
+	print("Creating image dmg")
+	common.run("hdiutil create -volname %s -srcfolder ./dist -ov -format UDZO %s.dmg" % PROJECT_FULL_NAME)
+
 print("Done!")
