@@ -144,6 +144,16 @@ class ssAppMain(window.SingletonWindow):
 		self.music.play_looped()
 	# end intro
 
+	def createMenu(self,title):
+		"""Creates a menu instance and returns it.
+
+		:param title: Menu title.
+		:type title: str
+		"""
+		m=window.menu()
+		m.initialize(self,title,None,self.sounds["cursor.ogg"],self.sounds["confirm.ogg"],self.sounds["confirm.ogg"])
+		return m
+
 	def mainmenu(self):
 		"""
 		Shows the main menu and returns what was selected as index.
@@ -158,6 +168,8 @@ class ssAppMain(window.SingletonWindow):
 		m.append(_("Arcade mode")+"&2")
 		m.append(_("Classic mode")+"&3")
 		m.append(_("Collection")+"&C")
+		m.append(_("View the scoreboard")+"&v")
+		m.append(_("Read the manual")+"&r")
 		m.append(_("Erase data")+"&E")
 		m.append(_("Options")+"&o")
 		m.append(_("Quit")+"&Q")
@@ -215,7 +227,7 @@ class ssAppMain(window.SingletonWindow):
 		if self.intro() is False: return
 		while(True):
 			selected=self.mainmenu()
-			if selected is False or selected==7: self.exit()
+			if selected is False or selected==9: self.exit()
 			if selected==0:
 				if self.updateChecker.getLastResult()==updateClient.RET_NEW_VERSION_AVAILABLE: self.downloadUpdate()
 				continue
@@ -224,10 +236,14 @@ class ssAppMain(window.SingletonWindow):
 				self.collectionDialog()
 				continue
 			if selected==5:
+				self.displayManual()
+				continue
+
+			if selected==7:
 				self.eraseDataDialog()
 				continue
 			#end erase data
-			if selected==6:
+			if selected==8:
 				self.optionsDialog()
 				continue
 			#end options
@@ -306,11 +322,15 @@ class ssAppMain(window.SingletonWindow):
 		"""
 		self.message(_("Tip: %s (Press enter to close this tip)") % tip)
 
+
 	def collectionDialog(self):
 		"""Shows the collection dialog. Returns when user pressed escape and left the dialog."""
 		c=collection.CollectionDialog()
 		c.run(self)
 
+	def readManual(self):
+		"""Shows the manual reading dialog. Returns when user presses escape."""
+;asd
 	def eraseDataDialog(self):
 		"""Shows the erase data dialog. Returns when user leaves this menu."""
 		m=window.menu()
