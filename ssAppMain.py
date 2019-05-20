@@ -245,6 +245,7 @@ class ssAppMain(window.SingletonWindow):
 			self.message(_("This build of %(gamename)s doesn't have download location set.") % {"gamename": buildSettings.GAME_NAME})
 			return
 		#end download location not set
+		self.say(_("Select the folder you want to download the installer."))
 		fld=self.folderSelect(_("Select the folder you want to download the installer."))
 		if not fld: return
 		bgtsound.playOneShot(self.sounds["confirm.ogg"])
@@ -529,6 +530,7 @@ Returns False when the game is closed. Otherwise True.
 		:type result: gameResult.GameResult
 		"""
 		if self.yesno(_("Score posting"),_("Do you want to post this score to the scoreboard?")) is True:#post
+			self.say(_("Please input your name.")
 			name=self.input(_("Name entry"),_("Please input your name."))
 			if name is None: return
 			adapter=buildSettings.getScorePostingAdapter()
