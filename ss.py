@@ -6,7 +6,7 @@
 import sys
 import os
 import platform_utils.paths
-if platform_utils.paths.is_mac and platform_utils.paths.is_frozen(): os.chdir("../Resources")
+if platform_utils.paths.is_mac and platform_utils.paths.is_frozen(): os.chdir(platform_utils.paths.embedded_data_path())
 import buildSettings
 from ssAppMain import *
 
