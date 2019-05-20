@@ -2,6 +2,7 @@
 
 Version : 2.00
 Developed by : Nyanchan
+Scoreboard: https://www.nyanchangames.com/scoreboard/score.php
 
 Screaming Strike 2 is the world's funniest audio game ever where you punch various kinds of incoming enemies.
 This game was originally a small time-killer released in 2012, but in 2018, it was excibited at Tokyo Game Show (I still can't believe it actually was!), and I decided to completely rewrite it after that.

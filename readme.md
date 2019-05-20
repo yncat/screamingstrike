@@ -26,6 +26,7 @@ The game uses Nuitka for building on windows.
 pip install nuitka  
 In order to compile with Nuitka, you need minGW64.  
 Please refer to http://nuitka.net/doc/user-manual.html  
+For automated packaging, WinRAR must be installed and WinRAR.exe must be accessible from the environment variable path.  
 On mac OSX, you just need pyinstaller.  
 pip install pyinstaller  
 After setting up the environment, run 'python tools\build.py'.  
@@ -39,6 +40,8 @@ Run 'python tools\buildTranslation.py'
 Your added language should be selectable from the options menu.  
 
 ## API reference
+You need sphinx.  
+pip install sphinx  
 run the following commands to generate the API reference, which may help you how the game is coded. There's missing docstrings here and there, so a small part of the API reference may have less detailed info.  
 python tools\initdoc.py  
 python tools\gendoc.py  
