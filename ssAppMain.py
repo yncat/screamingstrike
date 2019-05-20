@@ -530,7 +530,7 @@ Returns False when the game is closed. Otherwise True.
 		:type result: gameResult.GameResult
 		"""
 		if self.yesno(_("Score posting"),_("Do you want to post this score to the scoreboard?")) is True:#post
-			self.say(_("Please input your name.")
+			self.say(_("Please input your name."))
 			name=self.input(_("Name entry"),_("Please input your name."))
 			if name is None: return
 			adapter=buildSettings.getScorePostingAdapter()
