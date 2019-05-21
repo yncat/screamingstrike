@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: screamingStrike\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-17 10:49+0900\n"
+"POT-Creation-Date: 2019-05-21 12:34+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,19 +21,19 @@ msgstr ""
 msgid ""
 "Use your left and right arrows to brows your collections, then press enter "
 "to make your unlocked one scream. You can move through your unlocked items "
-"with ctrl + left or right. To play with pitch changing, hold down up and "
+"with shift + left or right. To play with pitch changing, hold down up and "
 "down arrows. Press escape when you're satisfied."
 msgstr ""
 
-#: collection.py:217
+#: collection.py:228
 msgid "Unlocked"
 msgstr ""
 
-#: collection.py:220
+#: collection.py:231
 msgid "Locked"
 msgstr ""
 
-#: collection.py:222
+#: collection.py:233
 #, python-format
 msgid "No.%(no)d, %(status)s, %(plays)d"
 msgstr ""
@@ -169,95 +169,103 @@ msgstr ""
 msgid "Point: %(added).1f %(changestr)s (%(total).1f)"
 msgstr ""
 
-#: ssAppMain.py:155
+#: ssAppMain.py:167
+msgid "Normal mode"
+msgstr ""
+
+#: ssAppMain.py:168
+msgid "Arcade mode"
+msgstr ""
+
+#: ssAppMain.py:169
+msgid "Classic mode"
+msgstr ""
+
+#: ssAppMain.py:178
 msgid ""
 "Main menu. Use your up and down arrows to choose an option, then press enter "
 "to confirm"
 msgstr ""
 
-#: ssAppMain.py:157
-msgid "Normal mode"
-msgstr ""
-
-#: ssAppMain.py:158
-msgid "Arcade mode"
-msgstr ""
-
-#: ssAppMain.py:159
-msgid "Classic mode"
-msgstr ""
-
-#: ssAppMain.py:160
+#: ssAppMain.py:181
 msgid "Collection"
 msgstr ""
 
-#: ssAppMain.py:161
-msgid "Erase data"
+#: ssAppMain.py:182
+msgid "View the scoreboard"
 msgstr ""
 
-#: ssAppMain.py:162
-msgid "Options"
-msgstr ""
-
-#: ssAppMain.py:163
-msgid "Quit"
+#: ssAppMain.py:183
+msgid "Read the manual"
 msgstr ""
 
 #: ssAppMain.py:184
+msgid "Erase data"
+msgstr ""
+
+#: ssAppMain.py:185
+msgid "Options"
+msgstr ""
+
+#: ssAppMain.py:186
+msgid "Quit"
+msgstr ""
+
+#: ssAppMain.py:207
 #, python-format
 msgid "Update checking is disabled in this build of %(gamename)s."
 msgstr ""
 
-#: ssAppMain.py:186
+#: ssAppMain.py:209
 #, python-format
 msgid ""
 "There was an error while retrieving software update information (%(error)s). "
 "Please try again later."
 msgstr ""
 
-#: ssAppMain.py:188
+#: ssAppMain.py:211
 msgid ""
 "You're playing the latest version! When a new update is found, it will be "
 "notified here."
 msgstr ""
 
-#: ssAppMain.py:191
+#: ssAppMain.py:214
 msgid "There is a new version of the game! Press enter here to download it."
 msgstr ""
 
-#: ssAppMain.py:204
+#: ssAppMain.py:227
 #, python-format
 msgid "Downloading the new version (%(current)dK/%(total)dK (%(percent)d%%)"
 msgstr ""
 
-#: ssAppMain.py:207
+#: ssAppMain.py:230
 #, python-format
 msgid "The new version has been downloaded to %(location)s."
 msgstr ""
 
-#: ssAppMain.py:209
+#: ssAppMain.py:232
 #, python-format
 msgid "Failed to download the new update (%(reason)s). Press enter to retry."
 msgstr ""
 
-#: ssAppMain.py:245
+#: ssAppMain.py:274
 #, python-format
 msgid "This build of %(gamename)s doesn't have download location set."
 msgstr ""
 
-#: ssAppMain.py:248
+#: ssAppMain.py:277 ssAppMain.py:278
 msgid "Select the folder you want to download the installer."
 msgstr ""
 
-#: ssAppMain.py:252
+#: ssAppMain.py:283
 msgid "Warning"
 msgstr ""
 
-#: ssAppMain.py:252
+#: ssAppMain.py:283
 msgid " already exists. Do you want to overwrite?"
 msgstr ""
 
-#: ssAppMain.py:293
+#: ssAppMain.py:324
 #, python-format
 msgid ""
 "This is the new standard mode of %(gamename)s. Use your left and right "
@@ -267,7 +275,7 @@ msgid ""
 "chances to get bonuses if you achieve more than 5 consecutive hits!"
 msgstr ""
 
-#: ssAppMain.py:295
+#: ssAppMain.py:326
 #, python-format
 msgid ""
 "This is the new arcade mode of %(gamename)s! From the new version, items "
@@ -276,183 +284,214 @@ msgid ""
 "your up arrow when punching. Carefully choose which item to obtain!"
 msgstr ""
 
-#: ssAppMain.py:297
+#: ssAppMain.py:328
 msgid ""
 "This is the old-fassioned game mode! You don't get bonuses based on "
 "accuracy, so you can punch, punch, punch punch punch and punch! This mode "
 "has shirper levelup curb, meaning that you can collect screams really fast!"
 msgstr ""
 
-#: ssAppMain.py:305
+#: ssAppMain.py:336
 #, python-format
 msgid "Tip: %s (Press enter to close this tip)"
 msgstr ""
 
-#: ssAppMain.py:315
-msgid "Select the data to irase"
+#: ssAppMain.py:346
+msgid "Please select the game mode to view"
 msgstr ""
 
-#: ssAppMain.py:315
-msgid "Highscores"
-msgstr ""
-
-#: ssAppMain.py:315
-msgid "Collections"
-msgstr ""
-
-#: ssAppMain.py:315
+#: ssAppMain.py:348 ssAppMain.py:369 ssAppMain.py:403
 msgid "Back"
 msgstr ""
 
-#: ssAppMain.py:323
+#: ssAppMain.py:362
+#, python-format
+msgid "This build of %(gamename)s does not support scoreboard viewing."
+msgstr ""
+
+#: ssAppMain.py:365
+#, python-format
+msgid "Score table for %(mode)s"
+msgstr ""
+
+#: ssAppMain.py:382
+#, python-format
+msgid ""
+"The manual written in the selected language doesn't seem to exist. If you "
+"can write one and contribute, please create %(filename)s and contact the "
+"developer."
+msgstr ""
+
+#: ssAppMain.py:386
+msgid ""
+"Use your up and down arrows to read the manual. You can navigate to each "
+"section by using shortcut keys 1 to 9. Press escape to close"
+msgstr ""
+
+#: ssAppMain.py:403
+msgid "Select the data to irase"
+msgstr ""
+
+#: ssAppMain.py:403
+msgid "Highscores"
+msgstr ""
+
+#: ssAppMain.py:403
+msgid "Collections"
+msgstr ""
+
+#: ssAppMain.py:411
 msgid "Hold shift and enter to erase."
 msgstr ""
 
-#: ssAppMain.py:328
+#: ssAppMain.py:416
 msgid "Your highscores are all reset!"
 msgstr ""
 
-#: ssAppMain.py:332
+#: ssAppMain.py:420
 msgid "Your collections are all reset!"
 msgstr ""
 
-#: ssAppMain.py:343
+#: ssAppMain.py:430
 msgid ""
 "Options Menu, use your up and down arrows to choose an option, left and "
 "right arrows to change values, enter to save or escape to discard changes"
 msgstr ""
 
-#: ssAppMain.py:344
+#: ssAppMain.py:431
 msgid "Background music volume"
 msgstr ""
 
-#: ssAppMain.py:345
+#: ssAppMain.py:432
 msgid "Left panning limit"
 msgstr ""
 
-#: ssAppMain.py:346
+#: ssAppMain.py:433
 msgid "Right panning limit."
 msgstr ""
 
-#: ssAppMain.py:347
+#: ssAppMain.py:434
 msgid "Item announcement voice"
 msgstr ""
 
-#: ssAppMain.py:348
+#: ssAppMain.py:435
 msgid "Language (restart to apply)"
 msgstr ""
 
-#: ssAppMain.py:359
+#: ssAppMain.py:446
 msgid "Changes discarded."
 msgstr ""
 
-#: ssAppMain.py:364
+#: ssAppMain.py:451
 msgid "Settings saved"
 msgstr ""
 
-#: ssAppMain.py:418
+#: ssAppMain.py:505
 #, python-format
 msgid "%(voice)s cannot be loaded."
 msgstr ""
 
-#: ssAppMain.py:447
+#: ssAppMain.py:534
 #, python-format
 msgid "%(playmode)s, high score %(highscore)s, start!"
 msgstr ""
 
-#: ssAppMain.py:486
+#: ssAppMain.py:572
 msgid "collection"
 msgstr ""
 
-#: ssAppMain.py:486
+#: ssAppMain.py:572
 msgid "collections"
 msgstr ""
 
-#: ssAppMain.py:487
+#: ssAppMain.py:573
 #, python-format
 msgid "Unlocked %(number)d %(collection)s!"
 msgstr ""
 
-#: ssAppMain.py:491
+#: ssAppMain.py:577
 msgid "Close"
 msgstr ""
 
-#: ssAppMain.py:505
+#: ssAppMain.py:590
 msgid "Game result"
 msgstr ""
 
-#: ssAppMain.py:506
+#: ssAppMain.py:591
 #, python-format
 msgid "Final score: %(score)d"
 msgstr ""
 
-#: ssAppMain.py:508
+#: ssAppMain.py:593
 #, python-format
 msgid "New high score! Plus %(distance)d (last: %(last)d)"
 msgstr ""
 
-#: ssAppMain.py:512
+#: ssAppMain.py:597
 #, python-format
 msgid "Punches: %(punches)d, hits: %(hits)d, accuracy: %(accuracy).2f%%"
 msgstr ""
 
-#: ssAppMain.py:530
+#: ssAppMain.py:615
 msgid "Score posting"
 msgstr ""
 
-#: ssAppMain.py:530
+#: ssAppMain.py:615
 msgid "Do you want to post this score to the scoreboard?"
 msgstr ""
 
-#: ssAppMain.py:531
-msgid "Name entry"
-msgstr ""
-
-#: ssAppMain.py:531
+#: ssAppMain.py:616 ssAppMain.py:617
 msgid "Please input your name."
 msgstr ""
 
-#: ssAppMain.py:536
+#: ssAppMain.py:617
+msgid "Name entry"
+msgstr ""
+
+#: ssAppMain.py:622
 #, python-format
 msgid "This build of %(gamename)s does not support score posting. Sorry!"
 msgstr ""
 
-#: ssAppMain.py:540
-msgid "There was an error while posting your score. Please try again later."
+#: ssAppMain.py:626
+#, python-format
+msgid ""
+"There was an error while posting your score (%(error)s). Please try again "
+"later."
 msgstr ""
 
-#: ssAppMain.py:544
+#: ssAppMain.py:630
 msgid ""
 "Your score was posted, but you were not ranked in. Better luck next time!"
 msgstr ""
 
-#: ssAppMain.py:547
+#: ssAppMain.py:633
 #, python-format
 msgid ""
-"Congratulations! Your score is ranked in position %(pos)d! Keep up your "
+"Congratulations! Your score has ranked in position %(pos)d! Keep up your "
 "great work!"
 msgstr ""
 
-#: ssAppMain.py:588
+#: ssAppMain.py:673
 msgid "Yes"
 msgstr ""
 
-#: ssAppMain.py:589
+#: ssAppMain.py:674
 msgid "No"
 msgstr ""
 
-#: ssAppMain.py:632
+#: ssAppMain.py:720
 msgid "Update downloading is still in progress"
 msgstr ""
 
-#: ssAppMain.py:634
+#: ssAppMain.py:722
 msgid "Forcefully shutdown"
 msgstr ""
 
-#: ssAppMain.py:642
+#: ssAppMain.py:730
 msgid "Download job has ended! Press enter to close the application."
 msgstr ""
 
-#: ssAppMain.py:652
+#: ssAppMain.py:740
 msgid "Choose 'Forcefully shutdown' or alt+f4 to aboat the download."
 msgstr ""
