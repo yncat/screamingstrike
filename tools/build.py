@@ -8,6 +8,20 @@ import shutil
 import glob
 import common
 
+def dopackage():
+	if win:
+		print("Creating installer exe")
+		f=open("_build.bat","w")
+		f.write("WinRAR a -cfg- -ed -ep1 -k -m5 -r -sfx \"-ztools\\rar_options.txt\" \"%s.exe\" \"%s.dist\\*\"" % (PROJECT_FULL_NAME, PROJECT))
+		f.close()
+		common.run("cmd /c _build.bat")
+		os.remove("_build.bat")
+	if not win:
+		print("Creating image dmg")
+		os.rename("dist/"+PROJECT+".app","dist/"+PROJECT_FULL_NAME+".app")
+		os.remove("dist/%s" % PROJECT)
+		common.run("hdiutil create -volname %s -srcfolder ./dist -ov -format UDZO %s.dmg" % (PROJECT_FULL_NAME, PROJECT_FULL_NAME))
+
 win=True
 if platform.system() == 'Darwin':
 	win=False
@@ -22,13 +36,20 @@ if not os.path.exists("data"):
   sys.exit()
 
 print("Building %s. This will take several minutes. Please wait..." % PROJECT)
+
+if "--skip-compile" in sys.argv:
+	print("Skipping to packaging")
+	dopackage()
+	print("Done!")
+	sys.exit()
+
 copydir=""
 
 if win:
 	cmd="nuitka --follow-imports --windows-disable-console --standalone --mingw64 --include-plugin-directory=sound_lib/lib/x64 %s.py" % (PROJECT)
 	copydir="%s.dist" % PROJECT
 else:
-	cmd="pyinstaller --windowed --onefile --osx-bundle-identifier com.nyanchanGames.%s %s.py" % (PROJECT, PROJECT)
+	cmd="pyinstaller --windowed --onefile --osx-bundle-identifier com.nyanchanGames.%s %s.py" % (PROJECT_FULL_NAME, PROJECT)
 	copydir="dist/%s.app/Contents/Resources" % PROJECT
 
 common.run(cmd, sh=win)#win uses shell=true and mac doesn't
@@ -54,12 +75,5 @@ for elem in readmes:
 if win:
 	print("Renaming to play.exe")
 	os.rename(PROJECT+".dist/"+PROJECT+".exe",PROJECT+".dist/play.exe")
-if win:
-	print("Creating installer exe")
-	common.run("WinRAR a -cfg- -ed -ep1 -k -m5 -r -sfx \"-ztools\\rar_options.txt\" \"%s.exe\" \"%s.dist\\*\"" % (PROJECT_FULL_NAME, PROJECT), shell=True)
-if not win:
-	print("Creating image dmg")
-	os.remove("dist/%s" % PROJECT)
-	common.run("hdiutil create -volname %s -srcfolder ./dist -ov -format UDZO %s.dmg" % PROJECT_FULL_NAME)
-
+dopackage()
 print("Done!")
