@@ -1,4 +1,4 @@
-﻿Screaming Strike 2!
+Screaming Strike 2!
 
 Version : 2.00
 作成者　: にゃんちゃん

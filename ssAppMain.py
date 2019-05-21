@@ -20,6 +20,7 @@ import gameOptions
 import gameResult
 import globalVars
 import scorePostingAdapter
+import scoreViewAdapter
 import stats
 import updateClient
 import window
@@ -144,15 +145,28 @@ class ssAppMain(window.SingletonWindow):
 		self.music.play_looped()
 	# end intro
 
-	def createMenu(self,title):
+	def createMenu(self,title,default=None):
 		"""Creates a menu instance and returns it.
 
 		:param title: Menu title.
 		:type title: str
+		:param default: Default selections.
+		:type default: List.
 		"""
 		m=window.menu()
-		m.initialize(self,title,None,self.sounds["cursor.ogg"],self.sounds["confirm.ogg"],self.sounds["confirm.ogg"])
+		m.initialize(self,title,default,self.sounds["cursor.ogg"],self.sounds["confirm.ogg"],self.sounds["confirm.ogg"])
 		return m
+
+	def appendModeMenus(self,m):
+		"""
+		Appends all game modes to the specified menu.
+
+		:param m: Menu.
+		:type m: window.Menu
+		"""
+		m.append(_("Normal mode")+"&1")
+		m.append(_("Arcade mode")+"&2")
+		m.append(_("Classic mode")+"&3")
 
 	def mainmenu(self):
 		"""
@@ -161,12 +175,9 @@ class ssAppMain(window.SingletonWindow):
 		:rtype: int
 		"""
 		updateProgressTimer=window.Timer()
-		m=window.menu()
-		m.initialize(self,_("Main menu. Use your up and down arrows to choose an option, then press enter to confirm"),None,self.sounds["cursor.ogg"],self.sounds["confirm.ogg"],self.sounds["confirm.ogg"])
+		m=self.createMenu(_("Main menu. Use your up and down arrows to choose an option, then press enter to confirm"))
 		self.appendUpdateMessage(m)
-		m.append(_("Normal mode")+"&1")
-		m.append(_("Arcade mode")+"&2")
-		m.append(_("Classic mode")+"&3")
+		self.appendModeMenus(m)
 		m.append(_("Collection")+"&C")
 		m.append(_("View the scoreboard")+"&v")
 		m.append(_("Read the manual")+"&r")
@@ -236,9 +247,11 @@ class ssAppMain(window.SingletonWindow):
 				self.collectionDialog()
 				continue
 			if selected==5:
+				self.viewScoreboard()
+				continue
+			if selected==6:
 				self.displayManual()
 				continue
-
 			if selected==7:
 				self.eraseDataDialog()
 				continue
@@ -328,13 +341,66 @@ class ssAppMain(window.SingletonWindow):
 		c=collection.CollectionDialog()
 		c.run(self)
 
-	def readManual(self):
+	def viewScoreboard(self):
+		"""Displays the scoreboard view. Returns when user closed the dialog."""
+		m=self.createMenu(_("Please select the game mode to view"))
+		self.appendModeMenus(m)
+		m.append(_("Back"))
+		while(True):
+			m.open()
+			while(True):
+				self.frameUpdate()
+				r=m.frameUpdate()
+				if r is None: continue
+				break
+			#end loop
+			if r==-1 or m.isLast(r): break
+			#Start retrieving
+			adapter=buildSettings.getScoreViewAdapter()
+			ret=adapter.get(gameModes.ALL_MODES_STR[r])
+			if ret==scoreViewAdapter.RET_UNAVAILABLE:
+				self.message(_("This build of %(gamename)s does not support scoreboard viewing.") % {"gamename": buildSettings.GAME_NAME})
+				continue
+			#end not supported
+			m2=self.createMenu(_("Score table for %(mode)s") % {"mode": gameModes.ALL_MODES_STR[r]})
+			for elem in ret:
+				m2.append(elem)
+			#end append
+			m2.append(_("Back"))
+			m2.open()
+			while(True):
+				self.frameUpdate()
+				if m2.frameUpdate(): break
+			#end while score table vie is active
+		#end while the mode selection menu is active
+	#end viewScoreboard
+
+	def displayManual(self):
 		"""Shows the manual reading dialog. Returns when user presses escape."""
-;asd
+		fname="readme_"+self.options.language[0:2]+".txt"
+		if not os.path.isfile(fname):
+			self.message(_("The manual written in the selected language doesn't seem to exist. If you can write one and contribute, please create %(filename)s and contact the developer.") % {"filename": fname})
+			return
+		#end not exist
+		f=open(fname,"r", encoding="UTF-8")
+		m=self.createMenu(_("Use your up and down arrows to read the manual. You can navigate to each section by using shortcut keys 1 to 9. Press escape to close"))
+		for line in f:
+			if line!="\n": m.append(line.rstrip())
+		#end addition
+		f.close()
+		m.open()
+		while(True):
+			self.frameUpdate()
+			r=m.frameUpdate()
+			if r is None: continue
+			if r==-1: break
+			self.say(m.getString(m.getCursorPos()))
+		#end loop
+	#end displayManual
+
 	def eraseDataDialog(self):
 		"""Shows the erase data dialog. Returns when user leaves this menu."""
-		m=window.menu()
-		m.initialize(self,_("Select the data to irase"),[_("Highscores"),_("Collections"),_("Back")],self.sounds["cursor.ogg"],self.sounds["confirm.ogg"],self.sounds["confirm.ogg"])
+		m=self.createMenu(_("Select the data to irase"),[_("Highscores"),_("Collections"),_("Back")])
 		m.open()
 		while(True):
 			self.frameUpdate()
@@ -361,8 +427,7 @@ class ssAppMain(window.SingletonWindow):
 		"""Shows the game options menu. It returns when the menu is closed and all required i/o is finished."""
 		backup=gameOptions.GameOptions()
 		backup.initialize(self.options)
-		m=window.menu()
-		m.initialize(self,_("Options Menu, use your up and down arrows to choose an option, left and right arrows to change values, enter to save or escape to discard changes"),"",self.sounds["cursor.ogg"],self.sounds["confirm.ogg"],self.sounds["confirm.ogg"])
+		m=self.createMenu(_("Options Menu, use your up and down arrows to choose an option, left and right arrows to change values, enter to save or escape to discard changes"))
 		m.append(_("Background music volume"))
 		m.append(_("Left panning limit"))
 		m.append(_("Right panning limit."))
@@ -504,9 +569,8 @@ class ssAppMain(window.SingletonWindow):
 		if num==0: return
 		bgtsound.playOneShot(self.sounds["unlock.ogg"])
 		self.wait(500)
-		m=window.menu()
 		s=_("collection") if num==1 else _("collections")
-		m.initialize(self,_("Unlocked %(number)d %(collection)s!") % {"number": num, "collection": s},"",self.sounds["cursor.ogg"],self.sounds["confirm.ogg"],self.sounds["confirm.ogg"])
+		m=self.createMenu(_("Unlocked %(number)d %(collection)s!") % {"number": num, "collection": s})
 		for elem in result.unlockedCollection:
 			m.append(str(elem))
 		#end for
@@ -523,8 +587,7 @@ class ssAppMain(window.SingletonWindow):
 
 	def resultScreen(self,result):
 		"""Shows the game results screen."""
-		m=window.menu()
-		m.initialize(self,_("Game result"),"",self.sounds["cursor.ogg"],self.sounds["confirm.ogg"],self.sounds["confirm.ogg"])
+		m=self.createMenu(_("Game result"))
 		m.append(_("Final score: %(score)d") % {"score": result.score})
 		if result.highscore is not None:
 			m.append(_("New high score! Plus %(distance)d (last: %(last)d)") % {"distance": result.highscore-result.previousHighscore, "last": result.previousHighscore})
@@ -605,8 +668,7 @@ Returns False when the game is closed. Otherwise True.
 		:type top: str
 		:rtype: bool
 		"""
-		m=window.menu()
-		m.initialize(self,title,"",self.sounds["cursor.ogg"],self.sounds["confirm.ogg"],self.sounds["confirm.ogg"])
+		m=self.createMenu(title)
 		m.append(top)
 		m.append(_("Yes")+"&Y")
 		m.append(_("No")+"&N")
@@ -655,8 +717,7 @@ Returns False when the game is closed. Otherwise True.
 	def checkUpdateDownloadFinish(self):
 		"""Shows a menu where players can wait the update download to finish."""
 		if not self.updateDownloader.isWorking(): return
-		m=window.menu()
-		m.initialize(self,_("Update downloading is still in progress"),None,self.sounds["cursor.ogg"],self.sounds["confirm.ogg"],self.sounds["confirm.ogg"])
+		m=self.createMenu(_("Update downloading is still in progress"))
 		m.append(self.generateUpdateProgress())
 		m.append(_("Forcefully shutdown"))
 		updateProgressTimer=window.Timer()

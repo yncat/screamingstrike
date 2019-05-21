@@ -3,6 +3,7 @@
 # Copyright (C) 2019 Yukio Nozawa <personal@nyanchangames.com>
 # License: GPL V2.0 (See copying.txt for details)
 import scorePostingAdapter
+import scoreViewAdapter
 
 #	sys.stderr = open('data/errorLog.txt', 'w') # uncomment this line when releasing
 
@@ -19,3 +20,4 @@ UPDATE_PACKAGE_LOCAL_NAME={
 }
 
 def getScorePostingAdapter(): return scorePostingAdapter.AdapterBase()
+def getScoreViewAdapter(): return scoreViewAdapter.AdapterBase()
