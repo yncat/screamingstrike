@@ -325,7 +325,7 @@ class ssAppMain(window.SingletonWindow):
 			elif mode==gameModes.ALL_MODES_STR[1]:
 				self.showTip(_("This is the new arcade mode of %(gamename)s! From the new version, items that fall faster are more likely to be good, and slower ones are more likely to be bad. You can obtain an item by punching it, or destroy it by combining your up arrow when punching. Carefully choose which item to obtain!") % {"gamename": buildSettings.GAME_NAME})
 			elif mode==gameModes.ALL_MODES_STR[2]:
-				self.showTip(_("This is the old-fassioned game mode! You don't get bonuses based on accuracy, so you can punch, punch, punch punch punch and punch! This mode has shirper levelup curb, meaning that you can collect screams really fast!"))
+				self.showTip(_("This is the old-fashioned game mode! You don't get bonuses based on accuracy, so you can punch, punch, punch punch punch and punch! This mode has shirper levelup curb, meaning that you can collect screams really fast!"))
 
 	def showTip(self,tip):
 		"""Shows the ingame tip.

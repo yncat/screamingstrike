@@ -318,9 +318,9 @@ msgstr ""
 "ムを壊すことができます。どのアイテムを撮るか、身長に選びましょう！"
 
 #: ssAppMain.py:328
-#, fuzzy
+#, python-format
 msgid ""
-"This is the old-fassioned game mode! You don't get bonuses based on "
+"This is the old-fashioned game mode! You don't get bonuses based on "
 "accuracy, so you can punch, punch, punch punch punch and punch! This mode "
 "has shirper levelup curb, meaning that you can collect screams really fast!"
 msgstr ""
