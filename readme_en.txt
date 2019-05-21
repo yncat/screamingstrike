@@ -9,7 +9,6 @@ This game was originally a small time-killer released in 2012, but in 2018, it w
 
 1: Game features &1
 In this game, you punch enemies coming from the three lanes until you die. It has three modes: normal mode where you punch as many enemies as possible with your highest accuracy, arcade mode where you gain higher points by utilizing items, and classic mode for those who like the old-fashioned game system.
-三つのレーンのどこかから歩いてくるいろんなものを、ひたすら殴り倒していくゲームです。ひたすら敵をなぎ倒すノーマルモード、アイテムが登場し、さまざまな効果を発揮するアーケードモードの二つを収録しました。また、旧バージョンの雰囲気が好きな人のために、新たにクラシックモードを追加しています。
 The controls are very simple, and it of course supports online scoreboard system. Enjoy compeeting with other players worldwide!
 
 2: Controls &2
