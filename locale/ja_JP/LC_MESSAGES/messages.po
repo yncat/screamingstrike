@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: screamingStrike\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-23 11:15+0900\n"
+"POT-Creation-Date: 2019-05-23 11:24+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Yukio Nozawa <support@nyanchangames.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -76,7 +76,6 @@ msgstr ""
 "レベル%(newlevel)dにアップ! (ヒット率 %(accuracy).1f%%, 残りHP %(lives)d"
 
 #: gameField.py:146
-#, python-format
 msgid "Game aborted."
 msgstr "ゲームを中断しました。"
 
@@ -161,7 +160,6 @@ msgid "You've been slapped! (%(lives)d HP remaining)"
 msgstr "ひっぱたかれた!(残りHP %(lives)d)"
 
 #: player.py:296
-#, python-format
 msgid "Game over!"
 msgstr "ゲームオーバー!"
 
@@ -238,7 +236,6 @@ msgstr ""
 "試しください。"
 
 #: ssAppMain.py:211
-#, python-format
 msgid ""
 "You're playing the latest version! When a new update is found, you will be "
 "notified here."
@@ -280,7 +277,6 @@ msgstr ""
 "い！"
 
 #: ssAppMain.py:277 ssAppMain.py:278
-#, python-format
 msgid "Select the folder where you want to download the installer."
 msgstr "インストーラーをダウンロードするフォルダーを指定してください。"
 
@@ -321,7 +317,6 @@ msgstr ""
 "ムを壊すことができます。どのアイテムを撮るか、身長に選びましょう！"
 
 #: ssAppMain.py:328
-#, python-format
 msgid ""
 "This is the old-fashioned game mode! You don't get bonuses based on "
 "accuracy, so you can punch, punch, punch punch punch and punch! This mode "
@@ -376,7 +371,6 @@ msgstr ""
 "カットを押すことで、対応するセクションに移動することができます"
 
 #: ssAppMain.py:403
-#, python-format
 msgid "Select the data to erase"
 msgstr "削除するデータを選んでください"
 
@@ -552,7 +546,6 @@ msgstr ""
 "ダウンロード処理が終了しました！エンターキーを押すと、ゲームを終了します。"
 
 #: ssAppMain.py:740
-#, python-format
 msgid "Choose 'Forcefully shutdown' or alt+f4 to abort the download."
 msgstr ""
 "'強制終了' を選択するか、もう一度alt+f4を推すと、ダウンロードを中断できます。"

@@ -1,0 +1,530 @@
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the screamingStrike package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: screamingStrike\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-05-21 12:34+0900\n"
+"PO-Revision-Date: 2019-05-23 12:01+0900\n"
+"Language: tr_TR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"X-Generator: Poedit 2.2.3\n"
+
+#: collection.py:185
+msgid ""
+"Use your left and right arrows to brows your collections, then press enter to make "
+"your unlocked one scream. You can move through your unlocked items with shift + "
+"left or right. To play with pitch changing, hold down up and down arrows. Press "
+"escape when you're satisfied."
+msgstr ""
+"Kolleksiyona göz atmak için sol ve sağ okları kullanın, istediğinizi bağırtmak "
+"için enter'a basın. Kilidi açılmış öğeler arasında shift+sol ve sağ oklarla "
+"dolaşabilirsiniz. Kalınlığı değiştirmek için yukarı veya aşağı oku basılı tutun. "
+"Çıkmak için escape'e basın."
+
+#: collection.py:228
+msgid "Unlocked"
+msgstr "Kilidi açılmış"
+
+#: collection.py:231
+msgid "Locked"
+msgstr "Kilitli"
+
+#: collection.py:233
+#, python-format
+msgid "No.%(no)d, %(status)s, %(plays)d"
+msgstr "No.%(no)d, %(status)s, %(plays)d"
+
+#: enemy.py:104
+#, python-format
+msgid "Hit! (speed %(speed)d, distance %(distance)d, penetration bonus added)"
+msgstr ""
+"İsabet! (Hız (%(speed)d, mesafe %(distance)d, aynı anda yumruk bonusuyla beraber)"
+
+#: enemy.py:106
+#, python-format
+msgid "Hit! (speed %(speed)d, distance %(distance)d)"
+msgstr "İsabet! (Hız (%(speed)d, mesafe %(distance)d)"
+
+#: gameField.py:29
+#, python-format
+msgid "Game started at %(startedtime)s!"
+msgstr "Oyun %(startedtime)s zamanında başladı!"
+
+#: gameField.py:57
+#, python-format
+msgid "Game mode: %(mode)s, high score: %(highscore)d."
+msgstr "Oyun modu: %(mode)s, en yüksek puan: %(highscore)d."
+
+#: gameField.py:77
+#, python-format
+msgid "Game over! Final score: %(score)d"
+msgstr "Oyun bitti! Puanınız: %(score)d"
+
+#: gameField.py:111
+#, python-format
+msgid ""
+"Leveled up to %(newlevel)d! (Accuracy %(accuracy).1f%%, with %(lives)d hp "
+"remaining)"
+msgstr "Seviye %(newlevel)d! (İsabet oranı %(accuracy).1f%%, %(lives)d can ile)"
+
+#: gameField.py:146
+msgid "Game aborted."
+msgstr "Oyun iptal edildi."
+
+#: gameField.py:161
+msgid "Activating destruction!"
+msgstr "Patlama etkin!"
+
+#: gameField.py:168
+msgid "End destruction!"
+msgstr "Patlama sona erdi!"
+
+#: item.py:57
+#, python-format
+msgid "A \"%(item)s\" item fell on the ground and shattered into peaces!"
+msgstr "\"%(item)s\" bonusu yere düşüp parçalandı!"
+
+#: item.py:61
+#, python-format
+msgid "Obtained a \"%(item)s\" item!"
+msgstr "\"%(item)s\" bonusu aldınız!"
+
+#: item.py:87
+#, python-format
+msgid "A \"%(item)s\" item was shattered into peaces!"
+msgstr "\"%(item)s\" bonusu parçalandı!"
+
+#: itemEffects.py:32
+#, python-format
+msgid "A new \"%(item)s\" effect is starting!"
+msgstr "Yeni \"%(item)s\" bonusunun etkisi başlıyor!"
+
+#: itemEffects.py:39
+#, python-format
+msgid "One of your \"%(item)s\" effects is ending!"
+msgstr "\"%(item)s\" bonuslarınızdan birinin etkisi sona eriyor!"
+
+#: itemEffects.py:47
+#, python-format
+msgid ""
+"Your \"%(item)s\" effect has been extended for %(extended)d milliseconds! (now "
+"%(newtime)d)"
+msgstr ""
+"\"%(item)s\" bonusunuzun süresi %(extended)d milisaniye uzadı! Toplam süresi "
+"%(newtime)d oldu"
+
+#: player.py:123
+#, python-format
+msgid "%(hits)d consecutive hits bonus!"
+msgstr "%(hits)d art arda isabet bonusu!"
+
+#: player.py:133
+#, python-format
+msgid "%(misses)d consecutive misses penalty!"
+msgstr "%(misses)d art arda ıska cezası!"
+
+#: player.py:215
+#, python-format
+msgid "Extra life! (now %(lives)d lives)"
+msgstr "Ekstra can! (%(lives)d canınız var"
+
+#: player.py:243
+#, python-format
+msgid "The effective range of your Punch is now %(range)d (from %(from)d)"
+msgstr "Yumruk mesafeniz %(from)d idi, %(range)d oldu"
+
+#: player.py:254
+#, python-format
+msgid "The speed of your punch is now %(speed)d milliseconds (from %(from)d)"
+msgstr "Yumruk hızınız %(from)d milisaniyeydi, %(speed)d milisaniye oldu"
+
+#: player.py:265
+msgid "Your punches now penetrate enemies and items!"
+msgstr "Yumruğunuz birden fazla düşmana ya da bonusa vurabiliyor!"
+
+#: player.py:267
+msgid "Your punches no longer penetrate enemies and items!"
+msgstr "Yumruğunuz artık birden fazla düşmana ya da öğeye vuramıyor!"
+
+#: player.py:290
+#, python-format
+msgid "You've been slapped! (%(lives)d HP remaining)"
+msgstr "Tokatlandınız! (%(lives)d canınız kaldı)"
+
+#: player.py:296
+msgid "Game over!"
+msgstr "Oyun bitti!"
+
+#: player.py:310
+msgid "added"
+msgstr "Eklendi"
+
+#: player.py:311
+msgid "subtracted"
+msgstr "Çıkartıldı"
+
+#: player.py:312
+#, python-format
+msgid "Point: %(added).1f %(changestr)s (%(total).1f)"
+msgstr "Puan: %(added).1f %(changestr)s (%(total).1f)"
+
+#: ssAppMain.py:167
+msgid "Normal mode"
+msgstr "Normal mod"
+
+#: ssAppMain.py:168
+msgid "Arcade mode"
+msgstr "Arkeyd mod"
+
+#: ssAppMain.py:169
+msgid "Classic mode"
+msgstr "Klasik mod"
+
+#: ssAppMain.py:178
+msgid ""
+"Main menu. Use your up and down arrows to choose an option, then press enter to "
+"confirm"
+msgstr ""
+"Ana menü. Bir seçenek seçmek için yukarı aşağı okları kullanın, onaylamak için "
+"enter'a basın"
+
+#: ssAppMain.py:181
+msgid "Collection"
+msgstr "Kolleksiyon"
+
+#: ssAppMain.py:182
+msgid "View the scoreboard"
+msgstr "Skorbordu görüntüle"
+
+#: ssAppMain.py:183
+msgid "Read the manual"
+msgstr "Kılavuzu oku"
+
+#: ssAppMain.py:184
+msgid "Erase data"
+msgstr "Veriyi sil"
+
+#: ssAppMain.py:185
+msgid "Options"
+msgstr "Seçenekler"
+
+#: ssAppMain.py:186
+msgid "Quit"
+msgstr "Çıkış"
+
+#: ssAppMain.py:207
+#, python-format
+msgid "Update checking is disabled in this build of %(gamename)s."
+msgstr "%(gamename)s oyununun bu sürümünde güncelleme denetimi  devredışıdır."
+
+#: ssAppMain.py:209
+#, python-format
+msgid ""
+"There was an error while retrieving software update information (%(error)s). "
+"Please try again later."
+msgstr ""
+"Yazılım güncelleme bilgisi alınırken bir hata oluştu. (Hata %(error)s). Lütfen "
+"daha sonra tekrar deneyin."
+
+#: ssAppMain.py:211
+msgid ""
+"You're playing the latest version! When a new update is found, it will be notified "
+"here."
+msgstr "En son sürümü kullanıyorsunuz! Bir güncelleme olunca burada bildirilir."
+
+#: ssAppMain.py:214
+msgid "There is a new version of the game! Press enter here to download it."
+msgstr "Oyunun yeni bir sürümü mevcut! Enter'a basarak indirebilirsiniz."
+
+#: ssAppMain.py:227
+#, python-format
+msgid "Downloading the new version (%(current)dK/%(total)dK (%(percent)d%%)"
+msgstr "Yeni sürüm indiriliyor (%(current)dK/%(total)dK (%(percent)d%%)"
+
+#: ssAppMain.py:230
+#, python-format
+msgid "The new version has been downloaded to %(location)s."
+msgstr "Yeni sürüm %(location)s konumuna indirildi."
+
+#: ssAppMain.py:232
+#, python-format
+msgid "Failed to download the new update (%(reason)s). Press enter to retry."
+msgstr "Güncelleme indirilemedi %(reason)s. Enter'a basarak tekrar deneyebilirsiniz."
+
+#: ssAppMain.py:274
+#, python-format
+msgid "This build of %(gamename)s doesn't have download location set."
+msgstr "%(gamename)s oyununun bu yapısında indirme konumu ayarlı değil."
+
+#: ssAppMain.py:277 ssAppMain.py:278
+msgid "Select the folder you want to download the installer."
+msgstr "Yükleyicinin indirileceği klasörü seçin."
+
+#: ssAppMain.py:283
+msgid "Warning"
+msgstr "Uyarı"
+
+#: ssAppMain.py:283
+msgid " already exists. Do you want to overwrite?"
+msgstr "Zaten var. Üzerine yazmak ister misiniz?"
+
+#: ssAppMain.py:324
+#, python-format
+msgid ""
+"This is the new standard mode of %(gamename)s. Use your left and right arrows to "
+"move to the same position as an enemy and spacebar to punch! But remember, they "
+"need to be close enough to be hit by your fist. Compared to the previous version, "
+"you get bonus points when leveling up. Also, you have chances to get bonuses if "
+"you achieve more than 5 consecutive hits!"
+msgstr ""
+"Bu %(gamename)s oyununun yeni standart modudur. Sağ ve sol okları kullanarak bir "
+"düşmanla aynı yöne gelin e boşluk tuşuyla onu yumruklayın! Düşmanın yumruk "
+"mesafeniz dahilinde olması gerektiğini unutmayın! Eski sürüme nazaran seviyeniz "
+"artınca puan alırsınız. Ayrıca 5 kez art arda düşman yumruklarsanız bonus alma "
+"şansınız vardır!"
+
+#: ssAppMain.py:326
+#, python-format
+msgid ""
+"This is the new arcade mode of %(gamename)s! From the new version, items that fall "
+"faster are more likely to be good, and slower ones are more likely to be bad. You "
+"can obtain an item by punching it, or destroy it by combining your up arrow when "
+"punching. Carefully choose which item to obtain!"
+msgstr ""
+"Bu %(gamename)s oyununun yeni arkeyd modudur! Bu yeni sürümde, hızlı düşen "
+"bonusların olumlu, yavaş düşen bonusların ise olumsuz etki etme ihtimali daha "
+"yüksektir. Bonusu yumruklayarak alabilirsiniz, ya da yukarı okla beraber "
+"yumruklarsanız parçalayabilirsiniz. Alacağınız bonusu dikkatli seçin!"
+
+#: ssAppMain.py:328
+msgid ""
+"This is the old-fassioned game mode! You don't get bonuses based on accuracy, so "
+"you can punch, punch, punch punch punch and punch! This mode has a sharper levelup "
+"curb, meaning that you can collect screams really fast!"
+msgstr ""
+"Bu klasik oyun modudur! İsabet oranınıza göre bonus almazsınız, bu yüzden sağa "
+"sola istediğiniz kadar yumruk sallayabilirsiniz! Bu modda daha hızlı seviye "
+"atlarsınız, bu da daha fazla çığlık toplayacağınız anlamına gelir!"
+
+#: ssAppMain.py:336
+#, python-format
+msgid "Tip: %s (Press enter to close this tip)"
+msgstr "İpucu: %s (Enter'a basarak ipucunu kapatabilirsiniz)"
+
+#: ssAppMain.py:346
+msgid "Please select the game mode to view"
+msgstr "Görüntülenecek oyun modunu seçin"
+
+#: ssAppMain.py:348 ssAppMain.py:369 ssAppMain.py:403
+msgid "Back"
+msgstr "Geri"
+
+#: ssAppMain.py:362
+#, python-format
+msgid "This build of %(gamename)s does not support scoreboard viewing."
+msgstr "%(gamename)s oyununun bu yapısı skorbord görüntülemeyi desteklemiyor."
+
+#: ssAppMain.py:365
+#, python-format
+msgid "Score table for %(mode)s"
+msgstr "%(mode)s için skorbord"
+
+#: ssAppMain.py:382
+#, python-format
+msgid ""
+"The manual written in the selected language doesn't seem to exist. If you can "
+"write one and contribute, please create %(filename)s and contact the developer."
+msgstr ""
+"Seçili dilde yazılmış bir kılavuz yok. Eğer yardımcı olmak isterseniz, "
+"%(filename)s adlı dosyayı oluşturup yazarak üreticiye ulaşabilirsiniz."
+
+#: ssAppMain.py:386
+msgid ""
+"Use your up and down arrows to read the manual. You can navigate to each section "
+"by using shortcut keys 1 to 9. Press escape to close"
+msgstr ""
+"Yukarı ve aşağı okları kullanarak kılavuzu okuyabilirsiniz. 1-9 tuşlarıyla çeşitli "
+"bölümlere atlayabilirsiniz. Escape'e basarak kapatabilirsiniz."
+
+#: ssAppMain.py:403
+msgid "Select the data to erase"
+msgstr "Silinecek veriyi seçin"
+
+#: ssAppMain.py:403
+msgid "Highscores"
+msgstr "Yüksek puanlar"
+
+#: ssAppMain.py:403
+msgid "Collections"
+msgstr "Kolleksiyon"
+
+#: ssAppMain.py:411
+msgid "Hold shift and enter to erase."
+msgstr "Shift'i basılı tutarak enter'a basıp silebilirsiniz."
+
+#: ssAppMain.py:416
+msgid "Your highscores are all reset!"
+msgstr "Bütün yüksek puanlar sıfırlandı!"
+
+#: ssAppMain.py:420
+msgid "Your collections are all reset!"
+msgstr "Kolleksiyonunuz sıfırlandı!"
+
+#: ssAppMain.py:430
+msgid ""
+"Options Menu, use your up and down arrows to choose an option, left and right "
+"arrows to change values, enter to save or escape to discard changes"
+msgstr ""
+"Seçenekler menüsü, seçenek seçmek için yukarı ve aşağı okları kullanın, ayar "
+"değiştirmek için sağ sol okları kullanın, ayarları kaydetmek için enter'ı, iptal "
+"etmek için escape'i kullanın"
+
+#: ssAppMain.py:431
+msgid "Background music volume"
+msgstr "Müzik seviyesi"
+
+#: ssAppMain.py:432
+msgid "Left panning limit"
+msgstr "Soldaki ses sınırı"
+
+#: ssAppMain.py:433
+msgid "Right panning limit."
+msgstr "Sağdaki ses sınırı."
+
+#: ssAppMain.py:434
+msgid "Item announcement voice"
+msgstr "Bonus duyuru sesi"
+
+#: ssAppMain.py:435
+msgid "Language (restart to apply)"
+msgstr "Dil (değişikliği uygulamak için oyunu yeniden başlatın)"
+
+#: ssAppMain.py:446
+msgid "Changes discarded."
+msgstr "Değişiklikler iptal edildi."
+
+#: ssAppMain.py:451
+msgid "Settings saved"
+msgstr "Seçenekler kaydedildi"
+
+#: ssAppMain.py:505
+#, python-format
+msgid "%(voice)s cannot be loaded."
+msgstr "%(voice)s sesi yüklenemedi."
+
+#: ssAppMain.py:534
+#, python-format
+msgid "%(playmode)s, high score %(highscore)s, start!"
+msgstr "%(playmode)s, en yüksek puan %(highscore)s, başla!"
+
+#: ssAppMain.py:572
+msgid "collection"
+msgstr "Kolleksiyon"
+
+#: ssAppMain.py:572
+msgid "collections"
+msgstr "Kolleksiyon"
+
+#: ssAppMain.py:573
+#, python-format
+msgid "Unlocked %(number)d %(collection)s!"
+msgstr "%(number)d %(collection)s kolleksiyonu açıldı!"
+
+#: ssAppMain.py:577
+msgid "Close"
+msgstr "Kapat"
+
+#: ssAppMain.py:590
+msgid "Game result"
+msgstr "Oyun sonucu"
+
+#: ssAppMain.py:591
+#, python-format
+msgid "Final score: %(score)d"
+msgstr "Puan: %(score)d"
+
+#: ssAppMain.py:593
+#, python-format
+msgid "New high score! Plus %(distance)d (last: %(last)d)"
+msgstr "Yeni en yüksek puan! Artı %(distance)d (önceki puan %(last)d idi)"
+
+#: ssAppMain.py:597
+#, python-format
+msgid "Punches: %(punches)d, hits: %(hits)d, accuracy: %(accuracy).2f%%"
+msgstr ""
+"Yumruklar: %(punches)d, İsabet eden yumruklar: %(hits)d, İsabet oranı: "
+"%(accuracy).2f%%"
+
+#: ssAppMain.py:615
+msgid "Score posting"
+msgstr "Puan gönderme"
+
+#: ssAppMain.py:615
+msgid "Do you want to post this score to the scoreboard?"
+msgstr "Bu puanı skorborda göndermek istiyor musunuz?"
+
+#: ssAppMain.py:616 ssAppMain.py:617
+msgid "Please input your name."
+msgstr "Adınızı girin."
+
+#: ssAppMain.py:617
+msgid "Name entry"
+msgstr "Ad girişi"
+
+#: ssAppMain.py:622
+#, python-format
+msgid "This build of %(gamename)s does not support score posting. Sorry!"
+msgstr "%(gamename)s oyununun bu yapısı puan göndermeyi desteklemiyor. Üzgünüm!"
+
+#: ssAppMain.py:626
+#, python-format
+msgid ""
+"There was an error while posting your score (%(error)s). Please try again later."
+msgstr ""
+"Puanınızı gönderirken bir hata oluştu (%(error)s). Lütfen daha sonra tekrar "
+"deneyin."
+
+#: ssAppMain.py:630
+msgid "Your score was posted, but you were not ranked in. Better luck next time!"
+msgstr ""
+"Puanınız gönderildi ancak derece yapmak için yeterince yüksek değildi. Üzgünüm!"
+
+#: ssAppMain.py:633
+#, python-format
+msgid ""
+"Congratulations! Your score has ranked in position %(pos)d! Keep up your great "
+"work!"
+msgstr "Tebrikler! Puanınız %(pos)d. Sırada! Böyle devam edin!"
+
+#: ssAppMain.py:673
+msgid "Yes"
+msgstr "Evet"
+
+#: ssAppMain.py:674
+msgid "No"
+msgstr "Hayır"
+
+#: ssAppMain.py:720
+msgid "Update downloading is still in progress"
+msgstr "Hâla güncelleme indiriliyor"
+
+#: ssAppMain.py:722
+msgid "Forcefully shutdown"
+msgstr "Kapatmaya zorla"
+
+#: ssAppMain.py:730
+msgid "Download job has ended! Press enter to close the application."
+msgstr "Güncelleme indirmesi sona erdi! Oyunu kapatmak için enter'a basın."
+
+#: ssAppMain.py:740
+msgid "Choose 'Forcefully shutdown' or alt+f4 to abort the download."
+msgstr ""
+"İndirmeyi iptal etmek için \"kapatmaya zorla\"yı seçin ya da alt+f4 tuşlarına "
+"basın."
