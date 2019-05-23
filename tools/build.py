@@ -29,7 +29,7 @@ if platform.system() == 'Darwin':
 print("win=%s, cwd=%s" % (win, os.getcwd()))
 PROJECT = "ss"  # Change this line accordingly
 PROJECT_FULL_NAME="screamingStrike2"
-PYTHON_PATH="C:/python37"#Windows only
+PYTHON_PATH="D:\softs\Python37-32"#Windows only
 
 if not os.path.exists("data"):
   print("Error: no data folder found. Your working directory must be the root of the project. You shouldn't cd to tools and run this script.")
@@ -46,7 +46,7 @@ if "--skip-compile" in sys.argv:
 copydir=""
 
 if win:
-	cmd="nuitka --follow-imports --windows-disable-console --standalone --include-plugin-directory=sound_lib/lib/x86 %s.py" % (PROJECT)
+	cmd="nuitka --follow-imports --windows-disable-console --standalone --mingw64 --include-plugin-directory=sound_lib/lib/x86 %s.py" % (PROJECT)
 	copydir="%s.dist" % PROJECT
 else:
 	cmd="pyinstaller --windowed --onefile --osx-bundle-identifier com.nyanchanGames.%s %s.py" % (PROJECT_FULL_NAME, PROJECT)
