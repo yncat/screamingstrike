@@ -134,7 +134,7 @@ msgstr "%(misses)d回の連続ミスペナルティー!"
 #: player.py:215
 #, python-format
 msgid "Extra life! (now %(lives)d lives)"
-msgstr "エクストラライフ! (現在 %(lives)d"
+msgstr "エクストラライフ! (現在 %(lives)d)"
 
 #: player.py:243
 #, python-format
