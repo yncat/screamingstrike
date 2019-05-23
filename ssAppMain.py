@@ -63,7 +63,8 @@ class ssAppMain(window.SingletonWindow):
 		self.locales=self.getLocalesList()
 		self.initTranslation()
 		self.music = bgtsound.sound()
-		self.music.stream("data/sounds/stream/bg.ogg")
+		self.musicData=sound_lib.sample.Sample("data/sounds/stream//bg.ogg")
+		self.music.load(self.musicData)
 		self.music.volume = self.options.bgmVolume
 		self.numScreams = len(glob.glob("data/sounds/scream*.ogg"))
 		self.collectionStorage=collection.CollectionStorage()
