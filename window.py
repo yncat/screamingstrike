@@ -35,10 +35,10 @@ class SingletonWindow():
 
 	def frameUpdate(self):
 		"""
-A function that must be called once per frame. Calling this function will keep the 60fps speed.
+		A function that must be called once per frame. Calling this function will keep the 60fps speed.
 
-When user presses alt+f4 or the x icon, this function attempts to shut down the game by calling self.exit method. It is possible that the exit message is canceled by the onExit callback currently set.
-"""
+		When user presses alt+f4 or the x icon, this function attempts to shut down the game by calling self.exit method. It is possible that the exit message is canceled by the onExit callback currently set.
+		"""
 		self.clock.tick(60)
 		self.screen.fill((255,63,10,))
 		pygame.display.update()
@@ -55,7 +55,7 @@ When user presses alt+f4 or the x icon, this function attempts to shut down the 
 		Retrieves if the specified key has changed to "pressed" from "not pressed" at the last frame. Doesn't cause key repeats.
 
 		:rtype: bool
-"""
+		"""
 		return self.keys[key] and not self.previousKeys[key]
 
 	def keyPressing(self,key):
@@ -63,7 +63,7 @@ When user presses alt+f4 or the x icon, this function attempts to shut down the 
 		Retrieves if the specified key is being pressed. Key repeats at 60rp/sec.
 
 		:rtype: bool
-"""
+		"""
 		return self.keys[key]
 
 	def wait(self,msec):
@@ -404,8 +404,8 @@ class menu:
 	def getReadStr(self):
 		"""Returns a string which should be used as readout string for the current cursor.
 
-:rtype: str
-"""
+		:rtype: str
+		"""
 		s=self.items[self.cursor][0]
 		if self.items[self.cursor][1] is not None: s+=", "+self.items[self.cursor][1]
 		return s

@@ -4,10 +4,17 @@
 # License: GPL V2.0 (See copying.txt for details)
 
 import platform
-import ctypes
+import ctypestype title: str
 import subprocess
 import re
 def dialog(title,message):
+	"""Shows messageBox on win and mac.
+
+	:param title: Title.
+	:type title: str
+	:paramessage: Message body.
+	:type message: str
+	"""
 	if platform.system()=="Windows":
 		ctypes.windll.user32.MessageBoxW(0,message,title,0x00000040)
 	else:

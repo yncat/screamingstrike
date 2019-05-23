@@ -647,7 +647,7 @@ Returns False when the game is closed. Otherwise True.
 	def resetMusicPitch(self):
 		"""
 		Resets the music's pitch to default. The pitch change will be processed gradually and this method returns when the music is reverted to the normal speed.
-"""
+		"""
 		while(True):
 			if abs(self.music.pitch-100)<=2: break
 			if self.music.pitch<100:

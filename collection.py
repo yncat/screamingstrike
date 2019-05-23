@@ -90,9 +90,9 @@ class CollectionStorage(object):
 		f.close()
 		return True
 
-	def inclement(self,number):
+	def increment(self,number):
 		"""
-		Inclements the specified scream count by one. Returns True if it is unlocked, otherwise False.
+		Increments the specified scream count by one. Returns True if it is unlocked, otherwise False.
 
 		:param number: Scream number.
 		:type number: int
@@ -139,7 +139,7 @@ class CollectionCounter(object):
 
 		:param number: Scream number.
 		:type number: int
-"""
+		"""
 		if self.storage is None: return
 		if self.storage.inclement(number) is True: self.unlock(number)
 

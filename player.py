@@ -23,9 +23,9 @@ class Player():
 	def initialize(self,field):
 		"""Initializes this player.
 
-:param field: The field instance on which this player should be bound.
-:type field: gameField.GameField
-"""
+		:param field: The field instance on which this player should be bound.
+		:type field: gameField.GameField
+		"""
 		self.field=field
 		self.lives=3
 		self.x=field.getCenterPosition()
@@ -142,7 +142,7 @@ class Player():
 
 		:param it: Item instance which got hit.
 		:type it: item.Item
-"""
+		"""
 		if it.type==itemConstants.TYPE_NASTY:
 			self.processNastyItemHit(it)
 		else:
@@ -150,11 +150,11 @@ class Player():
 
 	def processNastyItemHit(self,it):
 		"""
-Processes a nasty item hit. Called from processItemHit.
+		Processes a nasty item hit. Called from processItemHit.
 
-:param it: Item instance which got hit.
-:type it: item.Item
-"""
+		:param it: Item instance which got hit.
+		:type it: item.Item
+		"""
 		if it.identifier==itemConstants.NASTY_SHRINK:
 			e=itemEffects.ShrinkEffect()
 			e.initialize(self)
@@ -176,11 +176,11 @@ Processes a nasty item hit. Called from processItemHit.
 
 	def processGoodItemHit(self,it):
 		"""
-Processes a good item hit. Called from processItemHit.
+		Processes a good item hit. Called from processItemHit.
 
-:param it: Item instance which got hit.
-:type it: item.Item
-"""
+		:param it: Item instance which got hit.
+		:type it: item.Item
+		"""
 		if it.identifier==itemConstants.GOOD_MEGATONPUNCH:
 			existing=self.findEffect("Megaton punch")
 			if existing is None:
@@ -221,46 +221,46 @@ Processes a good item hit. Called from processItemHit.
 
 	def findEffect(self,name):
 		"""
-Checks whether this player has the specified effect currently active.
+		Checks whether this player has the specified effect currently active.
 
-:param name: Name of the effect to search(Blurred, Megaton Punch, etc).
-:type name: str
+		:param name: Name of the effect to search(Blurred, Megaton Punch, etc).
+		:type name: str
 
-:rtype: bool
-"""
+		:rtype: bool
+		"""
 		for elem in self.itemEffects:
 			if elem.name==name: return elem
 		return None
 
 	def setPunchRange(self,r):
 		"""
-Changes this player's effective punch length.
+		Changes this player's effective punch length.
 
-:param r: New range.
-:type r: int
-"""
+		:param r: New range.
+		:type r: int
+		"""
 		previous=self.punchRange
 		self.field.log(_("The effective range of your Punch is now %(range)d (from %(from)d)") % {"range": r, "from": previous})
 		self.punchRange=r
 
 	def setPunchSpeed(self,s):
 		"""
-Changes this player's punching speed.
+		Changes this player's punching speed.
 
-:param s: New speed in milliseconds.
-:type s: int
-"""
+		:param s: New speed in milliseconds.
+		:type s: int
+		"""
 		previous=self.punchSpeed
 		self.field.log(_("The speed of your punch is now %(speed)d milliseconds (from %(from)d)") % {"speed": s, "from": previous})
 		self.punchSpeed=s
 
 	def setPenetration(self,p):
 		"""
-Sets whether this player's punches penetrate.
+		Sets whether this player's punches penetrate.
 
-:param p: Penetrate?
-:type p: bool
-"""
+		:param p: Penetrate?
+		:type p: bool
+		"""
 		if p is True:
 			self.field.log(_("Your punches now penetrate enemies and items!"))
 		else:
@@ -273,11 +273,11 @@ Sets whether this player's punches penetrate.
 
 	def moveTo(self,p):
 		"""
-Moves this player to the specified position.
+		Moves this player to the specified position.
 
-:param p: New position.
-:type p: int
-"""
+		:param p: New position.
+		:type p: int
+		"""
 		self.x=p
 		s=bgtsound.sound()
 		s.load(globalVars.appMain.sounds["change.ogg"])
@@ -300,11 +300,11 @@ Moves this player to the specified position.
 
 	def addScore(self,score):
 		"""
-Add a specified amount of score to this player. Also checks for high score.
+		Add a specified amount of score to this player. Also checks for high score.
 
-:param score: Score to add.
-:type score: int
-"""
+		:param score: Score to add.
+		:type score: int
+		"""
 		self.score+=score
 		if self.gotHighscore is False and self.score>=self.lastHighscore: self.processHighscore()
 		which=_("added")

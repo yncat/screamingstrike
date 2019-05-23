@@ -30,8 +30,8 @@ class ModeHandlerBase(object):
 
 	def calculateNextLevelup(self):
 		"""
-Calculates the number of enemies that should be defeated in this mode. This function implements the default formula. 
-"""
+		Calculates the number of enemies that should be defeated in this mode. This function implements the default formula. 
+		"""
 		if self.field.level==1: return 2
 		return int(1+(self.field.level*self.field.level*0.25))
 
@@ -104,8 +104,8 @@ class ClassicModeHandler(ModeHandlerBase):
 
 	def calculateNextLevelup(self):
 		"""
-This function provides classic mode specific formula.
-"""
+		This function provides classic mode specific formula.
+		"""
 		return int((2+self.field.level)*0.7)
 
 def getModeHandler(mode):
