@@ -32,6 +32,7 @@ megaton punch: Enables you to punch distant objects. When obtained continuously,
 Boost: Your punches will be faster. When obtained continuously, effects will be duplicated.
 Penetration: Your punch penetrates through enemies in range, and you can get points doubled for enemies you punch with this effect. When obtained continuously, the effect time will be extended.
 Destruction: Kills all enemies in the field. However, falling items will also be destroyed.
+Extra life: Gains an extra hp.
 Nasty effects:
 Shrink: Your punches will be shorter. When obtained continuously, effects will be duplicated.
 Slow down: Your punches will be slower. When obtained continuously, effects will be duplicated.
