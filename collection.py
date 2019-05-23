@@ -118,7 +118,7 @@ class CollectionStorage(object):
 #end class CollectionHandler
 
 class CollectionCounter(object):
-	"""This object counts screams played in a game session. Call frameUpdate for frame updating, and inclement when someone screamed. It also stores a full log of who has been unlocked in this session. You can call getLog and show the preview of what has been unlocked after the session ends."""
+	"""This object counts screams played in a game session. Call frameUpdate for frame updating, and increment when someone screamed. It also stores a full log of who has been unlocked in this session. You can call getLog and show the preview of what has been unlocked after the session ends."""
 	def __init__(self):
 		self.stack=0#number of stacks
 		self.timer=window.Timer()
@@ -134,14 +134,14 @@ class CollectionCounter(object):
 		"""
 		self.storage=storage
 
-	def inclement(self,number):
-		"""Inclements the specified scream number. If it is unlocked by this call, unlock event is also triggered.
+	def increment(self,number):
+		"""increments the specified scream number. If it is unlocked by this call, unlock event is also triggered.
 
 		:param number: Scream number.
 		:type number: int
 		"""
 		if self.storage is None: return
-		if self.storage.inclement(number) is True: self.unlock(number)
+		if self.storage.increment(number) is True: self.unlock(number)
 
 	def unlock(self,number):
 		"""Triggers one unlock sound. You can call this method multiple times really quickly; this object delays the following playbacks not to make them overlap.
