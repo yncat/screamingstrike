@@ -46,7 +46,7 @@ if "--skip-compile" in sys.argv:
 copydir=""
 
 if win:
-	cmd="nuitka --follow-imports --windows-disable-console --standalone --mingw64 --include-plugin-directory=sound_lib/lib/x64 %s.py" % (PROJECT)
+	cmd="nuitka --follow-imports --windows-disable-console --standalone --mingw64 --include-plugin-directory=sound_lib/lib/x86 %s.py" % (PROJECT)
 	copydir="%s.dist" % PROJECT
 else:
 	cmd="pyinstaller --windowed --onefile --osx-bundle-identifier com.nyanchanGames.%s %s.py" % (PROJECT_FULL_NAME, PROJECT)

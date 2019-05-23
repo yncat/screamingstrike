@@ -4,7 +4,7 @@
 # License: GPL V2.0 (See copying.txt for details)
 
 import platform
-import ctypestype title: str
+import ctypes
 import subprocess
 import re
 def dialog(title,message):
