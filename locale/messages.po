@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: screamingStrike\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-21 12:34+0900\n"
+"POT-Creation-Date: 2019-05-23 11:15+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -71,7 +71,7 @@ msgid ""
 msgstr ""
 
 #: gameField.py:146
-msgid "Game aboated."
+msgid "Game aborted."
 msgstr ""
 
 #: gameField.py:161
@@ -225,7 +225,7 @@ msgstr ""
 
 #: ssAppMain.py:211
 msgid ""
-"You're playing the latest version! When a new update is found, it will be "
+"You're playing the latest version! When a new update is found, you will be "
 "notified here."
 msgstr ""
 
@@ -254,7 +254,7 @@ msgid "This build of %(gamename)s doesn't have download location set."
 msgstr ""
 
 #: ssAppMain.py:277 ssAppMain.py:278
-msgid "Select the folder you want to download the installer."
+msgid "Select the folder where you want to download the installer."
 msgstr ""
 
 #: ssAppMain.py:283
@@ -270,8 +270,8 @@ msgstr ""
 msgid ""
 "This is the new standard mode of %(gamename)s. Use your left and right "
 "arrows to move to the same position as an enemy and spacebar to punch! But "
-"remember, they need to be close as your fist can reach! Compared to the "
-"previous version, you get bonus points when leveling up. Also, you have "
+"remember, they need to be close enough to be hit by your fist. Compared to "
+"the previous version, you get bonus points when leveling up. Also, you have "
 "chances to get bonuses if you achieve more than 5 consecutive hits!"
 msgstr ""
 
@@ -286,9 +286,9 @@ msgstr ""
 
 #: ssAppMain.py:328
 msgid ""
-"This is the old-fassioned game mode! You don't get bonuses based on "
+"This is the old-fashioned game mode! You don't get bonuses based on "
 "accuracy, so you can punch, punch, punch punch punch and punch! This mode "
-"has shirper levelup curb, meaning that you can collect screams really fast!"
+"has a sharper levelup curb, meaning that you can collect screams really fast!"
 msgstr ""
 
 #: ssAppMain.py:336
@@ -329,7 +329,7 @@ msgid ""
 msgstr ""
 
 #: ssAppMain.py:403
-msgid "Select the data to irase"
+msgid "Select the data to erase"
 msgstr ""
 
 #: ssAppMain.py:403
@@ -493,5 +493,5 @@ msgid "Download job has ended! Press enter to close the application."
 msgstr ""
 
 #: ssAppMain.py:740
-msgid "Choose 'Forcefully shutdown' or alt+f4 to aboat the download."
+msgid "Choose 'Forcefully shutdown' or alt+f4 to abort the download."
 msgstr ""

@@ -208,7 +208,7 @@ class ssAppMain(window.SingletonWindow):
 		elif upresult==updateClient.RET_CONNECTION_ERROR:
 			m.append(_("There was an error while retrieving software update information (%(error)s). Please try again later.") % {"error": self.updateChecker.getLastError()})
 		elif upresult==updateClient.RET_USING_LATEST:
-			m.append(_("You're playing the latest version! When a new update is found, it will be notified here."))
+			m.append(_("You're playing the latest version! When a new update is found, you will be notified here."))
 		elif upresult==updateClient.RET_NEW_VERSION_AVAILABLE:
 			if not self.updateDownloader:#Not yet downloaded
 				m.append(_("There is a new version of the game! Press enter here to download it."))
@@ -274,8 +274,8 @@ class ssAppMain(window.SingletonWindow):
 			self.message(_("This build of %(gamename)s doesn't have download location set.") % {"gamename": buildSettings.GAME_NAME})
 			return
 		#end download location not set
-		self.say(_("Select the folder you want to download the installer."))
-		fld=self.folderSelect(_("Select the folder you want to download the installer."))
+		self.say(_("Select the folder where you want to download the installer."))
+		fld=self.folderSelect(_("Select the folder where you want to download the installer."))
 		if not fld: return
 		bgtsound.playOneShot(self.sounds["confirm.ogg"])
 		local=os.path.join(fld,local)
@@ -321,11 +321,11 @@ class ssAppMain(window.SingletonWindow):
 		if self.statsStorage.get(k)==0:
 			self.statsStorage.inclement(k)
 			if mode==gameModes.ALL_MODES_STR[0]:
-				self.showTip(_("This is the new standard mode of %(gamename)s. Use your left and right arrows to move to the same position as an enemy and spacebar to punch! But remember, they need to be close as your fist can reach! Compared to the previous version, you get bonus points when leveling up. Also, you have chances to get bonuses if you achieve more than 5 consecutive hits!") % {"gamename": buildSettings.GAME_NAME})
+				self.showTip(_("This is the new standard mode of %(gamename)s. Use your left and right arrows to move to the same position as an enemy and spacebar to punch! But remember, they need to be close enough to be hit by your fist. Compared to the previous version, you get bonus points when leveling up. Also, you have chances to get bonuses if you achieve more than 5 consecutive hits!") % {"gamename": buildSettings.GAME_NAME})
 			elif mode==gameModes.ALL_MODES_STR[1]:
 				self.showTip(_("This is the new arcade mode of %(gamename)s! From the new version, items that fall faster are more likely to be good, and slower ones are more likely to be bad. You can obtain an item by punching it, or destroy it by combining your up arrow when punching. Carefully choose which item to obtain!") % {"gamename": buildSettings.GAME_NAME})
 			elif mode==gameModes.ALL_MODES_STR[2]:
-				self.showTip(_("This is the old-fashioned game mode! You don't get bonuses based on accuracy, so you can punch, punch, punch punch punch and punch! This mode has shirper levelup curb, meaning that you can collect screams really fast!"))
+				self.showTip(_("This is the old-fashioned game mode! You don't get bonuses based on accuracy, so you can punch, punch, punch punch punch and punch! This mode has a sharper levelup curb, meaning that you can collect screams really fast!"))
 
 	def showTip(self,tip):
 		"""Shows the ingame tip.
@@ -400,7 +400,7 @@ class ssAppMain(window.SingletonWindow):
 
 	def eraseDataDialog(self):
 		"""Shows the erase data dialog. Returns when user leaves this menu."""
-		m=self.createMenu(_("Select the data to irase"),[_("Highscores"),_("Collections"),_("Back")])
+		m=self.createMenu(_("Select the data to erase"),[_("Highscores"),_("Collections"),_("Back")])
 		m.open()
 		while(True):
 			self.frameUpdate()
@@ -538,12 +538,12 @@ class ssAppMain(window.SingletonWindow):
 		while(True):
 			self.frameUpdate()
 			if self.keyPressed(window.K_ESCAPE):
-				field.aboat()
+				field.abort()
 				result=gameResult.GameResult()
 				result.initialize(field)
-				result.aboated=True
+				result.aborted=True
 				return result
-			#end aboat
+			#end abort
 			if field.frameUpdate() is False:break
 		# end while
 		field.clear()
@@ -737,7 +737,7 @@ Returns False when the game is closed. Otherwise True.
 			#end update downloading
 			if r is None:continue
 			if r==1: break
-			self.say(_("Choose 'Forcefully shutdown' or alt+f4 to aboat the download."))
+			self.say(_("Choose 'Forcefully shutdown' or alt+f4 to abort the download."))
 		#end loop
 	#end checkUpdateDownloadFinish
 # end class ssAppMain

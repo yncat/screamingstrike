@@ -7,7 +7,7 @@
 class GameResult:
 	"""This class stores a gameplay's result. """
 	def __init__(self):
-		self.aboated=False
+		self.aborted=False
 	def __del__(self):
 		pass
 	def initialize(self,field):
@@ -28,15 +28,15 @@ class GameResult:
 		self.previousHighscore=field.player.getPreviousHighscore()
 		self.log=field.getLog()
 	#end initialize
-	def getAboated(self):
-		"""Retrieves if this game was ended by aboat (ESC)."""
-		return self.aboated
-	#end aboated
+	def getaborted(self):
+		"""Retrieves if this game was ended by abort (ESC)."""
+		return self.aborted
+	#end aborted
 
-	def setAboated(self,abt):
-		"""Set the aboat status of this result.
+	def setaborted(self,abt):
+		"""Set the abort status of this result.
 
-		:param abt: Aboated?
+		:param abt: aborted?
 		:type abt: bool
 		"""
-		self.aboated=abt
+		self.aborted=abt

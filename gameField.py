@@ -141,9 +141,9 @@ class GameField():
 	def getY(self):
 		return self.y
 
-	def aboat(self):
-		"""Aboats the gameplay."""
-		self.log(_("Game aboated."))
+	def abort(self):
+		"""aborts the gameplay."""
+		self.log(_("Game aborted."))
 		self.clear()
 
 	def clear(self):
