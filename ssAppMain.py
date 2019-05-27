@@ -658,7 +658,7 @@ Returns False when the game is closed. Otherwise True.
 				self.music.pitch+=2
 			else:
 				self.music.pitch-=2
-			self.wait(50)
+			self.wait(100)
 		#end while
 		self.music.pitch=100
 	#end resetMusicPitch

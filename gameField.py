@@ -62,6 +62,7 @@ class GameField():
 		self.rightPanningLimit=rpLimit
 
 	def frameUpdate(self):
+		if globalVars.appMain.keyPressed(window.K_s): globalVars.appMain.say("%.1f" % self.player.score)
 		self.collectionCounter.frameUpdate()
 		self.modeHandler.frameUpdate()
 		self.levelupBonus.frameUpdate()
