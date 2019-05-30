@@ -265,7 +265,7 @@ class Player():
 			self.field.log(_("Your punches now penetrate enemies and items!"))
 		else:
 			self.field.log(_("Your punches no longer penetrate enemies and items!"))
-		self.penetration=p
+		self.penetrate=p
 
 	def calcHitPercentage(self):
 		"""Calculates the hitting percentage of this player and updates the hitPercentage property."""
