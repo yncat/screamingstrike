@@ -87,8 +87,7 @@ class GameField():
 
 	def spawnEnemy(self,slot):
 		e=enemy.Enemy()
-#		e.initialize(self,random.randint(0,self.x-1),random.randint(300,900),random.randint(0,globalVars.appMain.getNumScreams()-1))
-		e.initialize(self,random.randint(0,self.x-1),random.randint(300,900),random.randint(0,0))
+		e.initialize(self,random.randint(0,self.x-1),random.randint(300,900),random.randint(0,globalVars.appMain.getNumScreams()-1))
 		self.enemies[slot]=e
 
 	def logDefeat(self):
