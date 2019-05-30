@@ -77,11 +77,11 @@ class ArcadeModeHandler(ModeHandlerBase):
 			self.itemShowerTimer.restart()
 
 	def resetItemShower(self):
-		self.itemShowerTime=90000
+		self.itemShowerTime=random.randint(70000,150000)
 		self.itemShowerCount=random.randint(3,6)
 
 	def spawnItem(self):
-		spd=random.randint(100,900)
+		spd=random.randint(100,800)
 		t=itemConstants.TYPE_NASTY if random.randint(1,100)<=spd/10 else itemConstants.TYPE_GOOD
 		ident=random.randint(0,itemConstants.NASTY_MAX) if t==item.TYPE_NASTY else random.randint(0,item.GOOD_MAX)
 		i=item.Item()
