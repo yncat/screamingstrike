@@ -164,7 +164,10 @@ class GameField():
 			if elem is not None and elem.state==enemy.STATE_ALIVE: elem.hit()
 			self.logDefeat()
 		for elem in self.items:
-			elem.destroy()
+			if elem.type==itemConstants.TYPE_NASTY:
+				elem.destroy()
+			else:
+				elem.obtain()
 		self.destructing=False
 		self.log(_("End destruction!"))
 # end class GameField
