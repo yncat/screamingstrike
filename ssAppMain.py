@@ -19,6 +19,7 @@ import gameModes
 import gameOptions
 import gameResult
 import globalVars
+import itemVoicePlayer
 import scorePostingAdapter
 import scoreViewAdapter
 import stats
@@ -501,12 +502,12 @@ class ssAppMain(window.SingletonWindow):
 			if direction==1 and c==len(self.itemVoices)-1: return#clipping
 			if direction==-1 and c==0: return#clipping
 			c+=direction
-			pl = ItemVoicePlayer()
-			if not pl.initialize(self.itemVoices[c]):
+			self.pl = itemVoicePlayer.ItemVoicePlayer()
+			if not self.pl.initialize(self.itemVoices[c]):
 				self.say(_("%(voice)s cannot be loaded.") % {"voice": self.itemVoices[c]})
 				return
 			self.say(self.itemVoices[c])
-			pl.test()
+			self.pl.test()
 			self.options.itemVoice=self.itemVoices[c]
 			return
 		#end item voices

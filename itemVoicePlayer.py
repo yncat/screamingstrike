@@ -22,13 +22,17 @@ class ItemVoicePlayer():
 			self.sounds[os.path.basename(elem)]=bgtsound.sound_lib.sample.Sample(elem)
 		self.name=name
 		self.active=True
+		return True
 
 	def clear(self):
 		self.sounds={}
 
 	def test(self):
 		if not self.active: return
-		bgtsound.playOneShot(random.choice(list(self.sounds)))
+		self.testSound=bgtsound.sound()
+		self.testSound.load(random.choice(list(self.sounds.values())))
+		self.testSound.volume=-10
+		self.testSound.play()
 
 	def play(self,file, pan):
 		if not self.active: return
