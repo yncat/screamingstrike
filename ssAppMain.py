@@ -413,7 +413,7 @@ class ssAppMain(window.SingletonWindow):
 				continue
 			#end confirmation
 			if r==0:
-				self.statsStorage.resetHighscore()
+				self.statsStorage.resetHighscores()
 				self.say(_("Your highscores are all reset!"))
 				continue
 			if r==1:
