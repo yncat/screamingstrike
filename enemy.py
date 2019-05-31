@@ -39,6 +39,7 @@ class Enemy():
 		:param screamNum: Scream file number.
 		:type screamNum: int
 		"""
+		self.paused=False
 		self.field=field
 		self.x=x
 		self.y=field.getY()
@@ -62,6 +63,14 @@ class Enemy():
 		"""
 		self.state=newState
 		if newState==STATE_FALLING: self.playBodyfall()
+
+	def setPaused(self,p):
+		"""Pauses / unpauses this enemy."""
+		if p==self.paused: return
+		self.paused=p
+		if self.scream: self.scream.setPaused(p)
+		self.stepTimer.setPaused(p)
+	#end setPaused
 
 	def step(self):
 		"""Makes this enemy walk one step. If it reaches to the player, it automatically attacks."""
@@ -101,10 +110,12 @@ class Enemy():
 		score=(1000-self.speed)*(self.y+1)*(0.5+(0.5*self.field.level))*0.1
 		if self.field.player.penetrate:
 			score=score*2.0
-			self.field.log(_("Hit! (speed %(speed)d, distance %(distance)d, penetration bonus added)") % {"speed": 900-self.speed, "distance": self.y})
+			s=(_("Hit! (speed %(speed)d, distance %(distance)d, penetration bonus added)") % {"speed": 900-self.speed, "distance": self.y})
 		else:
-			self.field.log(_("Hit! (speed %(speed)d, distance %(distance)d)") % {"speed": 900-self.speed, "distance": self.y})
+			s=(_("Hit! (speed %(speed)d, distance %(distance)d)") % {"speed": 900-self.speed, "distance": self.y})
 		#end penetrate bonus
+		if self.field.easter: s=s.replace("Hit!","I punched a monkey!")
+		self.field.log(s)
 		self.field.player.addScore(score)
 
 	def playScream(self):

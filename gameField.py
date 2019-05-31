@@ -24,7 +24,9 @@ class GameField():
 		self.player=None
 		self.collectionCounter=None
 
-	def initialize(self, x,y,mode, voice):
+	def initialize(self, x,y,mode, voice,easter=False):
+		self.paused=False
+		self.easter=easter
 		self.logs=[]
 		self.log(_("Game started at %(startedtime)s!") % {"startedtime": datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S")})
 		self.x=x
@@ -35,6 +37,7 @@ class GameField():
 		self.lowVolumeLimit=-30
 		self.highVolumeLimit=0
 		self.level=1
+		if self.easter: self.level=10
 		self.enemies=[]
 		self.items=[]
 		for i in range(self.level):
@@ -51,6 +54,11 @@ class GameField():
 		self.destructTimer=window.Timer()
 		self.itemVoicePlayer=itemVoicePlayer.ItemVoicePlayer()
 		self.itemVoicePlayer.initialize(voice)
+		self.destructPowerup=bgtsound.sound()
+		self.destructPowerup.load(globalVars.appMain.sounds["destructPowerup.ogg"])
+		self.destruct=bgtsound.sound()
+		self.destruct.load(globalVars.appMain.sounds["destruct.ogg"])
+
 	def setModeHandler(self,mode):
 		self.modeHandler=gameModes.getModeHandler(mode)
 		self.modeHandler.initialize(self)
@@ -87,7 +95,10 @@ class GameField():
 
 	def spawnEnemy(self,slot):
 		e=enemy.Enemy()
-		e.initialize(self,random.randint(0,self.x-1),random.randint(300,900),random.randint(0,globalVars.appMain.getNumScreams()-1))
+		if self.easter:
+			e.initialize(self,random.randint(0,self.x-1),random.randint(300,900),random.randint(90,91))
+		else:
+			e.initialize(self,random.randint(0,self.x-1),random.randint(300,900),random.randint(0,globalVars.appMain.getNumScreams()-1))
 		self.enemies[slot]=e
 
 	def logDefeat(self):
@@ -153,13 +164,13 @@ class GameField():
 
 	def startDestruction(self):
 		if self.destructing: return False
-		bgtsound.playOneShot(globalVars.appMain.sounds["destructPowerup.ogg"])
+		self.destructPowerup.play()
 		self.destructTimer.restart()
 		self.destructing=True
 		return True
 
 	def performDestruction(self):
-		bgtsound.playOneShot(globalVars.appMain.sounds["destruct.ogg"])
+		self.destruct.play()
 		self.log(_("Activating destruction!"))
 		for elem in self.enemies:
 			if elem is not None and elem.state==enemy.STATE_ALIVE: elem.hit()
@@ -173,3 +184,16 @@ class GameField():
 		self.destructing=False
 		self.log(_("End destruction!"))
 # end class GameField
+
+	def setPaused(self,p):
+		"""Pauses / unpauses this field."""
+		if p==self.paused: return
+		self.destructPowerup.setPaused(p)
+		self.destruct.setPaused(p)
+		for elem in self.enemies:
+			elem.setPaused(p)
+		#end enemies
+		for elem in self.items:
+			elem.setPaused(p)
+		#end items
+		self.player.setPaused(p)

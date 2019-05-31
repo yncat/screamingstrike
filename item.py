@@ -97,3 +97,10 @@ class Item():
 		self.shatter.play()
 		self.fallingBeep.stop()
 
+	def setPaused(self,p):
+		"""Pauses / unpauses this item."""
+		if p==self.paused: return
+		self.paused=p
+		self.fallingBeep.setPaused(p)
+		self.stepTimer.setPaused(p)
+	#end setPaused

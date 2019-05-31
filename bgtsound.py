@@ -35,6 +35,21 @@ class sound():
 		self.handle.looping=False
 		self.handle.play()
 
+	def setPaused(self,p):
+		if self.paused==p: return
+		if not self.playing and p: return
+		self.paused=p
+		if p:
+			self.handle.pause()
+		else:
+			self.handle.play()
+		#end pause or unpause
+	#end setPaused
+
+		
+		self.handle.looping=False
+		self.handle.pause()
+
 	def play_wait(self):
 		self.handle.looping=False
 		self.handle.play_blocking()

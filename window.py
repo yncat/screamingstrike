@@ -115,10 +115,13 @@ class SingletonWindow():
 class Timer:
 	"""A simple timer class like bgt."""
 	def __init__(self):
+		self.paused=False
+		self.pausedElapsed=0
 		self.restart()
 
 	def restart(self):
 		"""Restarts this timer."""
+		self.pausedElapsed=0
 		self.startTick=pygame.time.get_ticks()
 
 	@property
@@ -128,7 +131,19 @@ class Timer:
 
 		:rtype: int
 		"""
-		return pygame.time.get_ticks()-self.startTick
+		if self.paused: return self.pausedElapsed
+		return self.pausedElapsed+pygame.time.get_ticks()-self.startTick
+
+	def setPaused(self,p):
+		if p==self.paused: return
+		self.paused=p
+		if p:
+			self.pausedElapsed=self.elapsed
+		else:
+			self.startTick=pygame.time.get_ticks()
+		#end paused or unpaused
+	#end setPaused
+
 #end class Timer
 
 STR_TO_KEY={

@@ -26,6 +26,7 @@ class Player():
 		:param field: The field instance on which this player should be bound.
 		:type field: gameField.GameField
 		"""
+		self.paused=False
 		self.field=field
 		self.lives=3
 		self.x=field.getCenterPosition()
@@ -342,5 +343,15 @@ class Player():
 		"""
 		return self.lastHighscore
 	#end getPreviousHighscore
+
+	def setPaused(self,p):
+		"""Pauses this player."""
+		if p==self.paused: return
+		for elem in self.itemEffects:
+			elem.setPaused(p)
+		#end item effects
+		self.punchTimer.setPaused(p)
+	#end pause
+
 # end class Player
 

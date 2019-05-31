@@ -535,7 +535,11 @@ class ssAppMain(window.SingletonWindow):
 		"""
 		self.say(_("%(playmode)s, high score %(highscore)s, start!") % {"playmode": mode, "highscore":self.statsStorage.get("hs_"+mode)})
 		field=gameField.GameField()
-		field.initialize(3,20,mode,self.options.itemVoice)
+		if random.randint(0,4999)==1:
+			self.resetMusicPitch(200)
+			field.initialize(3,20,mode,self.options.itemVoice,True)
+		else:
+			field.initialize(3,20,mode,self.options.itemVoice)
 		field.setLimits(self.options.leftPanningLimit,self.options.rightPanningLimit)
 		while(True):
 			self.frameUpdate()
@@ -649,19 +653,19 @@ Returns False when the game is closed. Otherwise True.
 		self.music.pitch+=p
 	#end changeMusicPitch_relative
 
-	def resetMusicPitch(self):
+	def resetMusicPitch(self, val=100):
 		"""
 		Resets the music's pitch to default. The pitch change will be processed gradually and this method returns when the music is reverted to the normal speed.
 		"""
 		while(True):
-			if abs(self.music.pitch-100)<=2: break
-			if self.music.pitch<100:
+			if abs(self.music.pitch-val)<=2: break
+			if self.music.pitch<val:
 				self.music.pitch+=2
 			else:
 				self.music.pitch-=2
 			self.wait(100)
 		#end while
-		self.music.pitch=100
+		self.music.pitch=val
 	#end resetMusicPitch
 
 	def yesno(self,title, top):
