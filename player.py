@@ -46,6 +46,7 @@ class Player():
 		self.consecutiveMisses=0
 		self.itemEffects=[]
 		self.penetrate=False
+		self.autoDestructionRemaining=0
 		self.lastHighscore=globalVars.appMain.statsStorage.get("hs_"+self.field.modeHandler.getName())
 		self.gotHighscore=False
 
@@ -68,7 +69,7 @@ class Player():
 		s=bgtsound.sound()
 		s.load(globalVars.appMain.sounds["fists.ogg"])
 		s.pan=self.field.getPan(self.x)
-		s.pitch=random.randint(90,110)
+		s.pitch=int(DEFAULT_PUNCH_SPEED/self.punchSpeed*100)+random.randint(-10,10)
 		s.play()
 		self.punchTimer.restart()
 
@@ -208,8 +209,11 @@ class Player():
 				existing.extend(itemConstants.BASE_EFFECT_TIME)
 			return
 		if it.identifier==itemConstants.GOOD_DESTRUCTION:
-			self.field.startDestruction()
-			return
+			ok=self.field.startDestruction()
+			if not ok:#Already destructing
+				self.autoDestructionRemaining+=1
+				self.field.log(_("This effect will be used when it's necessary! (Remaining %(r)d)") % {"r": self.autoDestructionRemaining})
+				return
 		if it.identifier==itemConstants.GOOD_EXTRALIFE:
 			self.lives+=1
 			self.field.log(_("Extra life! (now %(lives)d lives)") % {"lives": self.lives})
@@ -285,7 +289,14 @@ class Player():
 		s.play()
 
 	def hit(self):
-		"""Called when this player gets hit by one of the enemies."""
+		"""Called when this player gets hit by one of the enemies. Returns true when the attack succeeds, or False if player attacks back with auto destruction."""
+		if self.autoDestructionRemaining>0:
+			self.autoDestructionRemaining-=1
+			self.field.log(_("You're about to be attacked, but you have a counter!"))
+			self.field.startDestruction()
+
+			return False
+		#end auto destruction
 		self.lives-=1
 		self.field.log(_("You've been slapped! (%(lives)d HP remaining)") % {"lives": self.lives})
 		s=bgtsound.sound()
@@ -297,6 +308,7 @@ class Player():
 			s.load(globalVars.appMain.sounds["gameover.ogg"])
 			s.volume=-10
 			s.play()
+			return False
 
 	def addScore(self,score):
 		"""

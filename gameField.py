@@ -152,10 +152,11 @@ class GameField():
 		self.items=[]
 
 	def startDestruction(self):
-		if self.destructing: return
+		if self.destructing: return False
 		bgtsound.playOneShot(globalVars.appMain.sounds["destructPowerup.ogg"])
 		self.destructTimer.restart()
 		self.destructing=True
+		return True
 
 	def performDestruction(self):
 		bgtsound.playOneShot(globalVars.appMain.sounds["destruct.ogg"])
@@ -168,6 +169,7 @@ class GameField():
 				elem.destroy()
 			else:
 				elem.obtain()
+				self.player.processItemHit(elem)
 		self.destructing=False
 		self.log(_("End destruction!"))
 # end class GameField

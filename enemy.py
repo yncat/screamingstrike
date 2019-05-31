@@ -84,7 +84,7 @@ class Enemy():
 	def attackCheck(self):
 		"""Checks if this enemy can attack the player. If it can, it attacks."""
 		if self.y!=0: return False
-		self.field.player.hit()
+		if self.field.player.hit() is False: return True
 		self.switchState(STATE_SHOULDBEDELETED)
 		return True
 
