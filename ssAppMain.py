@@ -550,6 +550,7 @@ class ssAppMain(window.SingletonWindow):
 				result.aborted=True
 				return result
 			#end abort
+			if self.keyPressed(window.K_TAB): self.pauseGame(field)
 			if field.frameUpdate() is False:break
 		# end while
 		field.clear()
@@ -564,6 +565,47 @@ class ssAppMain(window.SingletonWindow):
 		r=gameResult.GameResult()
 		r.initialize(field)
 		return r
+
+	def pauseGame(self,field):
+		"""Pauses the current field.
+
+		:param field: Field to pause.
+		:type field: gameField.GameField
+		"""
+		result=gameResult.GameResult()
+		result.initialize(field)
+		field.setPaused(True)
+		m=self.createMenu(_("Game paused"))
+		m.append(_("Press enter or escape to resume. Use your up and down arrows to view current stats."))
+		m.append(_("Score: %(score)d") % {"score": result.score})
+		if result.highscore is not None:
+			m.append(_("You are updating your high score. Currently plus %(distance)d (last: %(last)d)") % {"distance": result.highscore-result.previousHighscore, "last": result.previousHighscore})
+		m.append(_("Punches: %(punches)d, hits: %(hits)d, accuracy: %(accuracy).2f%%") % {"punches": result.punches, "hits": result.hits, "accuracy": result.hitPercentage})
+		m.append(_("This game is currently lasting for %(time)s.") % {"time": result.lastedString})
+		m.append(_("Level: %(level)d, player HP: %(hp)d.") % {"level": result.level, "hp": field.player.lives})
+		if field.player.autoDestructionRemaining>0: m.append(_("You have %(amount)d stored destructions. You will be protected automatically instead of consuming these.") %{"amount": field.player.autoDestructionRemaining})
+		if len(field.player.itemEffects)>0: m.append(_("Active item effects: %(fx)d") % {"fx": len(field.player.itemEffects)})
+		for elem in field.player.itemEffects:
+			m.append(elem.summarize())
+		#end item effects
+		m.append(_("-- Last 10 logs --"))
+		entries=10#default
+		index=len(result.log)-10
+		if index<0:
+			index=0
+			entries=len(result.log)
+		#end clipping
+		for i in range(entries):
+			m.append(result.log[index])
+			index+=1
+		#end log
+		m.open()
+		while(True):
+			self.frameUpdate()
+			if m.frameUpdate() is not None: break
+		#end menu loop
+		field.setPaused(False)
+	#end pauseGame
 
 	def reviewCollection(self,result):
 		"""Shows unlocked collections, if any.
@@ -601,6 +643,8 @@ class ssAppMain(window.SingletonWindow):
 			self.statsStorage.set("hs_"+result.mode,result.highscore)
 		#end if highscore
 		m.append(_("Punches: %(punches)d, hits: %(hits)d, accuracy: %(accuracy).2f%%") % {"punches": result.punches, "hits": result.hits, "accuracy": result.hitPercentage})
+		m.append(_("This game lasted for %(time)s.") % {"time": result.lastedString})
+		m.append(_("You reached level %(level)d.") % {"level": result.level})
 		m.append(result.log,shortcut=False)
 		m.open()
 		while(True):

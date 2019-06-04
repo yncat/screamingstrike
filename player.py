@@ -347,6 +347,7 @@ class Player():
 	def setPaused(self,p):
 		"""Pauses this player."""
 		if p==self.paused: return
+		self.paused=p
 		for elem in self.itemEffects:
 			elem.setPaused(p)
 		#end item effects

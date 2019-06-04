@@ -16,6 +16,7 @@ class sound():
 	def __init__(self):
 		self.handle=None
 		self.freq=44100
+		self.paused=False
 
 	def stream(self,filename=""):
 		if self.handle:
@@ -45,10 +46,6 @@ class sound():
 			self.handle.play()
 		#end pause or unpause
 	#end setPaused
-
-		
-		self.handle.looping=False
-		self.handle.pause()
 
 	def play_wait(self):
 		self.handle.looping=False

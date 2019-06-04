@@ -13,6 +13,7 @@ class Item():
 	def __init__(self):
 		self.fallingBeep=None
 		self.shatter=None
+		self.paused=False
 
 	def __del__(self):
 		self.field=None

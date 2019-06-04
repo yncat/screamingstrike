@@ -50,6 +50,13 @@ class ItemEffectBase(object):
 		self.lasts+=ms
 		self.player.field.log(_("Your \"%(item)s\" effect has been extended for %(extended)d milliseconds! (now %(newtime)d)") %  {"item": self.name, "extended": ms, "newtime": self.lasts-self.timer.elapsed})
 
+	def summarize(self):
+		"""Returns the summary of this effect.
+
+		:rtype: str
+		"""
+		return _("%(name)s: %(sec).2f seconds left") % {"name": self.name, "sec": (self.lasts-self.timer.elapsed)/1000}
+
 	def frameUpdate(self):
 		if self.active is not True: return False
 		if self.timer.elapsed>=self.lasts:
@@ -60,6 +67,7 @@ class ItemEffectBase(object):
 	def setPaused(self,p):
 		"""Pauses / unpauses this effect."""
 		if p==self.paused: return
+		self.paused=p
 		self.timer.setPaused(p)
 		if self.on: self.on.setPaused(p)
 		if self.off: self.off.setPaused(p)

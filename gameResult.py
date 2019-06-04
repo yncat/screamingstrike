@@ -27,6 +27,12 @@ class GameResult:
 		self.highscore=field.player.getNewHighscore()
 		self.previousHighscore=field.player.getPreviousHighscore()
 		self.log=field.getLog()
+		ms=field.gameTimer.elapsed
+		self.lastedMinute=int(ms/60000)
+		self.lastedSecond=int((ms%60000)/1000)
+		m=_("minute") if self.lastedMinute==1 else _("minutes")
+		s=_("second") if self.lastedSecond==1 else _("seconds")
+		self.lastedString=_("%(min)d %(minunit)s and %(sec)d %(secunit)s") % {"min": self.lastedMinute, "minunit": m, "sec": self.lastedSecond, "secunit": s}
 	#end initialize
 	def getaborted(self):
 		"""Retrieves if this game was ended by abort (ESC)."""

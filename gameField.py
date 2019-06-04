@@ -25,6 +25,7 @@ class GameField():
 		self.collectionCounter=None
 
 	def initialize(self, x,y,mode, voice,easter=False):
+		self.gameTimer=window.Timer()
 		self.paused=False
 		self.easter=easter
 		self.logs=[]
@@ -188,12 +189,16 @@ class GameField():
 	def setPaused(self,p):
 		"""Pauses / unpauses this field."""
 		if p==self.paused: return
+		self.paused=p
 		self.destructPowerup.setPaused(p)
 		self.destruct.setPaused(p)
 		for elem in self.enemies:
-			elem.setPaused(p)
+			if elem: elem.setPaused(p)
 		#end enemies
 		for elem in self.items:
 			elem.setPaused(p)
 		#end items
 		self.player.setPaused(p)
+		self.destructTimer.setPaused(p)
+		self.gameTimer.setPaused(p)
+

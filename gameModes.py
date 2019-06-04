@@ -18,6 +18,7 @@ class ModeHandlerBase(object):
 		self.allowConsecutiveMissesBonus=False#Originally this was true, but I decided to disable it because the one of my friends (a professional game designer) said "In the game designing theory, subtracting scores is a totally bad idea!". And the penalty was very irritating, actually. lol!
 		self.allowLevelupBonus=True
 		self.name="Base"
+		self.paused=False
 
 	def __del__(self):
 		self.field=None
@@ -43,6 +44,10 @@ class ModeHandlerBase(object):
 		"""
 		return self.name
 
+	def setPaused(self,p):
+		"""Pauses / resumes this mode handler."""
+		pass
+
 class NormalModeHandler(ModeHandlerBase):
 	def __init__(self):
 		super().__init__()
@@ -66,6 +71,13 @@ class ArcadeModeHandler(ModeHandlerBase):
 	def frameUpdate(self):
 		if self.itemShowerTimer.elapsed>=self.itemShowerTime: self.triggerItemShower()
 		if self.itemComingTimer.elapsed>=self.itemComingTime: self.spawnItem()
+
+	def setPaused(self,p):
+		if p==self.paused: return
+		self.paused=p
+		self.itemComingTimer.setPaused(p)
+		self.itemShowerTimer.setPaused(p)
+	#end setPaused
 
 	def triggerItemShower(self):
 		self.spawnItem()

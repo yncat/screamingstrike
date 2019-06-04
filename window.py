@@ -136,12 +136,12 @@ class Timer:
 
 	def setPaused(self,p):
 		if p==self.paused: return
-		self.paused=p
 		if p:
 			self.pausedElapsed=self.elapsed
 		else:
 			self.startTick=pygame.time.get_ticks()
 		#end paused or unpaused
+		self.paused=p
 	#end setPaused
 
 #end class Timer
