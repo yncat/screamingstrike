@@ -29,6 +29,7 @@ import window
 import dialog
 COLLECTION_DATA_FILENAME="data/collection.dat"
 STATS_DATA_FILENAME="data/stats.dat"
+LAST_VERSION_FILENAME="data/lastVersion.dat"
 
 class ssAppMain(window.SingletonWindow):
 	"""
@@ -238,6 +239,7 @@ class ssAppMain(window.SingletonWindow):
 		Starts the game. initialize method must be successfully called prior to call this method. It returns when the game is exited.
 		"""
 		if self.intro() is False: return
+		self.checkChangeLog()
 		while(True):
 			selected=self.mainmenu()
 			if selected is False or selected==9: self.exit()
@@ -793,5 +795,51 @@ Returns False when the game is closed. Otherwise True.
 			self.say(_("Choose 'Forcefully shutdown' or alt+f4 to abort the download."))
 		#end loop
 	#end checkUpdateDownloadFinish
+
+	def checkChangeLog(self):
+		"""Checks if this version is run for the first time. If it is, show the changelog file."""
+		if not os.path.isfile(LAST_VERSION_FILENAME):
+			self.writeLastVersion()
+			self.showChangeLog()
+			return
+		#end file does not exist
+		f=open(LAST_VERSION_FILENAME, "r")
+		v=float(f.read())
+		f.close()
+		self.writeLastVersion()
+		if v!=buildSettings.GAME_VERSION:
+			self.writeLastVersion()
+			self.showChangeLog()
+		#end if show changelog?
+	#end checkChangeLog
+
+	def writeLastVersion(self):
+		"""Writes the last version number to file."""
+		f=open(LAST_VERSION_FILENAME,"w")
+		f.write("%.2f" % buildSettings.GAME_VERSION)
+		f.close()
+	#end writeLastVersion
+
+	def showChangeLog(self):
+		"""Shows the changelog."""
+		fname="changelog_"+self.options.language[0:2]+".txt"
+		if not os.path.isfile(fname):
+			self.message(_("The changelog file written in the selected language doesn't seem to exist. If you can write one and contribute, please create %(filename)s and contact the developer.") % {"filename": fname})
+			return
+		#end not exist
+		f=open(fname,"r", encoding="UTF-8")
+		m=self.createMenu(_("Changelog"))
+		for line in f:
+			if line!="\n": m.append(line.rstrip())
+		#end addition
+		f.close()
+		m.open()
+		while(True):
+			self.frameUpdate()
+			r=m.frameUpdate()
+			if r is None: continue
+			break
+		#end loop
+	#end displayManual
 # end class ssAppMain
 
