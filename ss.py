@@ -15,6 +15,13 @@ def main():
 	app.initialize()
 	app.run()
 
-#global schope
+def exchandler(type, exc, tb):
+	f=open("data/errorLog.txt", "w")
+	f.writelines(traceback.format_exception(type, exc, tb))
+	f.close()
+	dialog.dialog("Error", "An error occured. Please send error-log.txt, found in the data directory of wherever you are running the game, to the developer.")
+	sys.exit()
 
+#global schope
+sys.excepthook=exchandler
 if __name__ == "__main__": main()

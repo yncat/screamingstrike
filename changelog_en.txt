@@ -19,3 +19,4 @@ From this version, the game will be distributed as a 32-bit application. Hopeful
 (15) When a destruction effect is triggered and items are destroyed, good items are treated as if they were obtained, and nasty items are treated as they were destroyed. If you get a destruction by that destruction, you will gain a stored destruction that automatically protects you from being attacked. Hmm. Complicated.
 (16) Pressing the tab key during the gameplay now pauses the game. While pausing, you can check the current game stats.
 (17) At the result screen, you can now check the game's lasted duration and level you reached.
+(18) If the game crashes for some reason, it now displays a dialog before exiting. I didn't know how to do that; someone told me how. Thanks.
