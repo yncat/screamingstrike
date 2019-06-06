@@ -1,10 +1,12 @@
 *.pyc
 result.txt
+log.txt
 data/options.dat
 data/collection.dat
 data/highscore.dat
 data/stats.dat
 data/errorLog.txt
+data/lastVersion.dat
 *.po~
 ss.build/
 ss.dist/

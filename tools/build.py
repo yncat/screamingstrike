@@ -29,7 +29,7 @@ if platform.system() == 'Darwin':
 print("win=%s, cwd=%s" % (win, os.getcwd()))
 PROJECT = "ss"  # Change this line accordingly
 PROJECT_FULL_NAME="screamingStrike2"
-PYTHON_PATH="C:/python37"#Windows only
+PYTHON_PATH="D:\softs\Python37-32"#Windows only
 
 if not os.path.exists("data"):
   print("Error: no data folder found. Your working directory must be the root of the project. You shouldn't cd to tools and run this script.")
@@ -70,6 +70,11 @@ shutil.copytree("locale", "%s/locale" % (copydir))
 print("Copying readme")
 readmes=glob.glob("readme_*.txt")
 for elem in readmes:
+	shutil.copyfile(elem, "%s/%s" % (copydir, elem))
+
+print("Copying changelog")
+changelogs=glob.glob("changelog_*.txt")
+for elem in changelogs:
 	shutil.copyfile(elem, "%s/%s" % (copydir, elem))
 
 if win:

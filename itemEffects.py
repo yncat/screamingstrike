@@ -15,6 +15,7 @@ class ItemEffectBase(object):
 	def __del__(self):
 		pass
 	def initialize(self,player,onSound,offSound,name):
+		self.paused=False
 		self.player=player
 		self.active=False
 		self.timer=window.Timer()
@@ -22,29 +23,39 @@ class ItemEffectBase(object):
 		self.offSound=offSound
 		self.lasts=itemConstants.BASE_EFFECT_TIME
 		self.name=name
+		self.on=None
+		self.off=None
+		self.ex=None
 
 	def activate(self):
-		s=bgtsound.sound()
-		s.load(self.onSound)
-		s.play()
+		self.on=bgtsound.sound()
+		self.on.load(self.onSound)
+		self.on.play()
 		self.active=True
 		self.timer.restart()
 		self.player.field.log(_("A new \"%(item)s\" effect is starting!") % {"item": self.name})
 
 	def deactivate(self):
-		s=bgtsound.sound()
-		s.load(self.offSound)
-		s.play()
+		self.off=bgtsound.sound()
+		self.off.load(self.offSound)
+		self.off.play()
 		self.active=False
 		self.player.field.log(_("One of your \"%(item)s\" effects is ending!") % {"item": self.name})
 
 	def extend(self,ms):
-		s=bgtsound.sound()
-		s.load(self.onSound)
-		s.pitch=130
-		s.play()
+		self.ex=bgtsound.sound()
+		self.ex.load(self.onSound)
+		self.ex.pitch=130
+		self.ex.play()
 		self.lasts+=ms
 		self.player.field.log(_("Your \"%(item)s\" effect has been extended for %(extended)d milliseconds! (now %(newtime)d)") %  {"item": self.name, "extended": ms, "newtime": self.lasts-self.timer.elapsed})
+
+	def summarize(self):
+		"""Returns the summary of this effect.
+
+		:rtype: str
+		"""
+		return _("%(name)s: %(sec).2f seconds left") % {"name": self.name, "sec": (self.lasts-self.timer.elapsed)/1000}
 
 	def frameUpdate(self):
 		if self.active is not True: return False
@@ -52,6 +63,16 @@ class ItemEffectBase(object):
 			self.deactivate()
 			return False
 		return True
+
+	def setPaused(self,p):
+		"""Pauses / unpauses this effect."""
+		if p==self.paused: return
+		self.paused=p
+		self.timer.setPaused(p)
+		if self.on: self.on.setPaused(p)
+		if self.off: self.off.setPaused(p)
+		if self.ex: self.ex.setPaused(p)
+	#end setPaused
 
 class ShrinkEffect(ItemEffectBase):
 	def initialize(self,player):

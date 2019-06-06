@@ -9,6 +9,7 @@ import os
 import threading
 import gettext
 import platform
+import platform_utils.paths
 import urllib.request
 import sound_lib.sample
 import bgtsound
@@ -19,15 +20,19 @@ import gameModes
 import gameOptions
 import gameResult
 import globalVars
+import itemVoicePlayer
 import scorePostingAdapter
 import scoreViewAdapter
 import stats
 import updateClient
 import window
-
 import dialog
-COLLECTION_DATA_FILENAME="data/collection.dat"
-STATS_DATA_FILENAME="data/stats.dat"
+
+platform_utils.paths.prepare_app_data_path(buildSettings.GAME_NAME)
+appDataPath=platform_utils.paths.app_data_path(buildSettings.GAME_NAME)
+COLLECTION_DATA_FILENAME=appDataPath+"/collection.dat"
+STATS_DATA_FILENAME=appDataPath+"/stats.dat"
+LAST_VERSION_FILENAME=appDataPath+"/lastVersion.dat"
 
 class ssAppMain(window.SingletonWindow):
 	"""
@@ -49,6 +54,15 @@ class ssAppMain(window.SingletonWindow):
 		"""
 		super().initialize(640, 480, buildSettings.GAME_NAME+" ("+str(buildSettings.GAME_VERSION)+")")
 		globalVars.appMain = self
+		#data path patch
+		files=glob.glob("data/*.dat")
+		if len(files)>0:
+			import shutil
+			for elem in files:
+				shutil.copyfile(elem, appDataPath+"/"+os.path.basename(elem))
+				os.remove(elem)
+			#end files
+		#end patch required
 		#Load sounds
 		self.updateChecker=updateClient.Checker()
 		self.updateChecker.initialize(buildSettings.GAME_VERSION,buildSettings.UPDATE_SERVER_ADDRESS)
@@ -63,7 +77,8 @@ class ssAppMain(window.SingletonWindow):
 		self.locales=self.getLocalesList()
 		self.initTranslation()
 		self.music = bgtsound.sound()
-		self.music.stream("data/sounds/stream/bg.ogg")
+		self.musicData=sound_lib.sample.Sample("data/sounds/stream//bg.ogg")
+		self.music.load(self.musicData)
 		self.music.volume = self.options.bgmVolume
 		self.numScreams = len(glob.glob("data/sounds/scream*.ogg"))
 		self.collectionStorage=collection.CollectionStorage()
@@ -208,7 +223,7 @@ class ssAppMain(window.SingletonWindow):
 		elif upresult==updateClient.RET_CONNECTION_ERROR:
 			m.append(_("There was an error while retrieving software update information (%(error)s). Please try again later.") % {"error": self.updateChecker.getLastError()})
 		elif upresult==updateClient.RET_USING_LATEST:
-			m.append(_("You're playing the latest version! When a new update is found, it will be notified here."))
+			m.append(_("You're playing the latest version! When a new update is found, you will be notified here."))
 		elif upresult==updateClient.RET_NEW_VERSION_AVAILABLE:
 			if not self.updateDownloader:#Not yet downloaded
 				m.append(_("There is a new version of the game! Press enter here to download it."))
@@ -236,6 +251,7 @@ class ssAppMain(window.SingletonWindow):
 		Starts the game. initialize method must be successfully called prior to call this method. It returns when the game is exited.
 		"""
 		if self.intro() is False: return
+		self.checkChangeLog()
 		while(True):
 			selected=self.mainmenu()
 			if selected is False or selected==9: self.exit()
@@ -274,8 +290,8 @@ class ssAppMain(window.SingletonWindow):
 			self.message(_("This build of %(gamename)s doesn't have download location set.") % {"gamename": buildSettings.GAME_NAME})
 			return
 		#end download location not set
-		self.say(_("Select the folder you want to download the installer."))
-		fld=self.folderSelect(_("Select the folder you want to download the installer."))
+		self.say(_("Select the folder where you want to download the installer."))
+		fld=self.folderSelect(_("Select the folder where you want to download the installer."))
 		if not fld: return
 		bgtsound.playOneShot(self.sounds["confirm.ogg"])
 		local=os.path.join(fld,local)
@@ -321,11 +337,11 @@ class ssAppMain(window.SingletonWindow):
 		if self.statsStorage.get(k)==0:
 			self.statsStorage.inclement(k)
 			if mode==gameModes.ALL_MODES_STR[0]:
-				self.showTip(_("This is the new standard mode of %(gamename)s. Use your left and right arrows to move to the same position as an enemy and spacebar to punch! But remember, they need to be close as your fist can reach! Compared to the previous version, you get bonus points when leveling up. Also, you have chances to get bonuses if you achieve more than 5 consecutive hits!") % {"gamename": buildSettings.GAME_NAME})
+				self.showTip(_("This is the new standard mode of %(gamename)s. Use your left and right arrows to move to the same position as an enemy and spacebar to punch! But remember, they need to be close enough to be hit by your fist. Compared to the previous version, you get bonus points when leveling up. Also, you have chances to get bonuses if you achieve more than 5 consecutive hits!") % {"gamename": buildSettings.GAME_NAME})
 			elif mode==gameModes.ALL_MODES_STR[1]:
 				self.showTip(_("This is the new arcade mode of %(gamename)s! From the new version, items that fall faster are more likely to be good, and slower ones are more likely to be bad. You can obtain an item by punching it, or destroy it by combining your up arrow when punching. Carefully choose which item to obtain!") % {"gamename": buildSettings.GAME_NAME})
 			elif mode==gameModes.ALL_MODES_STR[2]:
-				self.showTip(_("This is the old-fashioned game mode! You don't get bonuses based on accuracy, so you can punch, punch, punch punch punch and punch! This mode has shirper levelup curb, meaning that you can collect screams really fast!"))
+				self.showTip(_("This is the old-fashioned game mode! You don't get bonuses based on accuracy, so you can punch, punch, punch punch punch and punch! This mode has a sharper levelup curb, meaning that you can collect screams really fast!"))
 
 	def showTip(self,tip):
 		"""Shows the ingame tip.
@@ -400,7 +416,7 @@ class ssAppMain(window.SingletonWindow):
 
 	def eraseDataDialog(self):
 		"""Shows the erase data dialog. Returns when user leaves this menu."""
-		m=self.createMenu(_("Select the data to irase"),[_("Highscores"),_("Collections"),_("Back")])
+		m=self.createMenu(_("Select the data to erase"),[_("Highscores"),_("Collections"),_("Back")])
 		m.open()
 		while(True):
 			self.frameUpdate()
@@ -412,7 +428,7 @@ class ssAppMain(window.SingletonWindow):
 				continue
 			#end confirmation
 			if r==0:
-				self.statsStorage.resetHighscore()
+				self.statsStorage.resetHighscores()
 				self.say(_("Your highscores are all reset!"))
 				continue
 			if r==1:
@@ -500,12 +516,12 @@ class ssAppMain(window.SingletonWindow):
 			if direction==1 and c==len(self.itemVoices)-1: return#clipping
 			if direction==-1 and c==0: return#clipping
 			c+=direction
-			pl = ItemVoicePlayer()
-			if not pl.initialize(self.itemVoices[c]):
+			self.pl = itemVoicePlayer.ItemVoicePlayer()
+			if not self.pl.initialize(self.itemVoices[c]):
 				self.say(_("%(voice)s cannot be loaded.") % {"voice": self.itemVoices[c]})
 				return
 			self.say(self.itemVoices[c])
-			pl.test()
+			self.pl.test()
 			self.options.itemVoice=self.itemVoices[c]
 			return
 		#end item voices
@@ -533,17 +549,22 @@ class ssAppMain(window.SingletonWindow):
 		"""
 		self.say(_("%(playmode)s, high score %(highscore)s, start!") % {"playmode": mode, "highscore":self.statsStorage.get("hs_"+mode)})
 		field=gameField.GameField()
-		field.initialize(3,20,mode,self.options.itemVoice)
+		if random.randint(0,4999)==1:
+			self.resetMusicPitch(200)
+			field.initialize(3,20,mode,self.options.itemVoice,True)
+		else:
+			field.initialize(3,20,mode,self.options.itemVoice)
 		field.setLimits(self.options.leftPanningLimit,self.options.rightPanningLimit)
 		while(True):
 			self.frameUpdate()
 			if self.keyPressed(window.K_ESCAPE):
-				field.aboat()
+				field.abort()
 				result=gameResult.GameResult()
 				result.initialize(field)
-				result.aboated=True
+				result.aborted=True
 				return result
-			#end aboat
+			#end abort
+			if self.keyPressed(window.K_TAB): self.pauseGame(field)
 			if field.frameUpdate() is False:break
 		# end while
 		field.clear()
@@ -558,6 +579,47 @@ class ssAppMain(window.SingletonWindow):
 		r=gameResult.GameResult()
 		r.initialize(field)
 		return r
+
+	def pauseGame(self,field):
+		"""Pauses the current field.
+
+		:param field: Field to pause.
+		:type field: gameField.GameField
+		"""
+		result=gameResult.GameResult()
+		result.initialize(field)
+		field.setPaused(True)
+		m=self.createMenu(_("Game paused"))
+		m.append(_("Press enter or escape to resume. Use your up and down arrows to view current stats."))
+		m.append(_("Score: %(score)d") % {"score": result.score})
+		if result.highscore is not None:
+			m.append(_("You are updating your high score. Currently plus %(distance)d (last: %(last)d)") % {"distance": result.highscore-result.previousHighscore, "last": result.previousHighscore})
+		m.append(_("Punches: %(punches)d, hits: %(hits)d, accuracy: %(accuracy).2f%%") % {"punches": result.punches, "hits": result.hits, "accuracy": result.hitPercentage})
+		m.append(_("This game is currently lasting for %(time)s.") % {"time": result.lastedString})
+		m.append(_("Level: %(level)d, player HP: %(hp)d.") % {"level": result.level, "hp": field.player.lives})
+		if field.player.autoDestructionRemaining>0: m.append(_("You have %(amount)d stored destructions. You will be protected automatically instead of consuming these.") %{"amount": field.player.autoDestructionRemaining})
+		if len(field.player.itemEffects)>0: m.append(_("Active item effects: %(fx)d") % {"fx": len(field.player.itemEffects)})
+		for elem in field.player.itemEffects:
+			m.append(elem.summarize())
+		#end item effects
+		m.append(_("-- Last 10 logs --"))
+		entries=10#default
+		index=len(result.log)-10
+		if index<0:
+			index=0
+			entries=len(result.log)
+		#end clipping
+		for i in range(entries):
+			m.append(result.log[index])
+			index+=1
+		#end log
+		m.open()
+		while(True):
+			self.frameUpdate()
+			if m.frameUpdate() is not None: break
+		#end menu loop
+		field.setPaused(False)
+	#end pauseGame
 
 	def reviewCollection(self,result):
 		"""Shows unlocked collections, if any.
@@ -595,6 +657,8 @@ class ssAppMain(window.SingletonWindow):
 			self.statsStorage.set("hs_"+result.mode,result.highscore)
 		#end if highscore
 		m.append(_("Punches: %(punches)d, hits: %(hits)d, accuracy: %(accuracy).2f%%") % {"punches": result.punches, "hits": result.hits, "accuracy": result.hitPercentage})
+		m.append(_("This game lasted for %(time)s.") % {"time": result.lastedString})
+		m.append(_("You reached level %(level)d.") % {"level": result.level})
 		m.append(result.log,shortcut=False)
 		m.open()
 		while(True):
@@ -613,9 +677,12 @@ Returns False when the game is closed. Otherwise True.
 		:type result: gameResult.GameResult
 		"""
 		if self.yesno(_("Score posting"),_("Do you want to post this score to the scoreboard?")) is True:#post
-			self.say(_("Please input your name."))
-			name=self.input(_("Name entry"),_("Please input your name."))
-			if name is None: return
+			while(True):
+				self.say(_("Please input your name."))
+				name=self.input(_("Name entry"),_("Please input your name."))
+				if name is None: return
+				if name!="": break
+			#end blank name checking
 			adapter=buildSettings.getScorePostingAdapter()
 			ret=adapter.post(name,result)
 			if ret==scorePostingAdapter.RET_UNAVAILABLE:
@@ -644,19 +711,19 @@ Returns False when the game is closed. Otherwise True.
 		self.music.pitch+=p
 	#end changeMusicPitch_relative
 
-	def resetMusicPitch(self):
+	def resetMusicPitch(self, val=100):
 		"""
 		Resets the music's pitch to default. The pitch change will be processed gradually and this method returns when the music is reverted to the normal speed.
 		"""
 		while(True):
-			if abs(self.music.pitch-100)<=2: break
-			if self.music.pitch<100:
+			if abs(self.music.pitch-val)<=2: break
+			if self.music.pitch<val:
 				self.music.pitch+=2
 			else:
 				self.music.pitch-=2
-			self.wait(50)
+			self.wait(100)
 		#end while
-		self.music.pitch=100
+		self.music.pitch=val
 	#end resetMusicPitch
 
 	def yesno(self,title, top):
@@ -737,8 +804,54 @@ Returns False when the game is closed. Otherwise True.
 			#end update downloading
 			if r is None:continue
 			if r==1: break
-			self.say(_("Choose 'Forcefully shutdown' or alt+f4 to aboat the download."))
+			self.say(_("Choose 'Forcefully shutdown' or alt+f4 to abort the download."))
 		#end loop
 	#end checkUpdateDownloadFinish
+
+	def checkChangeLog(self):
+		"""Checks if this version is run for the first time. If it is, show the changelog file."""
+		if not os.path.isfile(LAST_VERSION_FILENAME):
+			self.writeLastVersion()
+			self.showChangeLog()
+			return
+		#end file does not exist
+		f=open(LAST_VERSION_FILENAME, "r")
+		v=float(f.read())
+		f.close()
+		self.writeLastVersion()
+		if v!=buildSettings.GAME_VERSION:
+			self.writeLastVersion()
+			self.showChangeLog()
+		#end if show changelog?
+	#end checkChangeLog
+
+	def writeLastVersion(self):
+		"""Writes the last version number to file."""
+		f=open(LAST_VERSION_FILENAME,"w")
+		f.write("%.2f" % buildSettings.GAME_VERSION)
+		f.close()
+	#end writeLastVersion
+
+	def showChangeLog(self):
+		"""Shows the changelog."""
+		fname="changelog_"+self.options.language[0:2]+".txt"
+		if not os.path.isfile(fname):
+			self.message(_("The changelog file written in the selected language doesn't seem to exist. If you can write one and contribute, please create %(filename)s and contact the developer.") % {"filename": fname})
+			return
+		#end not exist
+		f=open(fname,"r", encoding="UTF-8")
+		m=self.createMenu(_("Changelog"))
+		for line in f:
+			if line!="\n": m.append(line.rstrip())
+		#end addition
+		f.close()
+		m.open()
+		while(True):
+			self.frameUpdate()
+			r=m.frameUpdate()
+			if r is None: continue
+			break
+		#end loop
+	#end displayManual
 # end class ssAppMain
 

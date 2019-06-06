@@ -18,6 +18,7 @@ class ModeHandlerBase(object):
 		self.allowConsecutiveMissesBonus=False#Originally this was true, but I decided to disable it because the one of my friends (a professional game designer) said "In the game designing theory, subtracting scores is a totally bad idea!". And the penalty was very irritating, actually. lol!
 		self.allowLevelupBonus=True
 		self.name="Base"
+		self.paused=False
 
 	def __del__(self):
 		self.field=None
@@ -43,6 +44,10 @@ class ModeHandlerBase(object):
 		"""
 		return self.name
 
+	def setPaused(self,p):
+		"""Pauses / resumes this mode handler."""
+		pass
+
 class NormalModeHandler(ModeHandlerBase):
 	def __init__(self):
 		super().__init__()
@@ -67,6 +72,13 @@ class ArcadeModeHandler(ModeHandlerBase):
 		if self.itemShowerTimer.elapsed>=self.itemShowerTime: self.triggerItemShower()
 		if self.itemComingTimer.elapsed>=self.itemComingTime: self.spawnItem()
 
+	def setPaused(self,p):
+		if p==self.paused: return
+		self.paused=p
+		self.itemComingTimer.setPaused(p)
+		self.itemShowerTimer.setPaused(p)
+	#end setPaused
+
 	def triggerItemShower(self):
 		self.spawnItem()
 		self.itemShowerCount-=1
@@ -77,11 +89,11 @@ class ArcadeModeHandler(ModeHandlerBase):
 			self.itemShowerTimer.restart()
 
 	def resetItemShower(self):
-		self.itemShowerTime=90000
+		self.itemShowerTime=random.randint(70000,150000)
 		self.itemShowerCount=random.randint(3,6)
 
 	def spawnItem(self):
-		spd=random.randint(100,900)
+		spd=random.randint(100,800)
 		t=itemConstants.TYPE_NASTY if random.randint(1,100)<=spd/10 else itemConstants.TYPE_GOOD
 		ident=random.randint(0,itemConstants.NASTY_MAX) if t==item.TYPE_NASTY else random.randint(0,item.GOOD_MAX)
 		i=item.Item()
