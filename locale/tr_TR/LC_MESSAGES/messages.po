@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: screamingStrike\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-06-05 20:51+0900\n"
-"PO-Revision-Date: 2019-05-23 12:01+0900\n"
+"PO-Revision-Date: 2019-06-06 09:23+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: tr_TR\n"
@@ -90,24 +90,24 @@ msgstr "Patlama sona erdi!"
 
 #: gameResult.py:33
 msgid "minute"
-msgstr ""
+msgstr "Dakika"
 
 #: gameResult.py:33
 msgid "minutes"
-msgstr ""
+msgstr "Dakika"
 
 #: gameResult.py:34
 msgid "second"
-msgstr ""
+msgstr "Saniye"
 
 #: gameResult.py:34
 msgid "seconds"
-msgstr ""
+msgstr "Saniye"
 
 #: gameResult.py:35
 #, python-format
 msgid "%(min)d %(minunit)s and %(sec)d %(secunit)s"
-msgstr ""
+msgstr "%(min)d %(minunit)s ve %(sec)d %(secunit)s"
 
 #: item.py:58
 #, python-format
@@ -146,7 +146,7 @@ msgstr ""
 #: itemEffects.py:58
 #, python-format
 msgid "%(name)s: %(sec).2f seconds left"
-msgstr ""
+msgstr "%(name)s: %(sec).2f saniye kaldı"
 
 #: player.py:125
 #, python-format
@@ -161,7 +161,7 @@ msgstr "%(misses)d art arda ıska cezası!"
 #: player.py:216
 #, python-format
 msgid "This effect will be used when it's necessary! (Remaining %(r)d)"
-msgstr ""
+msgstr "Bu etki ihtiyaç olduğunda açığa çıkacak! (Remaining %(r)d)"
 
 #: player.py:220
 #, python-format
@@ -188,7 +188,7 @@ msgstr "Yumruğunuz artık birden fazla düşmana ya da öğeye vuramıyor!"
 
 #: player.py:296
 msgid "You're about to be attacked, but you have a counter!"
-msgstr ""
+msgstr "Yumruklanmak üzeresiniz ama kalkanınız var!"
 
 #: player.py:302
 #, python-format
@@ -271,12 +271,11 @@ msgstr ""
 "Lütfen daha sonra tekrar deneyin."
 
 #: ssAppMain.py:214
-#, fuzzy
 msgid ""
 "You're playing the latest version! When a new update is found, you will be "
 "notified here."
 msgstr ""
-"En son sürümü kullanıyorsunuz! Bir güncelleme olunca burada bildirilir."
+"En son sürümü kullanıyorsunuz! Bir güncelleme olduğunda burada bildirilir."
 
 #: ssAppMain.py:217
 msgid "There is a new version of the game! Press enter here to download it."
@@ -304,7 +303,6 @@ msgid "This build of %(gamename)s doesn't have download location set."
 msgstr "%(gamename)s oyununun bu yapısında indirme konumu ayarlı değil."
 
 #: ssAppMain.py:281 ssAppMain.py:282
-#, fuzzy
 msgid "Select the folder where you want to download the installer."
 msgstr "Yükleyicinin indirileceği klasörü seçin."
 
@@ -345,7 +343,6 @@ msgstr ""
 "beraber yumruklarsanız parçalayabilirsiniz. Alacağınız bonusu dikkatli seçin!"
 
 #: ssAppMain.py:332
-#, fuzzy
 msgid ""
 "This is the old-fashioned game mode! You don't get bonuses based on "
 "accuracy, so you can punch, punch, punch punch punch and punch! This mode "
@@ -468,27 +465,29 @@ msgid "%(playmode)s, high score %(highscore)s, start!"
 msgstr "%(playmode)s, en yüksek puan %(highscore)s, başla!"
 
 #: ssAppMain.py:580
-#, fuzzy
 msgid "Game paused"
-msgstr "Oyun iptal edildi."
+msgstr "Oyun duraklatıldı"
 
 #: ssAppMain.py:581
 msgid ""
 "Press enter or escape to resume. Use your up and down arrows to view current "
 "stats."
 msgstr ""
+"Enter ya da escape tuşlarına basarak devam edebilirsiniz. Yukarı ve aşağı "
+"oklarla istatistiklere bakabilirsiniz."
 
 #: ssAppMain.py:582
-#, fuzzy, python-format
+#, python-format
 msgid "Score: %(score)d"
 msgstr "Puan: %(score)d"
 
 #: ssAppMain.py:584
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "You are updating your high score. Currently plus %(distance)d (last: "
 "%(last)d)"
-msgstr "Yeni en yüksek puan! Artı %(distance)d (önceki puan %(last)d idi)"
+msgstr ""
+"Puanınızı yükseltiyorsunuz. Artı %(distance)d (önceki puan %(last)d idi)"
 
 #: ssAppMain.py:585 ssAppMain.py:647
 #, python-format
@@ -500,28 +499,28 @@ msgstr ""
 #: ssAppMain.py:586
 #, python-format
 msgid "This game is currently lasting for %(time)s."
-msgstr ""
+msgstr "Oyun süresi: %(time)s."
 
 #: ssAppMain.py:587
 #, python-format
 msgid "Level: %(level)d, player HP: %(hp)d."
-msgstr ""
+msgstr "Seviye: %(level)d, hp: %(hp)d."
 
 #: ssAppMain.py:588
 #, python-format
 msgid ""
 "You have %(amount)d stored destructions. You will be protected automatically "
 "instead of consuming these."
-msgstr ""
+msgstr "%(amount)d patlama bonusunuz var. Bunları gerektiğinde tüketeceksiniz."
 
 #: ssAppMain.py:589
 #, python-format
 msgid "Active item effects: %(fx)d"
-msgstr ""
+msgstr "Süren bonus etkileri: %(fx)d"
 
 #: ssAppMain.py:593
 msgid "-- Last 10 logs --"
-msgstr ""
+msgstr "-- Son 10 günlük --"
 
 #: ssAppMain.py:622
 msgid "collection"
@@ -557,12 +556,12 @@ msgstr "Yeni en yüksek puan! Artı %(distance)d (önceki puan %(last)d idi)"
 #: ssAppMain.py:648
 #, python-format
 msgid "This game lasted for %(time)s."
-msgstr ""
+msgstr "Oyun süresi: %(time)s."
 
 #: ssAppMain.py:649
 #, python-format
 msgid "You reached level %(level)d."
-msgstr ""
+msgstr "Ulaşılan seviye: %(level)d"
 
 #: ssAppMain.py:667
 msgid "Score posting"
@@ -636,15 +635,16 @@ msgstr ""
 "tuşlarına basın."
 
 #: ssAppMain.py:827
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "The changelog file written in the selected language doesn't seem to exist. "
 "If you can write one and contribute, please create %(filename)s and contact "
 "the developer."
 msgstr ""
-"Seçili dilde yazılmış bir kılavuz yok. Eğer yardımcı olmak isterseniz, "
-"%(filename)s adlı dosyayı oluşturup yazarak üreticiye ulaşabilirsiniz."
+"Seçili dilde yazılmış bir değişiklikler dosyası yok. Eğer yardımcı olmak "
+"isterseniz, %(filename)s adlı dosyayı oluşturup yazarak üreticiye "
+"ulaşabilirsiniz."
 
 #: ssAppMain.py:831
 msgid "Changelog"
-msgstr ""
+msgstr "Değişiklikler"
