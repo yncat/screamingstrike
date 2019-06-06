@@ -9,6 +9,7 @@ import os
 import threading
 import gettext
 import platform
+import platform_utils.paths
 import urllib.request
 import sound_lib.sample
 import bgtsound
@@ -25,11 +26,13 @@ import scoreViewAdapter
 import stats
 import updateClient
 import window
-
 import dialog
-COLLECTION_DATA_FILENAME="data/collection.dat"
-STATS_DATA_FILENAME="data/stats.dat"
-LAST_VERSION_FILENAME="data/lastVersion.dat"
+
+platform_utils.paths.prepare_app_data_path(buildSettings.GAME_NAME)
+appDataPath=platform_utils.paths.app_data_path(buildSettings.GAME_NAME)
+COLLECTION_DATA_FILENAME=appDataPath+"/collection.dat"
+STATS_DATA_FILENAME=appDataPath+"/stats.dat"
+LAST_VERSION_FILENAME=appDataPath+"/lastVersion.dat"
 
 class ssAppMain(window.SingletonWindow):
 	"""
@@ -51,6 +54,15 @@ class ssAppMain(window.SingletonWindow):
 		"""
 		super().initialize(640, 480, buildSettings.GAME_NAME+" ("+str(buildSettings.GAME_VERSION)+")")
 		globalVars.appMain = self
+		#data path patch
+		files=glob.glob("data/*.dat")
+		if len(files)>0:
+			import shutil
+			for elem in files:
+				shutil.copyfile(elem, appDataPath+"/"+os.path.basename(elem))
+				os.remove(elem)
+			#end files
+		#end patch required
 		#Load sounds
 		self.updateChecker=updateClient.Checker()
 		self.updateChecker.initialize(buildSettings.GAME_VERSION,buildSettings.UPDATE_SERVER_ADDRESS)
