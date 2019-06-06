@@ -5,7 +5,7 @@
 import scorePostingAdapter
 import scoreViewAdapter
 
-#	sys.stderr = open('data/errorLog.txt', 'w') # uncomment this line when releasing
+#	sys.stderr = open('data/stderr.txt', 'w') # uncomment this line when releasing
 
 GAME_NAME="Screaming Strike 2"
 GAME_VERSION=2.01

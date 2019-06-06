@@ -2,6 +2,7 @@ Screaming Strike 2 Changelog
 
 2019/06/08 Version 2.01
 From this version, the game will be distributed as a 32-bit application. Hopefully this solves various issues that prevented the game from running. Please, please do.
+I have completely no idea about this, but apparently the game sometimes refuses to run without giving any errors. If it happens too often, I will think of an alternative solution, so please let me know.
 (1) Fixed a bug which only showed top 10 scores when viewing scoreboards with the built-in viewer(#1).
 (2) Fixed some typos in the Japanese translation(#2).
 (3) Fixed a bug where players were able to submit scores with blank name(#3).
