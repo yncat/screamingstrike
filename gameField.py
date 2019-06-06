@@ -121,7 +121,7 @@ class GameField():
 		return "\n".join(self.logs)
 
 	def levelup(self):
-		self.log(_("Leveled up to %(newlevel)d! (Accuracy %(accuracy).1f%%, with %(lives)d hp remaining)") % {"newlevel": self.level, "accuracy": self.player.hitPercentage, "lives": self.player.lives})
+		self.log(_("Leveled up to %(newlevel)d! (Accuracy %(accuracy).1f%%, with %(lives)d hp remaining)") % {"newlevel": self.level+1, "accuracy": self.player.hitPercentage, "lives": self.player.lives})
 		self.processLevelupBonus()
 		self.level+=1
 		self.enemies.append(None)
