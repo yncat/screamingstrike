@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "ss.py", line 28, in <module>
+    if __name__ == "__main__": main()
+  File "ss.py", line 17, in main
+    app.run()
+  File "D:\git\screamingstrike\ssAppMain.py", line 254, in run
+    if self.intro() is False: return
+  File "D:\git\screamingstrike\ssAppMain.py", line 147, in intro
+    a=1/0
+ZeroDivisionError: division by zero
