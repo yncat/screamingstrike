@@ -72,6 +72,11 @@ readmes=glob.glob("readme_*.txt")
 for elem in readmes:
 	shutil.copyfile(elem, "%s/%s" % (copydir, elem))
 
+print("Copying changelog")
+changelogs=glob.glob("changelog_*.txt")
+for elem in changelogs:
+	shutil.copyfile(elem, "%s/%s" % (copydir, elem))
+
 if win:
 	print("Renaming to play.exe")
 	os.rename(PROJECT+".dist/"+PROJECT+".exe",PROJECT+".dist/play.exe")
