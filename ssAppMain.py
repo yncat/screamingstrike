@@ -33,6 +33,7 @@ appDataPath=platform_utils.paths.app_data_path(buildSettings.GAME_NAME)
 COLLECTION_DATA_FILENAME=appDataPath+"/collection.dat"
 STATS_DATA_FILENAME=appDataPath+"/stats.dat"
 LAST_VERSION_FILENAME=appDataPath+"/lastVersion.dat"
+OPTIONS_FILENAME=appDataPath+"/options.dat"
 
 class ssAppMain(window.SingletonWindow):
 	"""
@@ -72,7 +73,7 @@ class ssAppMain(window.SingletonWindow):
 		self.thread_loadSounds.setDaemon(True)
 		self.thread_loadSounds.start()
 		self.options = gameOptions.GameOptions()
-		self.options.initialize("data/options.dat")
+		self.options.initialize(OPTIONS_FILENAME)
 		self.itemVoices=self.getItemVoicesList()
 		self.locales=self.getLocalesList()
 		self.initTranslation()
@@ -465,7 +466,7 @@ class ssAppMain(window.SingletonWindow):
 			# end if
 			if ret>=0:
 				self.say(_("Settings saved"))
-				self.options.save("data/options.dat")
+				self.options.save(OPTIONS_FILENAME)
 				return True
 
 	def optionChange(self,cursor,direction):

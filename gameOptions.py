@@ -45,7 +45,7 @@ class GameOptions:
 			self.setDefault()
 			self.save("data/options.dat")
 			return False
-		with open("data/options.dat", mode='r') as f:
+		with open(filename, mode='r') as f:
 			values=f.read().split("#")
 		# end with
 		numValues=len(values)
