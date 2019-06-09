@@ -1,6 +1,9 @@
 Screaming Strike 2 Changelog
 
-2019/06/08 Version 2.01
+2019/06/09 Version 2.02
+(1) Due to the data location change in the last version, game settings were not saved correctly. This version fix that bug(#7).
+
+2019/06/06 Version 2.01
 From this version, windows version will be distributed as a 32-bit application. Hopefully this solves various issues that prevented the game from running. Please, please do.
 I have completely no idea about this, but apparently the game sometimes refuses to run without giving any errors. If it happens too often, I will think of an alternative solution, so please let me know.
 (1) Fixed a bug which only showed top 10 scores when viewing scoreboards with the built-in viewer(#1).
