@@ -11,3 +11,6 @@ data/lastVersion.dat
 ss.build/
 ss.dist/
 docs/api
+build/
+dist/
+ss.spec
