@@ -47,7 +47,7 @@ copydir=""
 
 if win:
 	cmd="pyinstaller --onefile --windowed %s.py" % (PROJECT)
-	copydir="dist/%s" % PROJECT
+	copydir="dist"
 else:
 	cmd="pyinstaller --windowed --onefile --osx-bundle-identifier com.nyanchanGames.%s %s.py" % (PROJECT_FULL_NAME, PROJECT)
 	copydir="dist/%s.app/Contents/Resources" % PROJECT
