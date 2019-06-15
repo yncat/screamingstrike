@@ -26,6 +26,13 @@ win=True
 if platform.system() == 'Darwin':
 	win=False
 
+#pywin32 rebuilding (Carter)
+genpy_path=os.path.join(os.environ["temp"], "gen_py")
+if os.path.isdir(genpy_path):
+	print("Deleting pywin32 cach...")
+	shutil.rmtree(genpy_path)
+#end rebuilding
+
 print("win=%s, cwd=%s" % (win, os.getcwd()))
 PROJECT = "ss"  # Change this line accordingly
 PROJECT_FULL_NAME="screamingStrike2"
@@ -46,8 +53,8 @@ if "--skip-compile" in sys.argv:
 copydir=""
 
 if win:
-	cmd="pyinstaller --onefile --windowed %s.py" % (PROJECT)
-	copydir="dist"
+	cmd="pyinstaller --windowed %s.py" % (PROJECT)
+	copydir="dist/%s" % PROJECT
 else:
 	cmd="pyinstaller --windowed --onefile --osx-bundle-identifier com.nyanchanGames.%s %s.py" % (PROJECT_FULL_NAME, PROJECT)
 	copydir="dist/%s.app/Contents/Resources" % PROJECT

@@ -44,6 +44,7 @@ class SingletonWindow():
 		pygame.display.update()
 		self.previousKeys=copy(self.keys)
 		self.keys=pygame.key.get_pressed()
+		if self.keyPressed(K_LCTRL): self.sayStop()
 		if self.keyPressing(K_LALT) and self.keyPressed(K_F4): self.exit()
 		for event in pygame.event.get():
 			if event.type == QUIT: self.exit()
@@ -76,7 +77,11 @@ class SingletonWindow():
 
 	def say(self,str):
 		"""tts speech"""
-		self.speech.speak(str)
+		self.speech.speak(str,interrupt=True)
+
+	def sayStop(self):
+		"""stops tts speech"""
+		self.speech.silence()
 
 	def exit(self):
 		"""Attempt to exit the game. It is canceled if the onExit callback is set and it returned False."""
