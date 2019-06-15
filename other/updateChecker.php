@@ -5,7 +5,7 @@ Copyright (C) 2019 Yukio Nozawa <personal@nyanchangames.com>
 License: GPL V2.0 (See ../copying.txt for details)
 */
 
-$latest="2.02";
+$latest="2.03";
 if(isset($_REQUEST["updatecheck"])){
 	if($_REQUEST["platform"]!="Windows" && $_REQUEST["platform"]!="Darwin"){
 		returnError();
