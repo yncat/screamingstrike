@@ -26,11 +26,12 @@ win=True
 if platform.system() == 'Darwin':
 	win=False
 
-#pywin32 rebuilding (Carter)
-genpy_path=os.path.join(os.environ["temp"], "gen_py")
-if os.path.isdir(genpy_path):
-	print("Deleting pywin32 cach...")
-	shutil.rmtree(genpy_path)
+if win:
+	#pywin32 rebuilding (Carter)
+	genpy_path=os.path.join(os.environ["temp"], "gen_py")
+	if os.path.isdir(genpy_path):
+		print("Deleting pywin32 cach...")
+		shutil.rmtree(genpy_path)
 #end rebuilding
 
 print("win=%s, cwd=%s" % (win, os.getcwd()))
@@ -84,6 +85,7 @@ for elem in changelogs:
 
 if win:
 	print("Renaming to play.exe")
+	os.remove(copydir+"/"+PROJECT+".exe.manifest")
 	os.rename(copydir+"/"+PROJECT+".exe",copydir+"/play.exe")
 dopackage()
 print("Done!")
