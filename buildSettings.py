@@ -8,7 +8,7 @@ import scoreViewAdapter
 #	sys.stderr = open('data/stderr.txt', 'w') # uncomment this line when releasing
 
 GAME_NAME="Screaming Strike 2"
-GAME_VERSION=2.02
+GAME_VERSION=2.03
 #Specify the path to the updateChecker.php, leave it blank to disable update checking
 UPDATE_SERVER_ADDRESS=""
 #Specify win and mac installer remote paths, leave them blank to disable

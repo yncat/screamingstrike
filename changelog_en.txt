@@ -1,4 +1,8 @@
 Screaming Strike 2 Changelog
+2019/06/15 Version 2.03
+(1) Changed the Python compiler to use. It should now killed the most irritating bug that prevented the game from running.
+(2) Fixed inconvenience when playing the game using SAPI5. Also, it now supports ctrl key for speech interruption(#8, #11).
+(3) Changed so that the game modes in the log are translated (#9).
 
 2019/06/09 Version 2.02
 (1) Due to the data location change in the last version, game settings were not saved correctly. This version fix that bug(#7).

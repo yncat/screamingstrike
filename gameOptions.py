@@ -43,7 +43,7 @@ class GameOptions:
 	def load(self,filename):
 		if os.path.isfile(filename) is not True:
 			self.setDefault()
-			self.save("data/options.dat")
+			self.save(filename)
 			return False
 		with open(filename, mode='r') as f:
 			values=f.read().split("#")
@@ -64,5 +64,5 @@ class GameOptions:
 
 	def save(self,filename):
 		s="%d#%d#%d#%s#%s" % (self.bgmVolume,self.leftPanningLimit,self.rightPanningLimit,self.itemVoice, self.language)
-		with open("data/options.dat", mode="w") as f:
+		with open(filename, mode="w") as f:
 			f.write(s)

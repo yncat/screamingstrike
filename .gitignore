@@ -7,7 +7,12 @@ data/highscore.dat
 data/stats.dat
 data/errorLog.txt
 data/lastVersion.dat
+data/stderr.txt
+data/errorLog.txt
 *.po~
 ss.build/
 ss.dist/
 docs/api
+build/
+dist/
+ss.spec

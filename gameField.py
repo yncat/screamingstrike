@@ -63,7 +63,7 @@ class GameField():
 	def setModeHandler(self,mode):
 		self.modeHandler=gameModes.getModeHandler(mode)
 		self.modeHandler.initialize(self)
-		self.log(_("Game mode: %(mode)s, high score: %(highscore)d.") % {"mode": self.modeHandler.getName(), "highscore": globalVars.appMain.statsStorage.get("hs_"+self.modeHandler.getName())})
+		self.log(_("Playing: %(mode)s, high score: %(highscore)d.") % {"mode": _(self.modeHandler.getName()+" mode"), "highscore": globalVars.appMain.statsStorage.get("hs_"+self.modeHandler.getName())})
 
 
 	def setLimits(self,lpLimit, rpLimit):

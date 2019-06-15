@@ -24,6 +24,11 @@ class Auto(Output):
 		if output:
 			output.speak(*args, **kwargs)
 
+	def silence(self):
+		output = self.get_first_available_output()
+		if output:
+			if output.silence: output.silence()
+
 	def braille(self, *args, **kwargs):
 		output = self.get_first_available_output()
 		if output:
