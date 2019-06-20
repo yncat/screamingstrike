@@ -115,6 +115,25 @@ class CollectionStorage(object):
 		:rtype: bool
 		"""
 		return self.screams[number] >=UNLOCK_TRIGGER
+
+	def getUnlocked(self):
+		"""Retrieves how many collections have been unlocked.
+
+		:rtype: int
+		"""
+		r=0
+		for i in range(len(self.screams)):
+			if self.isUnlocked(i): r+=1
+		#end count
+		return r
+
+	def getTotal(self):
+		"""Retrieves how many collections are available (regardless of the lock / unlock status) in total.
+
+		:rtype: int
+		"""
+		return len(self.screams)
+
 #end class CollectionHandler
 
 class CollectionCounter(object):

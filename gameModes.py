@@ -34,7 +34,9 @@ class ModeHandlerBase(object):
 		Calculates the number of enemies that should be defeated in this mode. This function implements the default formula. 
 		"""
 		if self.field.level==1: return 2
-		return int(1+(self.field.level*self.field.level*0.25))
+		r=int(1+(self.field.level*self.field.level*0.25))
+		if r>60: r=60
+		return r
 
 	def getName(self):
 		"""
