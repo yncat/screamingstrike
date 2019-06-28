@@ -36,6 +36,7 @@ class Player():
 		self.punchSpeed=DEFAULT_PUNCH_SPEED
 		self.punchRange=DEFAULT_PUNCH_RANGE
 		self.score=0
+		self.score_validator=[]
 		self.punches=0
 		self.hits=0
 		self.hitPercentage=0
@@ -319,6 +320,7 @@ class Player():
 		:type score: int
 		"""
 		self.score+=score
+		self.score_validator.append(score)
 		if self.gotHighscore is False and self.score>=self.lastHighscore: self.processHighscore()
 		which=_("added")
 		if score<=0: which=_("subtracted")
@@ -353,6 +355,7 @@ class Player():
 		#end item effects
 		self.punchTimer.setPaused(p)
 	#end pause
+
 
 # end class Player
 

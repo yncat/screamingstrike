@@ -325,7 +325,7 @@ class ssAppMain(window.SingletonWindow):
 		self.resetMusicPitch()
 		self.reviewCollection(result)
 		self.resultScreen(result)
-		if result.score>0:
+		if result.score>0 and result.validateScore() is True:
 			self.scorePostDialog(result)
 
 	def triggerBeforeStartTips(self,mode):
