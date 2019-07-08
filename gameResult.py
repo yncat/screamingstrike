@@ -18,6 +18,7 @@ class GameResult:
 		:type field: gameField.GameField
 		"""
 		self.score=field.player.score
+		self.score_validator=field.player.score_validator
 		self.hitPercentage=field.player.hitPercentage
 		self.hits=field.player.hits
 		self.punches=field.player.punches
@@ -46,3 +47,10 @@ class GameResult:
 		:type abt: bool
 		"""
 		self.aborted=abt
+
+	def validateScore(self):
+		"""Returns if the score is valid (not modified by memory hacking).
+
+		:rtype: bool
+		"""
+		return self.score==sum(self.score_validator)

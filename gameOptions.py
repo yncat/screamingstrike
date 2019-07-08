@@ -32,6 +32,7 @@ class GameOptions:
 		self.itemVoice="chris"
 		self.language=locale.getdefaultlocale()[0]
 		if self.language is None: self.language="en_US"#OSX may fail to auto language detect when frozen
+		if not os.path.isdir("locale/%s" % self.language): self.language="en_US"#No such locale in the game
 
 	def copyFrom(self,importer):
 		self.bgmVolume=importer.bgmVolume

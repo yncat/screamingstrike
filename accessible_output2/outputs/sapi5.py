@@ -3,8 +3,6 @@ from collections import OrderedDict
 from libloader.com import load_com
 from .base import Output, OutputError
 import pywintypes
-import logging
-log = logging.getLogger(__name__)
 
 SVSFDefault = 0
 SVSFlagsAsync = 1
@@ -49,7 +47,6 @@ class SAPI5(Output):
 		return self.object.Voice.GetDescription()
 
 	def set_voice(self, value):
-		log.debug("Setting SAPI5 voice to \"%s\"" % value)
 		self.object.Voice = self._voices[value]
 		# For some reason SAPI5 does not reset audio after changing the voice
 		# By setting the audio device after changing voices seems to fix this
@@ -61,14 +58,12 @@ class SAPI5(Output):
 		return self._pitch
 
 	def set_pitch(self, value):
-		log.debug("Setting pitch to %d" % value)
 		self._pitch = value
 
 	def get_rate(self):
 		return self.object.Rate
 
 	def set_rate(self, value):
-		log.debug("Setting rate to %d" % value)
 		self.object.Rate = value
 
 	def get_volume(self):

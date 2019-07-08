@@ -194,7 +194,7 @@ class ssAppMain(window.SingletonWindow):
 		m=self.createMenu(_("Main menu. Use your up and down arrows to choose an option, then press enter to confirm"))
 		self.appendUpdateMessage(m)
 		self.appendModeMenus(m)
-		m.append(_("Collection")+"&C")
+		m.append(_("Collection")+" %d/%d &C" % (self.collectionStorage.getUnlocked(), self.collectionStorage.getTotal()))
 		m.append(_("View the scoreboard")+"&v")
 		m.append(_("Read the manual")+"&r")
 		m.append(_("Erase data")+"&E")
@@ -325,7 +325,7 @@ class ssAppMain(window.SingletonWindow):
 		self.resetMusicPitch()
 		self.reviewCollection(result)
 		self.resultScreen(result)
-		if result.score>0:
+		if result.score>0 and result.validateScore() is True:
 			self.scorePostDialog(result)
 
 	def triggerBeforeStartTips(self,mode):
