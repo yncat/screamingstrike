@@ -1,0 +1,40 @@
+﻿Screaming Strike 2 Değişiklikler
+08/07/2019 Sürüm 2.04
+(1) Sistem dili oyun tarafından algılanır ancak oyun tarafından desteklenmezse, oyun çöküyordu. Bu sorunu düzelttim.
+(2) Oyun elle yapılan (bellek hacklama yoluyla gibi) puan değişikliklerini algılıyor. Eğer puanınızın hacklanmış olduğu anlaşılırsa, puan gönderme işlemi atlanıyor. Lütfen yanlış algılama olursa bana söyleyin (böyle olacağını hiç zannetmiyorum).
+(3) 20. Seviye veya civarına geçince, sonraki seviyeye geçiş için yumruklama hedefi çok fazla artıyordu, böyle olmaması için artışı sınırladım.
+(4) Ana menüdeki "kolleksiyon" seçeneği, toplam kolleksiyon sayısını ve bunlardan kaç tanesinin kilidini açtığınızı gösteriyor.
+
+15/06/2019 Sürüm 2.03
+(1) Kullanılacak Python derleyicisi değiştirildi. Bu, oyunun çalışmasını engelleyen en rahatsız edici hatayı çözmüş olmalı.
+(2) Oyun sapi5 ile oynanırken karşılaşılan sıkıntılar düzeltildi. Ayrıca konuşmayı susturmak için kontrol tuşuna basılabiliyor (#8, #11).
+(3) Artık oyun günlüğündeki oyun modu isimleri çevirileriyle gözüküyor (#9).
+
+09/06/2019 Sürüm 2.02
+(1) Son sürümdeki data klasörünün yerinin değişmesinden dolayı, oyun ayarları düzgün kaydedilemiyordu. Bu sürüm bu hatayı düzeltiyor (#7).
+
+06/06/2019 Sürüm 2.01
+Bu sürümdden itibaren, oyunun windows sürümü 32-bit olarak derlenecek. Umarım bu oyunun çalışmasını engelleyen çeşitli sorunları çözer. Lütfen, lütfen bu sorunları çözsün. 
+Bunun hakkında hiçbir fikrim yok ama, oyun bazen hiç hata vermeden kapanıyormuş. Bu çok sık olursa, alternatif bir çözüm düşüneceğim, o yüzden lütfen bana bildirin.
+(1) Oyunun içindeki skorbord görüntüleyicinin sadece en yüksek 10 puanı görüntülemesine neden olan hata düzeltildi (#1).
+(2) Japonca çevirideki bazı yazım hataları düzeltildi (#2).
+(3) Oyuncuların boş adla puan gönderebilmelerini mümkün kılan bir hata düzeltildi (#3).
+(4) Ekstra can bonusundan Japonca ve İngilizce kılavuzlarda bahsetmeyi unutmuşum, ondan bahsettim (#4).
+(5) Delme bonusunun çalışmamasına neden olan bir hata düzeltildi (#5).
+(6) Yüksek skorların sıfırlanması oyunu çökertiyordu. Bu sorunu düzelttim (#6).
+(7) Yeni dil "Türkçe" eklendi. İlk dilin İspanyolca olmasını bekliyordum ama henüz olmadı. Belki birinden çeviri istemeliyim.
+(8) Bazı çığlıklar eklendi/değiştirildi.
+(9) Müziğin bazı ortamlarda garip bir şekilde çaldığını duydum, bu yüzden müziğin çalınma yöntemini değiştirmeyi denedim.
+(10) Oyun sırasında s tuşuna basarak puanınızı öğrenebilirsiniz.
+(11) Müzik kalınlığının değişim hızı azaltıldı.
+(12) Çok çok yavaş düşen bonuslar kaldırıldı. Bu dolaylı olarak kötü etkisi olan bonusların ihtimalinin azalması demek oluyor.
+(13) Yumruğunuzun hızı azalır veya artarsa yumruğunuzun sesi değişiyor.
+(14) İki yeni bonus duyuru sesi eklendi: "Eric the Evil" ve "Sophie".
+(15) Eğer patlama olur ve bu sırada bonuslar düşerse, iyi etkili bonusları almış ve kötü etkili bonusları parçalamış sayılacaksınız. Eğer düşen bonusların içinde patlama bonusu varsa, bu bonusun etkisi sizin tokatlanmak üzere olduğunuz ana kadar ertelenecek. Hmm. Karışık.
+(16) Oyun sırasında tab tuşuna basarak oyunu duraklatabilirsiniz. Oyun duraklamışken istatistiklere de bakabilirsiniz.
+(17) Sonuç ekranında oyun süresi ve ulaştığınız seviye hakkında bilgi edinebilirsiniz.
+(18) Eğer oyun bir nedenden dolayı çökerse, çıkmadan önce bir iletişim kutusu gösteriyor. Bunu nasıl yapacağımı bilmiyordum; birisi bana öğretti. Teşekkürler.
+(19) Mac kullanıcılarının oyunu her güncellediklerinde veri kaybına uğradığını fark ettim. Bu yüzden verinin kaydedildiği konumu değiştirdim. Uyumluluk kontrolü windows için mümkün, ancak bu mac için mümkün değil çünkü uygulamayı güncellemek için bütün uygulamanın değiştirilmesi gerekiyor. Lütfen ya bu kaybı kabul edin, ya da terminali kullanarak klasörü screamingStrike2.app/Content/Resources/data olarak ayarlayın ve verinizi kurtarmak için
+mkdir "/Users/yourusername/Library/Application Support"
+cp *.dat "/Users/yourusername/Library/Application Support"
+şeklinde komut verin.
