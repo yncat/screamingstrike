@@ -1,4 +1,7 @@
 Screaming Strike 2 Changelog
+2019/08/07 Version 2.05
+(1) Fixed a bug which made the game crash when you got too many duplicate boosts (#13).
+
 2019/07/08 Version 2.04
 (1) If it succeeded in retrieving language from the system and the retrieved language does not exist in the game, the game was crashing. I have fixed the issue.
 (2) The game now detects illegal score modification like memory hacking. If your final score is detected as "hacked", the score posting process will entirely be skipped. Please report me if it is falsely detected(I highly doubt it though).
