@@ -1,4 +1,6 @@
 ﻿Screaming Strike 2 Değişiklikler
+07/08/2019 Sürüm 2.05
+(1) Çok sayıda katlanan boost bonusu alındığında oyunun çökmesine sebep olan bir hatayı düzelttim (#13).
 08/07/2019 Sürüm 2.04
 (1) Sistem dili oyun tarafından algılanır ancak oyun tarafından desteklenmezse, oyun çöküyordu. Bu sorunu düzelttim.
 (2) Oyun elle yapılan (bellek hacklama yoluyla gibi) puan değişikliklerini algılıyor. Eğer puanınızın hacklanmış olduğu anlaşılırsa, puan gönderme işlemi atlanıyor. Lütfen yanlış algılama olursa bana söyleyin (böyle olacağını hiç zannetmiyorum).
