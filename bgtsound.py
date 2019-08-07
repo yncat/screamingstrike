@@ -84,6 +84,7 @@ class sound():
 
 	@pitch.setter
 	def pitch(self, value):
+		if value>400: value=400
 		if not self.handle:
 			return False
 		self.handle.set_frequency((float(value)/100)*self.freq)
