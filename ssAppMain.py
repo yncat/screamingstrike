@@ -575,7 +575,7 @@ class ssAppMain(window.SingletonWindow):
 		s.pitch=random.randint(70,130)
 		s.play()
 		self.wait(800)
-		with open("result.txt", mode='a') as f:
+		with open("result.txt", mode='a', encoding='utf-8') as f:
 			f.write(field.exportLog())
 		r=gameResult.GameResult()
 		r.initialize(field)
