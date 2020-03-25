@@ -118,6 +118,7 @@ class GameField():
 		return self.logs
 
 	def exportLog(self):
+		self.logs.append("")
 		return "\n".join(self.logs)
 
 	def levelup(self):
