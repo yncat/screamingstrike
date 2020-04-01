@@ -22,10 +22,8 @@ python build\gendoc.py
 to generate the API document.  
 
 ## Building
-The game uses Nuitka for building on windows.  
-pip install nuitka  
-In order to compile with Nuitka, you need minGW64.  
-Please refer to http://nuitka.net/doc/user-manual.html  
+The game uses pyinstaller for building.  
+pip install pyinstaller  
 For automated packaging, WinRAR must be installed and WinRAR.exe must be accessible from the environment variable path.  
 On mac OSX, you just need pyinstaller.  
 pip install pyinstaller  
