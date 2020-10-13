@@ -3,6 +3,7 @@
 I decided to opensource this.  
 
 ## Dependencies  
+You must use Python 3.7.x to run /  build this game. 3.8.x breaks some of the dependencies, so it's currently not supported.  
 You need pygame and wx.  
 pip install pygame  
 pip install wx  
