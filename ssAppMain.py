@@ -27,6 +27,7 @@ import stats
 import updateClient
 import window
 import dialog
+import pygame.midi
 
 platform_utils.paths.prepare_app_data_path(buildSettings.GAME_NAME)
 appDataPath=platform_utils.paths.app_data_path(buildSettings.GAME_NAME)
@@ -77,6 +78,9 @@ class ssAppMain(window.SingletonWindow):
 		self.itemVoices=self.getItemVoicesList()
 		self.locales=self.getLocalesList()
 		self.initTranslation()
+		pygame.midi.init()
+		input_id = pygame.midi.get_default_input_id()
+		self.midi_in = pygame.midi.Input(input_id)
 		self.music = bgtsound.sound()
 		self.musicData=sound_lib.sample.Sample("data/sounds/stream//bg.ogg")
 		self.music.load(self.musicData)
@@ -134,6 +138,13 @@ class ssAppMain(window.SingletonWindow):
 		for elem in files:
 			self.sounds[os.path.basename(elem)]=sound_lib.sample.Sample(elem)
 	# end loadSounds
+
+	def drumBeat(self):
+		if self.midi_in.poll():
+			midi_events = self.midi_in.read(10)
+			return midi_events[0][0][1]
+		else:
+			return 0
 
 	def getNumScreams(self):
 		"""

@@ -56,6 +56,22 @@ class Player():
 		"""Call this method once per frame to keep everything updated."""
 		self.consecutiveHitBonus.frameUpdate()
 		self.consecutiveMissUnbonus.frameUpdate()
+		db = globalVars.appMain.drumBeat()
+		if db==38:
+			self.punches+=1
+			self.x=0
+			
+			self.punchHit()
+		if db==45 or db==48:
+			self.punches += 1
+			self.x=1
+			self.punchHit()
+		if db==43:
+			self.punches += 1
+			self.x=2
+			self.punchHit()
+
+
 		if self.punching is False and globalVars.appMain.keyPressed(window.K_SPACE): self.punchLaunch()
 		if self.punching is True and self.punchTimer.elapsed>=self.punchSpeed: self.punchHit()
 		if self.x!=0 and globalVars.appMain.keyPressed(window.K_LEFT): self.moveTo(self.x-1)
@@ -74,6 +90,14 @@ class Player():
 		s.pitch=int(DEFAULT_PUNCH_SPEED/self.punchSpeed*100)+random.randint(-10,10)
 		s.play()
 		self.punchTimer.restart()
+
+	def punchsound(self):
+		s=bgtsound.sound()
+		s.load(globalVars.appMain.sounds["fists.ogg"])
+		s.pan=self.field.getPan(self.x)
+		s.pitch=int(DEFAULT_PUNCH_SPEED/self.punchSpeed*100)+random.randint(-10,10)
+		s.play()
+
 
 	def punchHit(self):
 		"""Process punch hits. Called from frameUpdate as it is needed."""
@@ -116,6 +140,7 @@ class Player():
 	def punchMiss(self):
 		"""Processes punch miss. Called from punchHit."""
 		self.consecutiveMisses+=1
+		self.punchsound()
 		if self.hits>0: self.calcHitPercentage()
 		self.processConsecutiveHits()
 
