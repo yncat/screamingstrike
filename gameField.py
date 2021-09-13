@@ -17,13 +17,6 @@ import player
 import window
 
 class GameField():
-	def __init__(self):
-		pass
-	def __del__(self):
-		self.Enemies=None
-		self.player=None
-		self.collectionCounter=None
-
 	def initialize(self, x,y,mode, voice,easter=False):
 		self.gameTimer=window.Timer()
 		self.paused=False

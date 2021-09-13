@@ -16,10 +16,6 @@ DEFAULT_PUNCH_SPEED = 200
 
 class Player():
 	"""This class represents a player."""
-	def __init__(self):
-		pass
-	def __del__(self):
-		pass
 	def initialize(self,field):
 		"""Initializes this player.
 
@@ -30,7 +26,6 @@ class Player():
 		self.field=field
 		self.lives=3
 		self.x=field.getCenterPosition()
-		self.punchTimer=window.Timer()
 		self.punchTimer=window.Timer()
 		self.punching=False
 		self.punchSpeed=DEFAULT_PUNCH_SPEED
@@ -61,7 +56,7 @@ class Player():
 		if self.x!=0 and globalVars.appMain.keyPressed(window.K_LEFT): self.moveTo(self.x-1)
 		if self.x!=self.field.getX()-1 and globalVars.appMain.keyPressed(window.K_RIGHT): self.moveTo(self.x+1)
 		for elem in self.itemEffects[:]:
-			if not elem.frameUpdate(): self.itemEffects.remove(elem)
+			if not elem.frameUpdate(self.field.modeHandler): self.itemEffects.remove(elem)
 
 	def punchLaunch(self):
 		"""Launches a punch. If this player is already punching, this method does nothing. """
@@ -161,19 +156,19 @@ class Player():
 		if it.identifier==itemConstants.NASTY_SHRINK:
 			e=itemEffects.ShrinkEffect()
 			e.initialize(self)
-			e.activate()
+			e.activate(self.field.modeHandler)
 			self.itemEffects.append(e)
 			return
 		if it.identifier==itemConstants.NASTY_BLURRED:
 			e=itemEffects.BlurredEffect()
 			e.initialize(self)
-			e.activate()
+			e.activate(self.field.modeHandler)
 			self.itemEffects.append(e)
 			return
 		if it.identifier==itemConstants.NASTY_SLOWDOWN:
 			e=itemEffects.SlowDownEffect()
 			e.initialize(self)
-			e.activate()
+			e.activate(self.field.modeHandler)
 			self.itemEffects.append(e)
 			return
 
@@ -189,7 +184,7 @@ class Player():
 			if existing is None:
 				e=itemEffects.MegatonPunchEffect()
 				e.initialize(self)
-				e.activate()
+				e.activate(self.field.modeHandler)
 				self.itemEffects.append(e)
 			else:
 				existing.extend(itemConstants.BASE_EFFECT_TIME)
@@ -197,7 +192,7 @@ class Player():
 		if it.identifier==itemConstants.GOOD_BOOST:
 			e=itemEffects.BoostEffect()
 			e.initialize(self)
-			e.activate()
+			e.activate(self.field.modeHandler)
 			self.itemEffects.append(e)
 			return
 		if it.identifier==itemConstants.GOOD_PENETRATION:
@@ -205,7 +200,7 @@ class Player():
 			if existing is None:
 				e=itemEffects.PenetrationEffect()
 				e.initialize(self)
-				e.activate()
+				e.activate(self.field.modeHandler)
 				self.itemEffects.append(e)
 			else:
 				existing.extend(itemConstants.BASE_EFFECT_TIME)
