@@ -44,9 +44,6 @@ class ssAppMain(window.SingletonWindow):
 	def __init__(self):
 		super().__init__()
 
-	def __del__(self):
-		super().__del__()
-
 	def initialize(self):
 		"""
 		Initializes the app. returns True on success or False on failure.
@@ -183,6 +180,7 @@ class ssAppMain(window.SingletonWindow):
 		m.append(_("Normal mode")+"&1")
 		m.append(_("Arcade mode")+"&2")
 		m.append(_("Classic mode")+"&3")
+		m.append(_("Burden mode")+"&3")
 
 	def mainmenu(self):
 		"""
@@ -255,25 +253,25 @@ class ssAppMain(window.SingletonWindow):
 		self.checkChangeLog()
 		while(True):
 			selected=self.mainmenu()
-			if selected is False or selected==9: self.exit()
+			if selected is False or selected==10: self.exit()
 			if selected==0:
 				if self.updateChecker.getLastResult()==updateClient.RET_NEW_VERSION_AVAILABLE: self.downloadUpdate()
 				continue
 			#end the update notification area
-			if selected==4:
+			if selected==5:
 				self.collectionDialog()
 				continue
-			if selected==5:
+			if selected==6:
 				self.viewScoreboard()
 				continue
-			if selected==6:
+			if selected==7:
 				self.displayManual()
 				continue
-			if selected==7:
+			if selected==8:
 				self.eraseDataDialog()
 				continue
 			#end erase data
-			if selected==8:
+			if selected==9:
 				self.optionsDialog()
 				continue
 			#end options
@@ -343,6 +341,8 @@ class ssAppMain(window.SingletonWindow):
 				self.showTip(_("This is the new arcade mode of %(gamename)s! From the new version, items that fall faster are more likely to be good, and slower ones are more likely to be bad. You can obtain an item by punching it, or destroy it by combining your up arrow when punching. Carefully choose which item to obtain!") % {"gamename": buildSettings.GAME_NAME})
 			elif mode==gameModes.ALL_MODES_STR[2]:
 				self.showTip(_("This is the old-fashioned game mode! You don't get bonuses based on accuracy, so you can punch, punch, punch punch punch and punch! This mode has a sharper levelup curb, meaning that you can collect screams really fast!"))
+			elif mode==gameModes.ALL_MODES_STR[3]:
+				self.showTip(_("Welcome to this new and exciting burden mode! In this mode, the more you torture yourself, the more point boost you get!"))
 
 	def showTip(self,tip):
 		"""Shows the ingame tip.

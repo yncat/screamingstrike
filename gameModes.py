@@ -10,7 +10,8 @@ import window
 NORMAL=0
 ARCADE=1
 CLASSIC=2
-ALL_MODES_STR = ["Normal", "Arcade", "Classic"]
+BURDEN=3
+ALL_MODES_STR = ["Normal", "Arcade", "Classic", "Burden"]
 
 class ModeHandlerBase(object):
 	def __init__(self):
@@ -19,9 +20,6 @@ class ModeHandlerBase(object):
 		self.allowLevelupBonus=True
 		self.name="Base"
 		self.paused=False
-
-	def __del__(self):
-		self.field=None
 
 	def initialize(self,field):
 		self.field=field
@@ -37,6 +35,22 @@ class ModeHandlerBase(object):
 		r=int(1+(self.field.level*self.field.level*0.25))
 		if r>60: r=60
 		return r
+
+	def getShrinkMultiplier(self):
+		"""
+			Defines the multiplier amount of the shrink item effect in this mode, Default is 0.5 (half length).
+
+			:rtype multiplier: float
+		"""
+		return 0.5
+
+	def getSlowDownMultiplier(self):
+		"""
+			Defines the multiplier amount of the slow down item effect in this mode, Default is 2.0 (2x motion time).
+
+			:rtype multiplier: float
+		"""
+		return 2.0
 
 	def getName(self):
 		"""
@@ -122,6 +136,62 @@ class ClassicModeHandler(ModeHandlerBase):
 		"""
 		return int((2+self.field.level)*0.7)
 
+class BurdenModeHandler(ModeHandlerBase):
+	def __init__(self):
+		super().__init__()
+		self.name=ALL_MODES_STR[3]
+
+	def initialize(self,field):
+		super().initialize(field)
+		self.itemComingTimer=window.Timer()
+		self.resetItemComingTimer()
+		self.itemShowerTimer=window.Timer()
+		self.resetItemShower()
+
+	def getShrinkMultiplier(self):
+		return 0.75
+
+	def getSlowDownMultiplier(self):
+		return 1.5
+
+	def frameUpdate(self):
+		if self.itemShowerTimer.elapsed>=self.itemShowerTime: self.triggerItemShower()
+		if self.itemComingTimer.elapsed>=self.itemComingTime: self.spawnItem()
+
+	def setPaused(self,p):
+		if p==self.paused: return
+		self.paused=p
+		self.itemComingTimer.setPaused(p)
+		self.itemShowerTimer.setPaused(p)
+	#end setPaused
+
+	def triggerItemShower(self):
+		self.spawnItem()
+		self.itemShowerCount-=1
+		if self.itemShowerCount==0:
+			self.resetItemShower()
+		else:
+			self.itemShowerTime=150
+			self.itemShowerTimer.restart()
+
+	def resetItemShower(self):
+		self.itemShowerTime=random.randint(70000,150000)
+		self.itemShowerCount=random.randint(3,6)
+
+	def spawnItem(self):
+		spd=random.randint(100,800)
+		t=itemConstants.TYPE_NASTY
+		ident=random.randint(0,itemConstants.NASTY_MAX)
+		i=item.Item()
+		i.initialize(self.field,random.randint(0,self.field.x-1),spd,t,ident)
+		self.field.items.append(i)
+		self.resetItemComingTimer()
+
+	def resetItemComingTimer(self):
+		self.itemComingTimer.restart()
+		self.itemComingTime=random.randint(0,60000)
+
+
 def getModeHandler(mode):
 	"""Receives a mode in string and returns the associated modeHandler object without initializing it.
 
@@ -131,4 +201,5 @@ def getModeHandler(mode):
 	if mode==ALL_MODES_STR[0]: return NormalModeHandler()
 	if mode==ALL_MODES_STR[1]: return ArcadeModeHandler()
 	if mode==ALL_MODES_STR[2]: return ClassicModeHandler()
+	if mode==ALL_MODES_STR[3]: return BurdenModeHandler()
 	return None

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Screaming Strike statisticks manager
+# Screaming Strike statistics manager
 # Copyright (C) 2019 Yukio Nozawa <personal@nyanchangames.com>
 # License: GPL V2.0 (See copying.txt for details)
 """This module contains StatsStorage class, which can store high scores and other statisticks about the game."""
