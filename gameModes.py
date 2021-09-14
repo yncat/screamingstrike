@@ -40,7 +40,17 @@ class ModeHandlerBase(object):
 
 	def calculateEnemyDefeatScore(self,speed,y):
 		"""Calculates score by enemy defeat. Since the object references are not organized, I just give up on refactoring it and gather information in a dirty way, if needed. Receives speed and y coors from the defeated enemy."""
-		return (1000-speed)*(y+1)*(0.5+(0.5*self.field.level))*0.1
+		score = (1000-speed)*(y+1)*(0.5+(0.5*self.field.level))*0.1
+		if self.field.player.penetrate: score=score*2.0
+		return score
+
+	def getDefeatMessage(self,speed,y):
+		"""Generates log message for enemy defeat."""
+		if self.field.player.penetrate:
+			return _("Hit! (speed %(speed)d, distance %(distance)d, penetration bonus added)") % {"speed": 900-self.speed, "distance": self.y}
+		else:
+			_("Hit! (speed %(speed)d, distance %(distance)d)") % {"speed": 900-self.speed, "distance": self.y}
+		# end penetration bonus?
 
 	def getShrinkMultiplier(self):
 		"""
@@ -176,6 +186,9 @@ class BurdenModeHandler(ModeHandlerBase):
 		"""Uses completely different formula for burden mode."""
 		return math.pow(1.25,len(self.field.player.itemEffects))*(1000-speed)*math.pow(self.field.level,2)/5
 
+	def getDefeatMessage(self, speed, y):
+		return _("Hit! (speed %(speed)d, burden %(burden)d)") % {"speed": 900-speed, "burden": len(self.field.player.itemEffects)}
+
 	def getShrinkMultiplier(self):
 		return 0.75
 
@@ -186,7 +199,6 @@ class BurdenModeHandler(ModeHandlerBase):
 		for elem in self.bonusCounters[:]:
 			if not elem.active:
 				self.bonusCounters.remove(elem)
-				print(len(self.bonusCounters))
 				continue
 			# end cleanup
 			elem.frameUpdate()

@@ -108,12 +108,7 @@ class Enemy():
 		self.field.collectionCounter.increment(self.screamNum)
 		self.switchState(STATE_SCREAMING)
 		score=self.field.modeHandler.calculateEnemyDefeatScore(self.speed,self.y)
-		if self.field.player.penetrate:
-			score=score*2.0
-			s=(_("Hit! (speed %(speed)d, distance %(distance)d, penetration bonus added)") % {"speed": 900-self.speed, "distance": self.y})
-		else:
-			s=(_("Hit! (speed %(speed)d, distance %(distance)d)") % {"speed": 900-self.speed, "distance": self.y})
-		#end penetrate bonus
+		s = self.field.modeHandler.getDefeatMessage(self.speed,self.y)
 		if self.field.easter: s=s.replace("Hit!","I punched a monkey!")
 		self.field.log(s)
 		self.field.player.addScore(score)
