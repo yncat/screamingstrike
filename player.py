@@ -78,6 +78,7 @@ class Player():
 			for elem in self.field.enemies:
 				if elem is not None and elem.state==enemy.STATE_ALIVE and self.x==elem.x and elem.y==pos:
 					elem.hit()
+					self.field.modeHandler.onEnemyDefeated()
 					hit+=1
 					self.hits+=1
 					self.consecutiveHits+=1

@@ -3,6 +3,7 @@
 # Copyright (C) 2019 Yukio Nozawa <personal@nyanchangames.com>
 # License: GPL V2.0 (See copying.txt for details)
 import random
+import bonusCounter
 import item
 import itemConstants
 import window
@@ -51,6 +52,10 @@ class ModeHandlerBase(object):
 			:rtype multiplier: float
 		"""
 		return 2.0
+
+	def onEnemyDefeated(self):
+		"""Called when the player defeated an enemy."""
+		pass
 
 	def onItemObtained(self):
 		"""Called when the player got an item."""
@@ -153,6 +158,7 @@ class BurdenModeHandler(ModeHandlerBase):
 	def __init__(self):
 		super().__init__()
 		self.name=ALL_MODES_STR[3]
+		self.bonusCounters=[]
 
 	def initialize(self,field):
 		super().initialize(field)
@@ -168,6 +174,14 @@ class BurdenModeHandler(ModeHandlerBase):
 		return 1.5
 
 	def frameUpdate(self):
+		for elem in self.bonusCounters[:]:
+			if not elem.active:
+				self.bonusCounters.remove(elem)
+				print(len(self.bonusCounters))
+				continue
+			# end cleanup
+			elem.frameUpdate()
+		# end update bonus counters
 		if self.itemShowerTimer.elapsed>=self.itemShowerTime: self.triggerItemShower()
 		if self.itemComingTimer.elapsed>=self.itemComingTime:
 			self.spawnItem()
@@ -214,8 +228,18 @@ class BurdenModeHandler(ModeHandlerBase):
 		self.itemComingTimer.restart()
 		self.itemComingTime=random.randint(0,60000)
 
+	def onEnemyDefeated(self):
+		effects = len(self.field.player.itemEffects)
+		if effects>0:
+			bc = bonusCounter.BonusCounter()
+			bc.initialize()
+			bc.start(effects)
+			self.bonusCounters.append(bc)
+		# end append bonus counter
+
 	def onItemObtained(self):
 		self.spawnItem()
+
 
 def getModeHandler(mode):
 	"""Receives a mode in string and returns the associated modeHandler object without initializing it.
