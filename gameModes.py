@@ -47,9 +47,9 @@ class ModeHandlerBase(object):
 	def getDefeatMessage(self,speed,y):
 		"""Generates log message for enemy defeat."""
 		if self.field.player.penetrate:
-			return _("Hit! (speed %(speed)d, distance %(distance)d, penetration bonus added)") % {"speed": 900-self.speed, "distance": self.y}
+			return _("Hit! (speed %(speed)d, distance %(distance)d, penetration bonus added)") % {"speed": 900-speed, "distance": y}
 		else:
-			_("Hit! (speed %(speed)d, distance %(distance)d)") % {"speed": 900-self.speed, "distance": self.y}
+			return _("Hit! (speed %(speed)d, distance %(distance)d)") % {"speed": 900-speed, "distance": y}
 		# end penetration bonus?
 
 	def getShrinkMultiplier(self):
