@@ -52,6 +52,10 @@ class ModeHandlerBase(object):
 		"""
 		return 2.0
 
+	def onItemObtained(self):
+		"""Called when the player got an item."""
+		pass
+
 	def getName(self):
 		"""
 		Retrieves the name of this mode. Normal, arcade or classic. There may be more future modes.
@@ -165,7 +169,9 @@ class BurdenModeHandler(ModeHandlerBase):
 
 	def frameUpdate(self):
 		if self.itemShowerTimer.elapsed>=self.itemShowerTime: self.triggerItemShower()
-		if self.itemComingTimer.elapsed>=self.itemComingTime: self.spawnItem()
+		if self.itemComingTimer.elapsed>=self.itemComingTime:
+			self.spawnItem()
+			self.resetItemComingTimer()
 
 	def setPaused(self,p):
 		if p==self.paused: return
@@ -194,7 +200,6 @@ class BurdenModeHandler(ModeHandlerBase):
 		i=item.Item()
 		i.initialize(self.field,random.randint(0,self.field.x-1),spd,t,ident)
 		self.field.items.append(i)
-		self.resetItemComingTimer()
 
 	def selectNastyItem(self):
 		"""Prevents shrink from appearing when the player already has 3 shrink effects."""
@@ -209,6 +214,8 @@ class BurdenModeHandler(ModeHandlerBase):
 		self.itemComingTimer.restart()
 		self.itemComingTime=random.randint(0,60000)
 
+	def onItemObtained(self):
+		self.spawnItem()
 
 def getModeHandler(mode):
 	"""Receives a mode in string and returns the associated modeHandler object without initializing it.

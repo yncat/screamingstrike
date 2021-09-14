@@ -94,6 +94,7 @@ class Player():
 						elem.punch()
 					else:
 						elem.obtain()
+						self.field.modeHandler.onItemObtained()
 						self.processItemHit(elem)
 					#end item hit
 					hit=True
