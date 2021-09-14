@@ -172,6 +172,10 @@ class ClassicModeHandler(ModeHandlerBase):
 class BurdenModeHandler(ModeHandlerBase):
 	def __init__(self):
 		super().__init__()
+		#disable bonuses
+		self.allowConsecutiveHitsBonus=False
+		self.allowConsecutiveMissesBonus=False
+		self.allowLevelupBonus=False
 		self.name=ALL_MODES_STR[3]
 		self.bonusCounters=[]
 
