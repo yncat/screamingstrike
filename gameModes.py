@@ -2,6 +2,7 @@
 # Screaming Strike game mode handlers
 # Copyright (C) 2019 Yukio Nozawa <personal@nyanchangames.com>
 # License: GPL V2.0 (See copying.txt for details)
+import math
 import random
 import bonusCounter
 import item
@@ -36,6 +37,10 @@ class ModeHandlerBase(object):
 		r=int(1+(self.field.level*self.field.level*0.25))
 		if r>60: r=60
 		return r
+
+	def calculateEnemyDefeatScore(self,speed,y):
+		"""Calculates score by enemy defeat. Since the object references are not organized, I just give up on refactoring it and gather information in a dirty way, if needed. Receives speed and y coors from the defeated enemy."""
+		return (1000-speed)*(y+1)*(0.5+(0.5*self.field.level))*0.1
 
 	def getShrinkMultiplier(self):
 		"""
@@ -166,6 +171,10 @@ class BurdenModeHandler(ModeHandlerBase):
 		self.resetItemComingTimer()
 		self.itemShowerTimer=window.Timer()
 		self.resetItemShower()
+
+	def calculateEnemyDefeatScore(self,speed,y):
+		"""Uses completely different formula for burden mode."""
+		return math.pow(1.25,len(self.field.player.itemEffects))*(1000-speed)*math.pow(self.field.level,2)/5
 
 	def getShrinkMultiplier(self):
 		return 0.75

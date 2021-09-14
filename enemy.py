@@ -107,7 +107,7 @@ class Enemy():
 		self.playScream()
 		self.field.collectionCounter.increment(self.screamNum)
 		self.switchState(STATE_SCREAMING)
-		score=(1000-self.speed)*(self.y+1)*(0.5+(0.5*self.field.level))*0.1
+		score=self.field.modeHandler.calculateEnemyDefeatScore(self.speed,self.y)
 		if self.field.player.penetrate:
 			score=score*2.0
 			s=(_("Hit! (speed %(speed)d, distance %(distance)d, penetration bonus added)") % {"speed": 900-self.speed, "distance": self.y})
