@@ -111,11 +111,20 @@ class ArcadeModeHandler(ModeHandlerBase):
 	def spawnItem(self):
 		spd=random.randint(100,800)
 		t=itemConstants.TYPE_NASTY if random.randint(1,100)<=spd/10 else itemConstants.TYPE_GOOD
-		ident=random.randint(0,itemConstants.NASTY_MAX) if t==item.TYPE_NASTY else random.randint(0,item.GOOD_MAX)
+		ident = self.selectNastyItem() if t==item.TYPE_NASTY else random.randint(0,item.GOOD_MAX)
 		i=item.Item()
 		i.initialize(self.field,random.randint(0,self.field.x-1),spd,t,ident)
 		self.field.items.append(i)
 		self.resetItemComingTimer()
+
+	def selectNastyItem(self):
+		"""Prevents shrink from appearing when the player already has 2 shrink effects."""
+		shrinks = len([e for e in self.field.player.itemEffects if e.name == itemConstants.NAMES[itemConstants.TYPE_NASTY][itemConstants.NASTY_SHRINK]])
+		while(True):
+			ret = random.randint(0,itemConstants.NASTY_MAX)
+			if ret == itemConstants.NASTY_SHRINK and shrinks==2: continue
+			break
+		return ret
 
 	def resetItemComingTimer(self):
 		self.itemComingTimer.restart()
