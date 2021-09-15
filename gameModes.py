@@ -191,7 +191,8 @@ class BurdenModeHandler(ModeHandlerBase):
 		return math.pow(1.45+(self.field.level*0.05),len(self.field.player.itemEffects))*(1000-speed)*math.pow(self.field.level,2)/5
 
 	def getDefeatMessage(self, speed, y):
-		return _("Hit! (speed %(speed)d, burden %(burden)d)") % {"speed": 900-speed, "burden": len(self.field.player.itemEffects)}
+		boost = "%.1f" % math.pow(1.45+(self.field.level*0.05),len(self.field.player.itemEffects))
+		return _("Hit! (speed %(speed)d, burden %(burden)d, %(boost)sx boost)") % {"speed": 900-speed, "burden": len(self.field.player.itemEffects), "boost": boost}
 
 	def getShrinkMultiplier(self):
 		return 0.75
