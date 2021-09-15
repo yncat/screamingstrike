@@ -8,15 +8,12 @@ import globalVars
 import window
 
 class BonusCounter():
-	def __init__(self):
-		pass
-	def __del__(self):
-		pass
 	def initialize(self):
 		self.active=False
 		self.countTimer=window.Timer()
 		self.number=0
 		self.current=0
+
 	def start(self,number):
 		if number==0: return
 		self.number=number
@@ -24,8 +21,10 @@ class BonusCounter():
 		self.countTimer.restart()
 		self.active=True
 		self.count()
+
 	def frameUpdate(self):
 		if self.active is True and self.countTimer.elapsed>=self.nextCountTime: self.count()
+
 	def count(self):
 		s=bgtsound.sound()
 

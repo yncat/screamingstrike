@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: screamingStrike\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-15 18:32+0900\n"
+"POT-Creation-Date: 2021-09-16 00:27+0900\n"
 "PO-Revision-Date: 2019-06-15 18:35+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.2.3\n"
 
-#: collection.py:185
+#: collection.py:204
 msgid ""
 "Use your left and right arrows to brows your collections, then press enter "
 "to make your unlocked one scream. You can move through your unlocked items "
@@ -28,52 +28,40 @@ msgstr ""
 "sağ oklarla dolaşabilirsiniz. Kalınlığı değiştirmek için yukarı veya aşağı "
 "oku basılı tutun. Çıkmak için escape'e basın."
 
-#: collection.py:228
+#: collection.py:247
 msgid "Unlocked"
 msgstr "Kilidi açılmış"
 
-#: collection.py:231
+#: collection.py:250
 msgid "Locked"
 msgstr "Kilitli"
 
-#: collection.py:233
+#: collection.py:252
 #, python-format
 msgid "No.%(no)d, %(status)s, %(plays)d"
 msgstr "No.%(no)d, %(status)s, %(plays)d"
 
-#: enemy.py:113
-#, python-format
-msgid "Hit! (speed %(speed)d, distance %(distance)d, penetration bonus added)"
-msgstr ""
-"İsabet! (Hız (%(speed)d, mesafe %(distance)d, aynı anda yumruk bonusuyla "
-"beraber)"
-
-#: enemy.py:115
-#, python-format
-msgid "Hit! (speed %(speed)d, distance %(distance)d)"
-msgstr "İsabet! (Hız (%(speed)d, mesafe %(distance)d)"
-
-#: gameField.py:32
+#: gameField.py:25
 #, python-format
 msgid "Game started at %(startedtime)s!"
 msgstr "Oyun %(startedtime)s zamanında başladı!"
 
-#: gameField.py:66
+#: gameField.py:59
 #, fuzzy, python-format
 msgid "Playing: %(mode)s, high score: %(highscore)d."
 msgstr "Oyun modu: %(mode)s, en yüksek puan: %(highscore)d."
 
-#: gameField.py:66
+#: gameField.py:59
 #, fuzzy
 msgid " mode"
 msgstr "Normal mod"
 
-#: gameField.py:87
+#: gameField.py:80
 #, python-format
 msgid "Game over! Final score: %(score)d"
 msgstr "Oyun bitti! Puanınız: %(score)d"
 
-#: gameField.py:124
+#: gameField.py:118
 #, python-format
 msgid ""
 "Leveled up to %(newlevel)d! (Accuracy %(accuracy).1f%%, with %(lives)d hp "
@@ -81,35 +69,52 @@ msgid ""
 msgstr ""
 "Seviye %(newlevel)d! (İsabet oranı %(accuracy).1f%%, %(lives)d can ile)"
 
-#: gameField.py:159
+#: gameField.py:153
 msgid "Game aborted."
 msgstr "Oyun iptal edildi."
 
-#: gameField.py:175
+#: gameField.py:169
 msgid "Activating destruction!"
 msgstr "Patlama etkin!"
 
-#: gameField.py:186
+#: gameField.py:180
 msgid "End destruction!"
 msgstr "Patlama sona erdi!"
 
-#: gameResult.py:33
+#: gameModes.py:50
+#, python-format
+msgid "Hit! (speed %(speed)d, distance %(distance)d, penetration bonus added)"
+msgstr ""
+"İsabet! (Hız (%(speed)d, mesafe %(distance)d, aynı anda yumruk bonusuyla "
+"beraber)"
+
+#: gameModes.py:52
+#, python-format
+msgid "Hit! (speed %(speed)d, distance %(distance)d)"
+msgstr "İsabet! (Hız (%(speed)d, mesafe %(distance)d)"
+
+#: gameModes.py:195
+#, fuzzy, python-format
+msgid "Hit! (speed %(speed)d, burden %(burden)d, %(boost)sx boost)"
+msgstr "İsabet! (Hız (%(speed)d, mesafe %(distance)d)"
+
+#: gameResult.py:34
 msgid "minute"
 msgstr "Dakika"
 
-#: gameResult.py:33
+#: gameResult.py:34
 msgid "minutes"
 msgstr "Dakika"
 
-#: gameResult.py:34
+#: gameResult.py:35
 msgid "second"
 msgstr "Saniye"
 
-#: gameResult.py:34
+#: gameResult.py:35
 msgid "seconds"
 msgstr "Saniye"
 
-#: gameResult.py:35
+#: gameResult.py:36
 #, python-format
 msgid "%(min)d %(minunit)s and %(sec)d %(secunit)s"
 msgstr "%(min)d %(minunit)s ve %(sec)d %(secunit)s"
@@ -129,17 +134,17 @@ msgstr "\"%(item)s\" bonusu aldınız!"
 msgid "A \"%(item)s\" item was shattered into peaces!"
 msgstr "\"%(item)s\" bonusu parçalandı!"
 
-#: itemEffects.py:36
+#: itemEffects.py:33
 #, python-format
 msgid "A new \"%(item)s\" effect is starting!"
 msgstr "Yeni \"%(item)s\" bonusunun etkisi başlıyor!"
 
-#: itemEffects.py:43
+#: itemEffects.py:40
 #, python-format
 msgid "One of your \"%(item)s\" effects is ending!"
 msgstr "\"%(item)s\" bonuslarınızdan birinin etkisi sona eriyor!"
 
-#: itemEffects.py:51
+#: itemEffects.py:48
 #, python-format
 msgid ""
 "Your \"%(item)s\" effect has been extended for %(extended)d milliseconds! "
@@ -148,88 +153,93 @@ msgstr ""
 "\"%(item)s\" bonusunuzun süresi %(extended)d milisaniye uzadı! Toplam süresi "
 "%(newtime)d oldu"
 
-#: itemEffects.py:58
+#: itemEffects.py:55
 #, python-format
 msgid "%(name)s: %(sec).2f seconds left"
 msgstr "%(name)s: %(sec).2f saniye kaldı"
 
-#: player.py:125
+#: player.py:123
 #, python-format
 msgid "%(hits)d consecutive hits bonus!"
 msgstr "%(hits)d art arda isabet bonusu!"
 
-#: player.py:135
+#: player.py:133
 #, python-format
 msgid "%(misses)d consecutive misses penalty!"
 msgstr "%(misses)d art arda ıska cezası!"
 
-#: player.py:216
+#: player.py:230
 #, python-format
 msgid "This effect will be used when it's necessary! (Remaining %(r)d)"
 msgstr "Bu etki ihtiyaç olduğunda açığa çıkacak! (Remaining %(r)d)"
 
-#: player.py:220
+#: player.py:234
 #, python-format
 msgid "Extra life! (now %(lives)d lives)"
 msgstr "Ekstra can! (%(lives)d canınız var"
 
-#: player.py:248
+#: player.py:262
 #, python-format
 msgid "The effective range of your Punch is now %(range)d (from %(from)d)"
 msgstr "Yumruk mesafeniz %(from)d idi, %(range)d oldu"
 
-#: player.py:259
+#: player.py:273
 #, python-format
 msgid "The speed of your punch is now %(speed)d milliseconds (from %(from)d)"
 msgstr "Yumruk hızınız %(from)d milisaniyeydi, %(speed)d milisaniye oldu"
 
-#: player.py:270
+#: player.py:284
 msgid "Your punches now penetrate enemies and items!"
 msgstr "Yumruğunuz birden fazla düşmana ya da bonusa vurabiliyor!"
 
-#: player.py:272
+#: player.py:286
 msgid "Your punches no longer penetrate enemies and items!"
 msgstr "Yumruğunuz artık birden fazla düşmana ya da öğeye vuramıyor!"
 
-#: player.py:296
+#: player.py:310
 msgid "You're about to be attacked, but you have a counter!"
 msgstr "Yumruklanmak üzeresiniz ama kalkanınız var!"
 
-#: player.py:302
+#: player.py:316
 #, python-format
 msgid "You've been slapped! (%(lives)d HP remaining)"
 msgstr "Tokatlandınız! (%(lives)d canınız kaldı)"
 
-#: player.py:308
+#: player.py:322
 msgid "Game over!"
 msgstr "Oyun bitti!"
 
-#: player.py:323
+#: player.py:338
 msgid "added"
 msgstr "Eklendi"
 
-#: player.py:324
+#: player.py:339
 msgid "subtracted"
 msgstr "Çıkartıldı"
 
-#: player.py:325
+#: player.py:340
 #, python-format
 msgid "Point: %(added).1f %(changestr)s (%(total).1f)"
 msgstr "Puan: %(added).1f %(changestr)s (%(total).1f)"
 
-#: ssAppMain.py:183
+#: ssAppMain.py:180
 msgid "Normal mode"
 msgstr "Normal mod"
 
-#: ssAppMain.py:184
+#: ssAppMain.py:181
 msgid "Arcade mode"
 msgstr "Arkeyd mod"
 
-#: ssAppMain.py:185
+#: ssAppMain.py:182
 msgid "Classic mode"
 msgstr "Klasik mod"
 
-#: ssAppMain.py:194
+#: ssAppMain.py:183
+#, fuzzy
+msgid "Burden mode"
+msgstr "Arkeyd mod"
+
+#: ssAppMain.py:192
 msgid ""
 "Main menu. Use your up and down arrows to choose an option, then press enter "
 "to confirm"
@@ -237,36 +247,36 @@ msgstr ""
 "Ana menü. Bir seçenek seçmek için yukarı aşağı okları kullanın, onaylamak "
 "için enter'a basın"
 
-#: ssAppMain.py:197
+#: ssAppMain.py:195
 msgid "Collection"
 msgstr "Kolleksiyon"
 
-#: ssAppMain.py:198
+#: ssAppMain.py:196
 msgid "View the scoreboard"
 msgstr "Skorbordu görüntüle"
 
-#: ssAppMain.py:199
+#: ssAppMain.py:197
 msgid "Read the manual"
 msgstr "Kılavuzu oku"
 
-#: ssAppMain.py:200
+#: ssAppMain.py:198
 msgid "Erase data"
 msgstr "Veriyi sil"
 
-#: ssAppMain.py:201
+#: ssAppMain.py:199
 msgid "Options"
 msgstr "Seçenekler"
 
-#: ssAppMain.py:202
+#: ssAppMain.py:200
 msgid "Quit"
 msgstr "Çıkış"
 
-#: ssAppMain.py:223
+#: ssAppMain.py:221
 #, python-format
 msgid "Update checking is disabled in this build of %(gamename)s."
 msgstr "%(gamename)s oyununun bu sürümünde güncelleme denetimi  devredışıdır."
 
-#: ssAppMain.py:225
+#: ssAppMain.py:223
 #, python-format
 msgid ""
 "There was an error while retrieving software update information (%(error)s). "
@@ -275,51 +285,51 @@ msgstr ""
 "Yazılım güncelleme bilgisi alınırken bir hata oluştu. (Hata %(error)s). "
 "Lütfen daha sonra tekrar deneyin."
 
-#: ssAppMain.py:227
+#: ssAppMain.py:225
 msgid ""
 "You're playing the latest version! When a new update is found, you will be "
 "notified here."
 msgstr ""
 "En son sürümü kullanıyorsunuz! Bir güncelleme olduğunda burada bildirilir."
 
-#: ssAppMain.py:230
+#: ssAppMain.py:228
 msgid "There is a new version of the game! Press enter here to download it."
 msgstr "Oyunun yeni bir sürümü mevcut! Enter'a basarak indirebilirsiniz."
 
-#: ssAppMain.py:243
+#: ssAppMain.py:241
 #, python-format
 msgid "Downloading the new version (%(current)dK/%(total)dK (%(percent)d%%)"
 msgstr "Yeni sürüm indiriliyor (%(current)dK/%(total)dK (%(percent)d%%)"
 
-#: ssAppMain.py:246
+#: ssAppMain.py:244
 #, python-format
 msgid "The new version has been downloaded to %(location)s."
 msgstr "Yeni sürüm %(location)s konumuna indirildi."
 
-#: ssAppMain.py:248
+#: ssAppMain.py:246
 #, python-format
 msgid "Failed to download the new update (%(reason)s). Press enter to retry."
 msgstr ""
 "Güncelleme indirilemedi %(reason)s. Enter'a basarak tekrar deneyebilirsiniz."
 
-#: ssAppMain.py:291
+#: ssAppMain.py:289
 #, python-format
 msgid "This build of %(gamename)s doesn't have download location set."
 msgstr "%(gamename)s oyununun bu yapısında indirme konumu ayarlı değil."
 
-#: ssAppMain.py:294 ssAppMain.py:295
+#: ssAppMain.py:292 ssAppMain.py:293
 msgid "Select the folder where you want to download the installer."
 msgstr "Yükleyicinin indirileceği klasörü seçin."
 
-#: ssAppMain.py:300
+#: ssAppMain.py:298
 msgid "Warning"
 msgstr "Uyarı"
 
-#: ssAppMain.py:300
+#: ssAppMain.py:298
 msgid " already exists. Do you want to overwrite?"
 msgstr "Zaten var. Üzerine yazmak ister misiniz?"
 
-#: ssAppMain.py:341
+#: ssAppMain.py:339
 #, python-format
 msgid ""
 "This is the new standard mode of %(gamename)s. Use your left and right "
@@ -334,7 +344,7 @@ msgstr ""
 "seviyeniz artınca puan alırsınız. Ayrıca 5 kez art arda düşman "
 "yumruklarsanız bonus alma şansınız vardır!"
 
-#: ssAppMain.py:343
+#: ssAppMain.py:341
 #, python-format
 msgid ""
 "This is the new arcade mode of %(gamename)s! From the new version, items "
@@ -347,7 +357,7 @@ msgstr ""
 "daha yüksektir. Bonusu yumruklayarak alabilirsiniz, ya da yukarı okla "
 "beraber yumruklarsanız parçalayabilirsiniz. Alacağınız bonusu dikkatli seçin!"
 
-#: ssAppMain.py:345
+#: ssAppMain.py:343
 msgid ""
 "This is the old-fashioned game mode! You don't get bonuses based on "
 "accuracy, so you can punch, punch, punch punch punch and punch! This mode "
@@ -356,6 +366,15 @@ msgstr ""
 "Bu klasik oyun modudur! İsabet oranınıza göre bonus almazsınız, bu yüzden "
 "sağa sola istediğiniz kadar yumruk sallayabilirsiniz! Bu modda daha hızlı "
 "seviye atlarsınız, bu da daha fazla çığlık toplayacağınız anlamına gelir!"
+
+#: ssAppMain.py:345
+msgid ""
+"Welcome to this new and exciting burden mode! In this mode, every item gives "
+"you a nasty effect, and each nasty effect boosts points you gain! Guess "
+"what? The more you torture yourself, the more point boost you get! Oh, but "
+"if you die because of your own torturous act, hahahahahaha, you stupid! Good "
+"luck!"
+msgstr ""
 
 #: ssAppMain.py:353
 #, python-format

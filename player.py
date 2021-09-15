@@ -16,10 +16,6 @@ DEFAULT_PUNCH_SPEED = 200
 
 class Player():
 	"""This class represents a player."""
-	def __init__(self):
-		pass
-	def __del__(self):
-		pass
 	def initialize(self,field):
 		"""Initializes this player.
 
@@ -30,7 +26,6 @@ class Player():
 		self.field=field
 		self.lives=3
 		self.x=field.getCenterPosition()
-		self.punchTimer=window.Timer()
 		self.punchTimer=window.Timer()
 		self.punching=False
 		self.punchSpeed=DEFAULT_PUNCH_SPEED
@@ -61,7 +56,7 @@ class Player():
 		if self.x!=0 and globalVars.appMain.keyPressed(window.K_LEFT): self.moveTo(self.x-1)
 		if self.x!=self.field.getX()-1 and globalVars.appMain.keyPressed(window.K_RIGHT): self.moveTo(self.x+1)
 		for elem in self.itemEffects[:]:
-			if not elem.frameUpdate(): self.itemEffects.remove(elem)
+			if not elem.frameUpdate(self.field.modeHandler): self.itemEffects.remove(elem)
 
 	def punchLaunch(self):
 		"""Launches a punch. If this player is already punching, this method does nothing. """
@@ -83,6 +78,7 @@ class Player():
 			for elem in self.field.enemies:
 				if elem is not None and elem.state==enemy.STATE_ALIVE and self.x==elem.x and elem.y==pos:
 					elem.hit()
+					self.field.modeHandler.onEnemyDefeated()
 					hit+=1
 					self.hits+=1
 					self.consecutiveHits+=1
@@ -99,6 +95,7 @@ class Player():
 						elem.punch()
 					else:
 						elem.obtain()
+						self.field.modeHandler.onItemObtained()
 						self.processItemHit(elem)
 					#end item hit
 					hit=True
@@ -159,23 +156,39 @@ class Player():
 		:type it: item.Item
 		"""
 		if it.identifier==itemConstants.NASTY_SHRINK:
-			e=itemEffects.ShrinkEffect()
-			e.initialize(self)
-			e.activate()
-			self.itemEffects.append(e)
+			# When player's punching range cannot be decreased further, find an existing shrink effect and extend the effect expiration.
+			self.processShrinkItemEffect()
 			return
 		if it.identifier==itemConstants.NASTY_BLURRED:
 			e=itemEffects.BlurredEffect()
 			e.initialize(self)
-			e.activate()
+			e.activate(self.field.modeHandler)
 			self.itemEffects.append(e)
 			return
 		if it.identifier==itemConstants.NASTY_SLOWDOWN:
 			e=itemEffects.SlowDownEffect()
 			e.initialize(self)
-			e.activate()
+			e.activate(self.field.modeHandler)
 			self.itemEffects.append(e)
 			return
+
+	def processShrinkItemEffect(self):
+		"""
+			Processes an edge case where player's punching range is 1 and cannot be decreased further.
+			In this case, find an existing shrink effect, which will be expired next.
+			Extend the found shrink effect's expiration.
+			Otherwise, normally process the shrink effect.
+		"""
+		if self.punchRange==1:
+			shrinks = [e for e in self.itemEffects if e.name == itemConstants.NAMES[itemConstants.TYPE_NASTY][itemConstants.NASTY_SHRINK]] # length should never be 0
+			shrinks.sort(key=lambda e: e.calculateTimeRemaining())
+			shrinks[0].extend(itemConstants.BASE_EFFECT_TIME)
+			return
+		# normal
+		e=itemEffects.ShrinkEffect()
+		e.initialize(self)
+		e.activate(self.field.modeHandler)
+		self.itemEffects.append(e)
 
 	def processGoodItemHit(self,it):
 		"""
@@ -189,7 +202,7 @@ class Player():
 			if existing is None:
 				e=itemEffects.MegatonPunchEffect()
 				e.initialize(self)
-				e.activate()
+				e.activate(self.field.modeHandler)
 				self.itemEffects.append(e)
 			else:
 				existing.extend(itemConstants.BASE_EFFECT_TIME)
@@ -197,7 +210,7 @@ class Player():
 		if it.identifier==itemConstants.GOOD_BOOST:
 			e=itemEffects.BoostEffect()
 			e.initialize(self)
-			e.activate()
+			e.activate(self.field.modeHandler)
 			self.itemEffects.append(e)
 			return
 		if it.identifier==itemConstants.GOOD_PENETRATION:
@@ -205,7 +218,7 @@ class Player():
 			if existing is None:
 				e=itemEffects.PenetrationEffect()
 				e.initialize(self)
-				e.activate()
+				e.activate(self.field.modeHandler)
 				self.itemEffects.append(e)
 			else:
 				existing.extend(itemConstants.BASE_EFFECT_TIME)

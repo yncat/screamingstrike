@@ -17,9 +17,6 @@ class SingletonWindow():
 		pygame.init()
 		self.clock=pygame.time.Clock()
 
-	def __del__(self):
-		pygame.quit()
-
 	def initialize(self,x,y,ttl):
 		"""
 		Initializes the game window. Returns True on success or False for failure.
@@ -86,6 +83,7 @@ class SingletonWindow():
 	def exit(self):
 		"""Attempt to exit the game. It is canceled if the onExit callback is set and it returned False."""
 		if not self.onExit(): return
+		pygame.quit()
 		sys.exit()
 
 	def onExit(self):
