@@ -342,7 +342,7 @@ class ssAppMain(window.SingletonWindow):
 			elif mode==gameModes.ALL_MODES_STR[2]:
 				self.showTip(_("This is the old-fashioned game mode! You don't get bonuses based on accuracy, so you can punch, punch, punch punch punch and punch! This mode has a sharper levelup curb, meaning that you can collect screams really fast!"))
 			elif mode==gameModes.ALL_MODES_STR[3]:
-				self.showTip(_("Welcome to this new and exciting burden mode! In this mode, the more you torture yourself, the more point boost you get!"))
+				self.showTip(_("Welcome to this new and exciting burden mode! In this mode, every item gives you a nasty effect, and each nasty effect boosts points you gain! Guess what? The more you torture yourself, the more point boost you get! Oh, but if you die because of your own torturous act, hahahahahaha, you stupid! Good luck!"))
 
 	def showTip(self,tip):
 		"""Shows the ingame tip.
