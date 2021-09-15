@@ -156,10 +156,8 @@ class Player():
 		:type it: item.Item
 		"""
 		if it.identifier==itemConstants.NASTY_SHRINK:
-			e=itemEffects.ShrinkEffect()
-			e.initialize(self)
-			e.activate(self.field.modeHandler)
-			self.itemEffects.append(e)
+			# When player's punching range cannot be decreased further, find an existing shrink effect and extend the effect expiration.
+			self.processShrinkItemEffect()
 			return
 		if it.identifier==itemConstants.NASTY_BLURRED:
 			e=itemEffects.BlurredEffect()
@@ -173,6 +171,24 @@ class Player():
 			e.activate(self.field.modeHandler)
 			self.itemEffects.append(e)
 			return
+
+	def processShrinkItemEffect(self):
+		"""
+			Processes an edge case where player's punching range is 1 and cannot be decreased further.
+			In this case, find an existing shrink effect, which will be expired next.
+			Extend the found shrink effect's expiration.
+			Otherwise, normally process the shrink effect.
+		"""
+		if self.punchRange==1:
+			shrinks = [e for e in self.itemEffects if e.name == itemConstants.NAMES[itemConstants.TYPE_NASTY][itemConstants.NASTY_SHRINK]] # length should never be 0
+			shrinks.sort(key=lambda e: e.calculateTimeRemaining())
+			shrinks[0].extend(itemConstants.BASE_EFFECT_TIME)
+			return
+		# normal
+		e=itemEffects.ShrinkEffect()
+		e.initialize(self)
+		e.activate(self.field.modeHandler)
+		self.itemEffects.append(e)
 
 	def processGoodItemHit(self,it):
 		"""

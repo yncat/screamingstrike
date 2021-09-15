@@ -52,7 +52,15 @@ class ItemEffectBase(object):
 
 		:rtype: str
 		"""
-		return _("%(name)s: %(sec).2f seconds left") % {"name": self.name, "sec": (self.lasts-self.timer.elapsed)/1000}
+		return _("%(name)s: %(sec).2f seconds left") % {"name": self.name, "sec": self.calculateTimeRemaining()}
+
+	def calculateTimeRemaining(self):
+		"""
+			Calculates the time after which this item expires in seconds.
+
+			:rtype: float
+		"""
+		return (self.lasts-self.timer.elapsed)/1000
 
 	def frameUpdate(self,mode):
 		if self.active is not True: return False
