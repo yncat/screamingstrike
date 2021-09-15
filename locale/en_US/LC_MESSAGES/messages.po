@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Falcon\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-15 23:45+0900\n"
+"POT-Creation-Date: 2021-09-16 00:27+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -86,9 +86,9 @@ msgstr ""
 msgid "Hit! (speed %(speed)d, distance %(distance)d)"
 msgstr ""
 
-#: gameModes.py:194
+#: gameModes.py:195
 #, python-format
-msgid "Hit! (speed %(speed)d, burden %(burden)d)"
+msgid "Hit! (speed %(speed)d, burden %(burden)d, %(boost)sx boost)"
 msgstr ""
 
 #: gameResult.py:34
@@ -341,8 +341,11 @@ msgstr ""
 
 #: ssAppMain.py:345
 msgid ""
-"Welcome to this new and exciting burden mode! In this mode, the more you "
-"torture yourself, the more point boost you get!"
+"Welcome to this new and exciting burden mode! In this mode, every item gives "
+"you a nasty effect, and each nasty effect boosts points you gain! Guess "
+"what? The more you torture yourself, the more point boost you get! Oh, but "
+"if you die because of your own torturous act, hahahahahaha, you stupid! Good "
+"luck!"
 msgstr ""
 
 #: ssAppMain.py:353

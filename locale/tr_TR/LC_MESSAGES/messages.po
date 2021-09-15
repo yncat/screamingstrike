@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: screamingStrike\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-15 23:45+0900\n"
+"POT-Creation-Date: 2021-09-16 00:27+0900\n"
 "PO-Revision-Date: 2019-06-15 18:35+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -93,9 +93,9 @@ msgstr ""
 msgid "Hit! (speed %(speed)d, distance %(distance)d)"
 msgstr "İsabet! (Hız (%(speed)d, mesafe %(distance)d)"
 
-#: gameModes.py:194
+#: gameModes.py:195
 #, fuzzy, python-format
-msgid "Hit! (speed %(speed)d, burden %(burden)d)"
+msgid "Hit! (speed %(speed)d, burden %(burden)d, %(boost)sx boost)"
 msgstr "İsabet! (Hız (%(speed)d, mesafe %(distance)d)"
 
 #: gameResult.py:34
@@ -369,8 +369,11 @@ msgstr ""
 
 #: ssAppMain.py:345
 msgid ""
-"Welcome to this new and exciting burden mode! In this mode, the more you "
-"torture yourself, the more point boost you get!"
+"Welcome to this new and exciting burden mode! In this mode, every item gives "
+"you a nasty effect, and each nasty effect boosts points you gain! Guess "
+"what? The more you torture yourself, the more point boost you get! Oh, but "
+"if you die because of your own torturous act, hahahahahaha, you stupid! Good "
+"luck!"
 msgstr ""
 
 #: ssAppMain.py:353
