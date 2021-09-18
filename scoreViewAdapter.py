@@ -5,30 +5,32 @@
 """This module contains the base class of adapters for score viewing. You need to make your own adapter by inheriting this class. You may add your extended class in this module, but distributing the modified module is not recommended."""
 import gameModes
 
-#return values of post method
-RET_UNAVAILABLE=0
-RET_CONNECTION_ERROR=-1
-RET_TOO_LOW=-2
+# return values of post method
+RET_UNAVAILABLE = 0
+RET_CONNECTION_ERROR = -1
+RET_TOO_LOW = -2
+
 
 class AdapterBase(object):
-	"""Inherit this class and override the get methods to make your own adapter."""
-	def __init__(self):
-		self.lastError=None
+    """Inherit this class and override the get methods to make your own adapter."""
 
-	def get(self,mode):
-		"""Retrieves the score table from the server. This base class does nothing and returns RET_UNAVAILABLE.
-		You must use gameModes.ALL_MODES_STR constants for identifying game modes.
+    def __init__(self):
+        self.lastError = None
 
-		:param mode: Game mode to retrieve.
-		:type name: str
+    def get(self, mode):
+        """Retrieves the score table from the server. This base class does nothing and returns RET_UNAVAILABLE.
+        You must use gameModes.ALL_MODES_STR constants for identifying game modes.
 
-		:rtype: list
-		"""
-		return RET_UNAVAILABLE
+        :param mode: Game mode to retrieve.
+        :type name: str
 
-	def getLastError(self):
-		"""Retrieves the last error.
+        :rtype: list
+        """
+        return RET_UNAVAILABLE
 
-		:rtype: str
-		"""
-		return self.lastError
+    def getLastError(self):
+        """Retrieves the last error.
+
+        :rtype: str
+        """
+        return self.lastError

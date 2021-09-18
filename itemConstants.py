@@ -23,7 +23,6 @@ GOOD_EXTRALIFE = 4
 GOOD_MAX = 4
 NAMES = {}
 NAMES[TYPE_NASTY] = {NASTY_SHRINK: "Shrink",
-   NASTY_BLURRED: "Blurred", NASTY_SLOWDOWN: "Slow down"}
+                     NASTY_BLURRED: "Blurred", NASTY_SLOWDOWN: "Slow down"}
 NAMES[TYPE_GOOD] = {GOOD_MEGATONPUNCH: "Megaton punch", GOOD_BOOST: "Boost",
-    GOOD_PENETRATION: "Penetration", GOOD_DESTRUCTION: "Destruction", GOOD_EXTRALIFE: "Extra life"}
-
+                    GOOD_PENETRATION: "Penetration", GOOD_DESTRUCTION: "Destruction", GOOD_EXTRALIFE: "Extra life"}

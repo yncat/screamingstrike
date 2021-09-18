@@ -25,23 +25,24 @@ Supported tags:
   MOD/etc titles
 '''
 
-import sys, ctypes, platform
+import sys
+import ctypes
+import platform
 from paths import x86_path, x64_path
 import libloader
 tags_module = libloader.load_library('tags', x86_path=x86_path, x64_path=x64_path)
-func_type = libloader.get_functype()# Current version. Just increments each release.
+func_type = libloader.get_functype()  # Current version. Just increments each release.
 
 TAGS_VERSION = 17
 
 # returns description of the last error.
-#const char*  _stdcall TAGS_GetLastErrorDesc();
+# const char*  _stdcall TAGS_GetLastErrorDesc();
 TAGS_GetLastErrorDesc = func_type(ctypes.c_char_p)(('TAGS_GetLastErrorDesc', tags_module))
 
 # main purpose of this library
-#const char*  _stdcall TAGS_Read( DWORD dwHandle, const char* fmt );
+# const char*  _stdcall TAGS_Read( DWORD dwHandle, const char* fmt );
 TAGS_Read = func_type(ctypes.c_char_p, ctypes.c_ulong, ctypes.c_char_p)(('TAGS_Read', tags_module))
 
 # retrieves the current version
-#DWORD _stdcall TAGS_GetVersion();
+# DWORD _stdcall TAGS_GetVersion();
 TAGS_GetVersion = func_type(ctypes.c_ulong)(('TAGS_GetVersion', tags_module))
-

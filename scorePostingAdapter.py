@@ -5,32 +5,34 @@
 """This module contains the base class of adapters for score posting. You need to make your own adapter by inheriting this class. You may add your extended class in this module, but distributing the modified module is not recommended."""
 import gameResult
 
-#return values of post method
-RET_UNAVAILABLE=0
-RET_CONNECTION_ERROR=-1
-RET_TOO_LOW=-2
+# return values of post method
+RET_UNAVAILABLE = 0
+RET_CONNECTION_ERROR = -1
+RET_TOO_LOW = -2
+
 
 class AdapterBase(object):
-	"""Inherit this class and override the post methods to make your own adapter."""
-	def __init__(self):
-		self.lastError=None
+    """Inherit this class and override the post methods to make your own adapter."""
 
-	def post(self,name,result):
-		"""Posts the given game result using this adapter. This base class does nothing and returns RET_UNAVAILABLE.
-		You must return the position on the scoreboard (>0) on success, or RET_CONNECTION_ERROR when connection error occured.
+    def __init__(self):
+        self.lastError = None
 
-		:param name: Player name.
-		:type name: str
-		:param result: Game result instance which will be posted.
-		:type result: gameResult.GameResult
+    def post(self, name, result):
+        """Posts the given game result using this adapter. This base class does nothing and returns RET_UNAVAILABLE.
+        You must return the position on the scoreboard (>0) on success, or RET_CONNECTION_ERROR when connection error occured.
 
-		:rtype: int
-		"""
-		return RET_UNAVAILABLE
+        :param name: Player name.
+        :type name: str
+        :param result: Game result instance which will be posted.
+        :type result: gameResult.GameResult
 
-	def getLastError(self):
-		"""Retrieves the last error.
+        :rtype: int
+        """
+        return RET_UNAVAILABLE
 
-		:rtype: str
-		"""
-		return self.lastError
+    def getLastError(self):
+        """Retrieves the last error.
+
+        :rtype: str
+        """
+        return self.lastError
