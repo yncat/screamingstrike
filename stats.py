@@ -6,108 +6,111 @@
 import pickle
 import gameModes
 
+
 class StatsStorage(object):
-	"""This object stores the game's statistics."""
-	def __init__(self):
-		self.items={}
+    """This object stores the game's statistics."""
 
-	def initialize(self,filename):
-		"""Initializes the storage with the given filename. If this method fails to load the specified file, everything is reset to zero.
+    def __init__(self):
+        self.items = {}
 
-		:param filename, File name to load.
-		"""
+    def initialize(self, filename):
+        """Initializes the storage with the given filename. If this method fails to load the specified file, everything is reset to zero.
 
-		try:
-			f=open(filename,"rb")
-		except IOError:
-			self.resetAll()
-			return
-		#end except
-		try:
-			self.items=pickle.load(f)
-		except (pickle.PickleError, EOFError):
-			self.resetAll()
-			return
-		#end except
-	#end initialize
+        :param filename, File name to load.
+        """
 
-	def resetAll(self):
-		"""Resets everything in this storage.
-		"""
-		self.items={}
-	#end resetAll
+        try:
+            f = open(filename, "rb")
+        except IOError:
+            self.resetAll()
+            return
+        # end except
+        try:
+            self.items = pickle.load(f)
+        except (pickle.PickleError, EOFError):
+            self.resetAll()
+            return
+        # end except
+    # end initialize
 
-	def resetHighscores(self):
-		"""Resets highscores only."""
-		for mode in gameModes.ALL_MODES_STR:
-			self.items["hs_"+mode]=0
-		#end for
-	#end resetHighscores
+    def resetAll(self):
+        """Resets everything in this storage.
+        """
+        self.items = {}
+    # end resetAll
 
-	def get(self,key):
-		"""Retrieves the specified value.
+    def resetHighscores(self):
+        """Resets highscores only."""
+        for mode in gameModes.ALL_MODES_STR:
+            self.items["hs_" + mode] = 0
+        # end for
+    # end resetHighscores
 
-		:param key: Key to retrieve.
-		:type key: str
-		:rtype: int
-		"""
-		try:
-			r=self.items[key]
-		except KeyError:
-			r=0
-		#end except
-		return r
+    def get(self, key):
+        """Retrieves the specified value.
 
-	def set(self,key,value):
-		"""Sets/updates the specified value.
+        :param key: Key to retrieve.
+        :type key: str
+        :rtype: int
+        """
+        try:
+            r = self.items[key]
+        except KeyError:
+            r = 0
+        # end except
+        return r
 
-		:param key: Key to set.
-		:type key: str
-		:param value: New value.
-		:type value: int
-		"""
-		self.items[key]=value
-	#end set
+    def set(self, key, value):
+        """Sets/updates the specified value.
 
-	def inclement(self,key, unit=1):
-		"""Inclements the specified value by unit. If the key doesn't exist, create one.
+        :param key: Key to set.
+        :type key: str
+        :param value: New value.
+        :type value: int
+        """
+        self.items[key] = value
+    # end set
 
-		:param unit: Unit. Default is 1.
-		:type unit: int
-		"""
-		self.checkKey(key)
-		self.items[key]=self.items[key]+unit
-	#end inclement
+    def inclement(self, key, unit=1):
+        """Inclements the specified value by unit. If the key doesn't exist, create one.
 
-	def declement(self,key, unit=1):
-		"""Declements the specified value by unit. If the key doesn't exist, does nothing.
+        :param unit: Unit. Default is 1.
+        :type unit: int
+        """
+        self.checkKey(key)
+        self.items[key] = self.items[key] + unit
+    # end inclement
 
-		:param unit: Unit. Default is 1.
-		:type unit: int
-		"""
-		self.keyCheck(key)
-		self.items[key]=self.items[key]-unit
-	#end inclement
+    def declement(self, key, unit=1):
+        """Declements the specified value by unit. If the key doesn't exist, does nothing.
 
-	def checkKey(self,key):
-		"""Checks the specified key. If it doesn't exist, create a new one with 0.
+        :param unit: Unit. Default is 1.
+        :type unit: int
+        """
+        self.keyCheck(key)
+        self.items[key] = self.items[key] - unit
+    # end inclement
 
-		:param key: Key to check.
-		:type key: str
-		"""
-		if not key in self.items: self.items[key]=0
+    def checkKey(self, key):
+        """Checks the specified key. If it doesn't exist, create a new one with 0.
 
-	def save(self,filename):
-		"""Saves the storage to a file. If IO error occurs, saving is skipped.
+        :param key: Key to check.
+        :type key: str
+        """
+        if key not in self.items:
+            self.items[key] = 0
 
-		:param filename: File name to save.
-		:type filename: str
-		"""
-		try:
-			f=open(filename,"wb")
-		except IOError:
-			return
-		#end except
-		pickle.dump(self.items,f)
-		f.close()
-	#end save
+    def save(self, filename):
+        """Saves the storage to a file. If IO error occurs, saving is skipped.
+
+        :param filename: File name to save.
+        :type filename: str
+        """
+        try:
+            f = open(filename, "wb")
+        except IOError:
+            return
+        # end except
+        pickle.dump(self.items, f)
+        f.close()
+    # end save

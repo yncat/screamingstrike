@@ -3,20 +3,19 @@
 # Just import this file and it should go away
 
 import sys
-if hasattr(sys,"frozen"): # true only if we are running as a py2exe app
-	class Blackhole(object):
+if hasattr(sys, "frozen"):  # true only if we are running as a py2exe app
+    class Blackhole(object):
 
-		def write(self,text):
-			pass
+        def write(self, text):
+            pass
 
-		def flush(self):
-			pass
+        def flush(self):
+            pass
 
-		def isatty(self):
-			return False
+        def isatty(self):
+            return False
 
-	sys.stdout = Blackhole()
-	sys.stderr = Blackhole()
-	del Blackhole
-	del sys
-
+    sys.stdout = Blackhole()
+    sys.stderr = Blackhole()
+    del Blackhole
+    del sys

@@ -2,38 +2,47 @@ from __future__ import absolute_import
 from sound_lib.external import pybass
 from .effect import SoundEffect
 
+
 class Chorus(SoundEffect):
- effect_type = pybass.BASS_FX_DX8_CHORUS
- struct = pybass.BASS_DX8_CHORUS
+    effect_type = pybass.BASS_FX_DX8_CHORUS
+    struct = pybass.BASS_DX8_CHORUS
+
 
 class Echo(SoundEffect):
- effect_type = pybass.BASS_FX_DX8_ECHO
- struct = pybass.BASS_DX8_ECHO 
+    effect_type = pybass.BASS_FX_DX8_ECHO
+    struct = pybass.BASS_DX8_ECHO
+
 
 class Compressor(SoundEffect):
- effect_type = pybass.BASS_FX_DX8_COMPRESSOR 
- struct = pybass.BASS_DX8_COMPRESSOR 
+    effect_type = pybass.BASS_FX_DX8_COMPRESSOR
+    struct = pybass.BASS_DX8_COMPRESSOR
+
 
 class Reverb(SoundEffect):
- effect_type = pybass.BASS_FX_DX8_REVERB
- struct = pybass.BASS_DX8_REVERB 
+    effect_type = pybass.BASS_FX_DX8_REVERB
+    struct = pybass.BASS_DX8_REVERB
+
 
 class Distortion(SoundEffect):
- effect_type = pybass.BASS_FX_DX8_DISTORTION
- struct = pybass.BASS_DX8_DISTORTION 
+    effect_type = pybass.BASS_FX_DX8_DISTORTION
+    struct = pybass.BASS_DX8_DISTORTION
+
 
 class Flanger(SoundEffect):
- effect_type = pybass.BASS_FX_DX8_FLANGER
- struct = pybass.BASS_DX8_FLANGER
+    effect_type = pybass.BASS_FX_DX8_FLANGER
+    struct = pybass.BASS_DX8_FLANGER
+
 
 class Gargle(SoundEffect):
- effect_type = pybass.BASS_FX_DX8_GARGLE
- struct = pybass.BASS_DX8_GARGLE
+    effect_type = pybass.BASS_FX_DX8_GARGLE
+    struct = pybass.BASS_DX8_GARGLE
+
 
 class I3DL2Reverb(SoundEffect):
- effect_type = pybass.BASS_FX_DX8_I3DL2REVERB
- struct = pybass.BASS_DX8_I3DL2REVERB
+    effect_type = pybass.BASS_FX_DX8_I3DL2REVERB
+    struct = pybass.BASS_DX8_I3DL2REVERB
+
 
 class ParamEq(SoundEffect):
- effect_type = pybass.BASS_FX_DX8_PARAMEQ
- struct = pybass.BASS_DX8_PARAMEQ
+    effect_type = pybass.BASS_FX_DX8_PARAMEQ
+    struct = pybass.BASS_DX8_PARAMEQ
