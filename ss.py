@@ -4,6 +4,7 @@
 # License: GPL V2.0 (See copying.txt for details)
 #See SsAppMain.py for application entry point
 import sys
+import shutil
 import os
 import platform_utils.paths
 import traceback
@@ -25,4 +26,9 @@ def exchandler(type, exc, tb):
 
 #global schope
 sys.excepthook=exchandler
+genpy_path=os.path.join(os.environ["temp"], "gen_py")
+if os.path.isdir(genpy_path):
+	shutil.rmtree(genpy_path)
+#end rebuilding
+
 if __name__ == "__main__": main()
