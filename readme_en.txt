@@ -38,17 +38,22 @@ Shrink: Your punches will be shorter. When obtained continuously, effects will b
 Slow down: Your punches will be slower. When obtained continuously, effects will be duplicated.
 Blurred: You'll get your position blurred and can't aim at enemies accurately. When obtained continuously, effects will be duplicated.
 
-4: Collection &4
+4: Burden mode &4
+In the burden mode, items fall from above like the arcade mode. However, in this mode, all items cause nasty effects on you. The burden mode's objective is to defeat enemies under as many nasty item effects as possible, boost up points and achieve higher scores.
+When you defeat an enemy in the burden mode, number of item effects which are active at that moment is counted. Based on the current level and item effects count, the score you gain is boosted. The more you're affected by item effects, the more boost you gain. In a higher level, with lots of effects on you, your score can be more than 10x or 20x.
+If you get an item in the burden mode, the next item will immediately spawn. By utilizing this, you can continuously get items and keep yourself always affected. If you don't want to take the item effect, you can hold down the up arrow and punch the item to destroy it, instead of obtaining it.
+
+5: Collection &5
 This game is shipped with lots of screams and you can collect them in the game. Enemies you punched 10 times will be unlocked (collected) and you can make unlocked enemies scream anytime from the collection menu which can be accessed from the main menu.
 In the collection screen, use your left and right arrows to browse your collections. You can press enter on one of your unlocked collections to make them scream. Pressing your up and down arrows will change the pitch. The pitch shifting range is same as the ingame range. Alternatively, you can press shift+left/right to search for the next / previous unlocked collections.
 
-5: Erasing data &5
+6: Erasing data &6
 The "Erase data" option in the main menu enables you to clear your high score and collection data separately. In order to actually delete the data, you need to hold shift and enter.
 
-6: Options &6
+7: Options &7
 You can change various game settings here. Use your up and down arrows to move through the available settings and left and right arrows to change its value. Currently, there's only one item announcement voice, so pressing left / right arrows there won't change anything. If someone can give me new voice sets, I may be able to make this option actually changable.
 
-7: About the source code &7
+8: About the source code &8
 This game's source code is available with GPL license here.
 https://github.com/yncat/screamingstrike
 GPL license allows you to use / modify the source code under following two conditions.
@@ -56,11 +61,11 @@ GPL license allows you to use / modify the source code under following two condi
 (2) You must open source your project with GPL license.
 Contributions such as new screams, item announcement voices, translations, code improvements are welcome. Please refer to the repository readme for details.
 
-8: Notes &8
+9: Notes &9
 For reporting bugs / suggestions, please use one of the methods guided in the next section.
 The developer of this game cannot take any responcibility even if your software / hardware got damaged by using this application.
 
-9: Contacting &9
+10: Contacting &0
 To contact the developer, please use one of the methods below.
 e-mail: support@nyanchangames.com
 Directly post to issue tracking: https://github.com/yncat/screamingstrike/issues
