@@ -184,7 +184,7 @@ class ssAppMain(window.SingletonWindow):
         m.append(_("Normal mode") + "&1")
         m.append(_("Arcade mode") + "&2")
         m.append(_("Classic mode") + "&3")
-        m.append(_("Burden mode") + "&3")
+        m.append(_("Burden mode") + "&4")
 
     def mainmenu(self):
         """
