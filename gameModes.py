@@ -96,6 +96,10 @@ class ModeHandlerBase(object):
         """Pauses / resumes this mode handler."""
         pass
 
+    def getModeSpecificResults(self):
+        """Can set the modes's specific result data in the game end. Return the array of strings to show at the result screen, otherwise, return an empty array."""
+        return []
+
 
 class NormalModeHandler(ModeHandlerBase):
     def __init__(self):
@@ -195,6 +199,7 @@ class BurdenModeHandler(ModeHandlerBase):
         self.allowLevelupBonus = False
         self.name = ALL_MODES_STR[3]
         self.bonusCounters = []
+        self.highestBoost = 1.0
 
     def initialize(self, field):
         super().initialize(field)
@@ -205,7 +210,12 @@ class BurdenModeHandler(ModeHandlerBase):
 
     def calculateEnemyDefeatScore(self, speed, y):
         """Uses completely different formula for burden mode."""
-        return math.pow(1.45 + (self.field.level * 0.05), len(self.field.player.itemEffects)) * (1000 - speed) * math.pow(self.field.level, 2) / 5
+        boost = math.pow(1.45 + (self.field.level * 0.05), len(self.field.player.itemEffects))
+        # Update highest boost here
+        if boost > self.highestBoost:
+            self.highestBoost = boost
+        # end update highest boost
+        return boost * (1000 - speed) * math.pow(self.field.level, 2) / 5
 
     def getDefeatMessage(self, speed, y):
         boost = "%.1f" % math.pow(1.45 + (self.field.level * 0.05), len(self.field.player.itemEffects))
@@ -287,6 +297,12 @@ class BurdenModeHandler(ModeHandlerBase):
 
     def onItemObtained(self):
         self.spawnItem()
+
+    def getModeSpecificResults(self):
+        boost = "%.1f" % self.highestBoost
+        return [
+            _("Highest boost: %(boost)sx" % {"boost": boost})
+        ]
 
 
 def getModeHandler(mode):

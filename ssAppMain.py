@@ -724,6 +724,10 @@ class ssAppMain(window.SingletonWindow):
         # end if highscore
         m.append(_("Punches: %(punches)d, hits: %(hits)d, accuracy: %(accuracy).2f%%") %
                  {"punches": result.punches, "hits": result.hits, "accuracy": result.hitPercentage})
+        for elem in result.getModeSpecificResults():
+            m.append(elem)
+        # end append mode specific results
+
         m.append(_("This game lasted for %(time)s.") % {"time": result.lastedString})
         m.append(_("You reached level %(level)d.") % {"level": result.level})
         m.append(result.log, shortcut=False)
