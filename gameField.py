@@ -125,8 +125,9 @@ class GameField():
         return self.logs
 
     def exportLog(self):
-        self.logs.append("")
-        return "\n".join(self.logs)
+        l = self.logs[:]
+        l.append("")
+        return "\n".join(l)
 
     def levelup(self):
         self.log(_("Leveled up to %(newlevel)d! (Accuracy %(accuracy).1f%%, with %(lives)d hp remaining)") %
