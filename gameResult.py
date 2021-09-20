@@ -11,9 +11,6 @@ class GameResult:
     def __init__(self):
         self.aborted = False
 
-    def __del__(self):
-        pass
-
     def initialize(self, field):
         """
         Populates the game results from the given field instance.
@@ -31,6 +28,7 @@ class GameResult:
         self.unlockedCollection = field.collectionCounter.getLog()
         self.highscore = field.player.getNewHighscore()
         self.previousHighscore = field.player.getPreviousHighscore()
+        self.modeSpecificResults = field.modeHandler.getModeSpecificResults()
         self.log = field.getLog()
         ms = field.gameTimer.elapsed
         self.lastedMinute = int(ms / 60000)
@@ -60,3 +58,6 @@ class GameResult:
         :rtype: bool
         """
         return self.score == sum(self.score_validator)
+
+    def getModeSpecificResults(self):
+        return self.modeSpecificResults
