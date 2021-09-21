@@ -30,10 +30,12 @@ def exchandler(type, exc, tb):
 
 #global schope
 sys.excepthook = exchandler
-genpy_path = os.path.join(os.environ["temp"], "gen_py")
-if os.path.isdir(genpy_path):
-    shutil.rmtree(genpy_path)
-# end rebuilding
+if platform_utils.paths.is_windows:
+    genpy_path = os.path.join(os.environ["temp"], "gen_py")
+    if os.path.isdir(genpy_path):
+        shutil.rmtree(genpy_path)
+    # end rebuilding
+# end win
 
 if __name__ == "__main__":
     main()
