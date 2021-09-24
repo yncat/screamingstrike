@@ -1,0 +1,3 @@
+wxpython
+pywin32
+pygame

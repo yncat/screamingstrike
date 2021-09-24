@@ -1,0 +1,4 @@
+wx
+pywin32
+pygame
+pyobjc

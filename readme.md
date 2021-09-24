@@ -3,11 +3,12 @@
 I decided to opensource this.  
 
 ## Dependencies  
-You must use Python 3.7.x to run /  build this game. 3.8.x breaks some of the dependencies, so it's currently not supported.  
-You need pygame and wx.  
-pip install pygame  
-pip install wx  
-Most of other modules will be included in this package because I'll very likely modify them a bit.  
+Windows: pip install -r requirements-win.txt  
+Mac: pip3 install -r requirements-mac.txt
+
+## Running from source
+Windows: python ss.py  
+Mac: python3 ss.py  
 
 ## Other useful commands  
 Note: If You're using mac, you need to use / instead of \.  
@@ -24,10 +25,8 @@ to generate the API document.
 
 ## Building
 The game uses pyinstaller for building.  
-pip install pyinstaller  
 For automated packaging, WinRAR must be installed and WinRAR.exe must be accessible from the environment variable path.  
 On mac OSX, you just need pyinstaller.  
-pip install pyinstaller  
 After setting up the environment, run 'python tools\build.py'.  
 
 ## Translating
