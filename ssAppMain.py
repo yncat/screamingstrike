@@ -351,7 +351,7 @@ class ssAppMain(window.SingletonWindow):
         """
         k = "playcount_" + mode
         if self.statsStorage.get(k) == 0:
-            self.statsStorage.inclement(k)
+            self.statsStorage.increment(k)
             if mode == gameModes.ALL_MODES_STR[0]:
                 self.showTip(
                     _("This is the new standard mode of %(gamename)s. Use your left and right arrows to move to the same position as an enemy and spacebar to punch! But remember, they need to be close enough to be hit by your fist. Compared to the previous version, you get bonus points when leveling up. Also, you have chances to get bonuses if you achieve more than 5 consecutive hits!") % {
