@@ -4,12 +4,12 @@
    entitlements.plist
    
 
-   Created by 野澤幸男 on 2021/10/20.
-   Copyright (c) 2021 ___ORGANIZATIONNAME___. All rights reserved.
+   Created by Yukio Nozawa on 2021/10/20.
+   Copyright (c) 2021 Nyanchan Games. All rights reserved.
 -->
 <plist version="1.0">
-<dict>
-<key>com.apple.security.cs.allow-unsigned-executable-memory</key>
-<true />
-</dict>
+  <dict>
+    <key>com.apple.security.cs.allow-unsigned-executable-memory</key>
+    <true/>
+  </dict>
 </plist>
