@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+   entitlements.plist
+   
+
+   Created by 野澤幸男 on 2021/10/20.
+   Copyright (c) 2021 ___ORGANIZATIONNAME___. All rights reserved.
+-->
 <plist version="1.0">
-  <!--
-    These are required for binaries built by PyInstaller.
-    For more info, see:
-      https://developer.apple.com/documentation/security/hardened_runtime
-      https://github.com/pyinstaller/pyinstaller/issues/4629
-  -->
-  <dict>
-    <key>com.apple.security.cs.allow-unsigned-executable-memory</key>
-    <true/>
-  </dict>
+<dict>
+<key>com.apple.security.cs.allow-unsigned-executable-memory</key>
+<true />
+</dict>
 </plist>
