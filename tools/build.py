@@ -18,9 +18,11 @@ def dopackage():
         common.run("cmd /c _build.bat")
         os.remove("_build.bat")
     if not win:
-        print("Creating image dmg")
+        print("codesigning...")
         os.rename("dist/" + PROJECT + ".app", "dist/" + PROJECT_FULL_NAME + ".app")
         os.remove("dist/%s" % PROJECT)
+        common.run("codesign -s \"Yukio Nozawa\" -v --deep --timestamp --entitlements entitlements.plist -o runtime \"dist/%s.app\"" % PROJECT_FULL_NAME)
+        print("Creating image dmg")
         common.run("hdiutil create -volname %s -srcfolder ./dist -ov -format UDZO %s.dmg" % (PROJECT_FULL_NAME, PROJECT_FULL_NAME))
 
 
