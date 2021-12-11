@@ -10,6 +10,15 @@ import glob
 import common
 
 
+def clearPywin32Cache():
+    # pywin32 rebuilding (Carter)
+    genpy_path = os.path.join(os.environ["temp"], "gen_py")
+    if os.path.isdir(genpy_path):
+        print("Deleting pywin32 cach...")
+        shutil.rmtree(genpy_path)
+# end rebuilding
+
+
 def clearPreviousBuild():
     if os.path.isdir("build"):
         shutil.rmtree("build")
@@ -55,12 +64,20 @@ def removeUnnecessaryFilesForMac():
 def dopackage():
     if win:
         print("Creating installer exe")
-        f = open("_build.bat", "w")
-        f.write("WinRAR a -cfg- -ed -ep1 -k -m5 -r -sfx \"-zrar_options.txt\" \"%s.exe\" \"dist\\%s\\*\"" %
-                (PROJECT_FULL_NAME, PROJECT))
-        f.close()
-        common.run("cmd /c _build.bat")
-        os.remove("_build.bat")
+        subprocess.run([
+            "WinRAR",
+            "a",
+            "-cfg-",
+            "-ed",
+            "-ep1",
+            "-k",
+            "-m5",
+            "-r",
+            "-sfx",
+            "-zrar_options.txt",
+            "%s.exe" % (PROJECT_FULL_NAME),
+            "dist\\%s\\*" % (PROJECT)
+        ])
     if not win:
         print("codesigning...")
         subprocess.run([
@@ -90,12 +107,7 @@ if platform.system() == 'Darwin':
     win = False
 
 if win:
-    # pywin32 rebuilding (Carter)
-    genpy_path = os.path.join(os.environ["temp"], "gen_py")
-    if os.path.isdir(genpy_path):
-        print("Deleting pywin32 cach...")
-        shutil.rmtree(genpy_path)
-# end rebuilding
+    clearPywin32Cache()
 
 print("win=%s, cwd=%s" % (win, os.getcwd()))
 PROJECT = "ss"  # Change this line accordingly
