@@ -2,4 +2,4 @@ wx
 pywin32
 pygame
 pyobjc
-pyinstaller==3.5
+pyinstaller==3.6
