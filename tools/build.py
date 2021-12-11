@@ -109,6 +109,13 @@ def dopackage():
             "UDZO",
             "%s.dmg" % (PROJECT_FULL_NAME)
         ])
+        common.run([
+            "codesign",
+            "-s",
+            "Yukio Nozawa",
+            "--timestamp",
+            "%s.dmg" % (PROJECT_FULL_NAME)
+        ])
 
 
 win = True
