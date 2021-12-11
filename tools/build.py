@@ -5,7 +5,6 @@ import os
 import platform
 import sys
 import shutil
-import subprocess
 import glob
 import common
 
@@ -64,7 +63,7 @@ def removeUnnecessaryFilesForMac():
 def dopackage():
     if win:
         print("Creating installer exe")
-        subprocess.run([
+        common.run([
             "WinRAR",
             "a",
             "-cfg-",
@@ -80,7 +79,7 @@ def dopackage():
         ])
     if not win:
         print("codesigning...")
-        subprocess.run([
+        common.run([
             "codesign",
             "-f",
             "-s",
@@ -98,7 +97,7 @@ def dopackage():
                   os.path.join("dist", PROJECT_FULL_NAME+".app"))
         os.remove(os.path.join("dist", PROJECT))
         print("Creating image dmg")
-        subprocess.run([
+        common.run([
             "hdiutil",
             "create",
             "-volname",
@@ -156,10 +155,7 @@ else:
     copydir = os.path.join("dist", "%s.app" %
                            (PROJECT), "Contents", "Resources")
 
-ret = subprocess.run(cmd)
-if ret.returncode != 0:
-    print("pyinstaller did not exit with code 0. Abort.")
-    sys.exit(ret.returncode)
+common.run(cmd)
 
 if not win:
     print("Copying sound_lib dynamic libraries...")

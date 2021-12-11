@@ -7,10 +7,13 @@ import subprocess
 import shutil
 
 
-def run(cmd, sh=False):
+def run(cmdlist,):
     """Runs a specific command."""
-    print("Executing: %s" % cmd)
-    subprocess.call(cmd.split(), shell=sh)
+    ret = subprocess.run(cmdlist)
+    if ret.returncode != 0:
+        sys.stderr.write(
+            "Error: %s returned non-zero exit code (%d)" % (cmdlist, ret.returncode))
+        sys.exit(ret.returncode)
 
 
 def mkdir(fld):
