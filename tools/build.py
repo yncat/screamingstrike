@@ -79,6 +79,17 @@ def dopackage():
         ])
     if not win:
         print("codesigning...")
+        for lib in ["libbass.dylib", "libbass_fx.dylib", "libbassopus.dylib"]:
+            common.run([
+                "codesign",
+                "-s",
+                "Yukio Nozawa",
+                "--timestamp",
+                "-o",
+                "runtime",
+                os.path.join("dist", PROJECT+".app", "Contents", "Resources", "sound_lib", "lib", "x64", lib)
+            ])
+        #end codesign dylib
         common.run([
             "codesign",
             "-f",
