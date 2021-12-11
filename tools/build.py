@@ -98,8 +98,18 @@ def dopackage():
                   os.path.join("dist", PROJECT_FULL_NAME+".app"))
         os.remove(os.path.join("dist", PROJECT))
         print("Creating image dmg")
-        common.run("hdiutil create -volname %s -srcfolder ./dist -ov -format UDZO %s.dmg" %
-                   (PROJECT_FULL_NAME, PROJECT_FULL_NAME))
+        subprocess.run([
+            "hdiutil",
+            "create",
+            "-volname",
+            PROJECT_FULL_NAME,
+            "-srcfolder",
+            "./dist",
+            "-ov",
+            "-format",
+            "UDZO",
+            "%s.dmg" % (PROJECT_FULL_NAME)
+        ])
 
 
 win = True
@@ -128,14 +138,29 @@ if not win:
 os.chdir("build")
 
 if win:
-    cmd = "pyinstaller --windowed %s.py" % (PROJECT)
-    copydir = "dist/%s" % PROJECT
+    cmd = [
+        "pyinstaller",
+        "--windowed",
+        "%s.py" % (PROJECT)
+    ]
+    copydir = os.path.join("dist", PROJECT)
 else:
-    cmd = "pyinstaller --windowed --onefile --osx-bundle-identifier com.nyanchanGames.%s %s.py" % (
-        PROJECT_FULL_NAME, PROJECT)
-    copydir = "dist/%s.app/Contents/Resources" % PROJECT
+    cmd = [
+        "pyinstaller",
+        "--windowed",
+        "--onefile",
+        "--osx-bundle-identifier",
+        "com.nyanchanGames.%s" % (PROJECT_FULL_NAME),
+        "%s.py" % (PROJECT)
+    ]
+    copydir = os.path.join("dist", "%s.app" %
+                           (PROJECT), "Contents", "Resources")
 
-common.run(cmd, sh=win)  # win uses shell=true and mac doesn't
+ret = subprocess.run(cmd)
+if ret.returncode != 0:
+    print("pyinstaller did not exit with code 0. Abort.")
+    sys.exit(ret.returncode)
+
 if not win:
     print("Copying sound_lib dynamic libraries...")
     shutil.copytree("sound_lib/lib", "%s/sound_lib/lib" % copydir)
