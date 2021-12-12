@@ -54,6 +54,42 @@ The game uses pyinstaller for building.
 
 For automated packaging for Windows, WinRAR must be installed and WinRAR.exe must be accessible from the environment variable path.
 
+## Codesigning and notarization on Mac
+
+Build.py runs codesign command to sign all executables in the app bundle. You must have Apple Developer payd membership for issuing your own developer certificate and correctly set it up in your keychain. You will need to change the certificate identifier in the build script to your matching. I haven't made it so that the values can be loaded for the env var.
+
+After running build.py, the script creates build/screamingStrike2.zip for notarization.
+
+Run
+
+`xcrun altool --notarize-app -t osx -f build/screamingStrike2.zip --primary-bundle-id "com.your.identifier" --asc-provider "provider_short_name" -u "your@apple.id" -p "your_app_password"`
+
+To notarize.
+
+com.your.identifier should be changed to your own app identifier. You can choose whatever you like, using alphabets and numbers. com.orgname.appname is the common pattern.
+
+provider_short_name is not necessary if you have only one provider (I don't know how the number of providers increase, I had two). If you have multiple providers, you need to substitute the the provider short name that you want to use. Your providers can be listed by running `xcrun altool --list-providers -u "your@apple.id" -p "app_specific_password"` .
+
+`your@apple.id` must be replaced with your apple ID (email).
+
+app_specific_password can be generated from apple ID account dashboard page. You cannot authenticate altool access with your apple ID password; you need to generate one.
+
+You will receive an email informing that your app has successfully been notarized after several minutes. Once it's done, run the following.
+
+`python3 tools/after_notarization_zip.py`
+
+This will staple the notarization ticket to the app, compress it to a dmg and codesign the dmg. After that, run the following.
+
+`xcrun altool --notarize-app -t osx -f build/screamingStrike2.dmg --primary-bundle-id "com.your.identifier" --asc-provider "provider_short_name" -u "your@apple.id" -p "your_app_password"`
+
+Now, the app and its container dmg is both notarized. Finally, run
+
+`python3 tools/after_notarization_dmg.py`
+
+to staple the notarization ticket to the dmg.
+
+You can distribute the dmg!
+
 ## Translating
 
 Sorry, it works only on Windows right now.
