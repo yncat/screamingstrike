@@ -1,4 +1,4 @@
-wx
+wxpython
 pywin32
 pygame
 pyobjc
