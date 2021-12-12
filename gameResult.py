@@ -29,6 +29,7 @@ class GameResult:
         self.highscore = field.player.getNewHighscore()
         self.previousHighscore = field.player.getPreviousHighscore()
         self.modeSpecificResults = field.modeHandler.getModeSpecificResults()
+        self.modeSpecificResultsForScoreboard = field.modeHandler.getModeSpecificResultsForScoreboard()
         self.log = field.getLog()
         ms = field.gameTimer.elapsed
         self.lastedMinute = int(ms / 60000)
@@ -61,3 +62,6 @@ class GameResult:
 
     def getModeSpecificResults(self):
         return self.modeSpecificResults
+
+    def getModeSpecificResultsForScoreboard(self):
+        return self.modeSpecificResultsForScoreboard
