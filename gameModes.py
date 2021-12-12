@@ -100,6 +100,10 @@ class ModeHandlerBase(object):
         """Can set the modes's specific result data in the game end. Return the array of strings to show at the result screen, otherwise, return an empty array."""
         return []
 
+    def getModeSpecificResultsForScoreboard(self):
+        """Can set the modes's specific result data when sending score. Return the string to be shown to the scoreboard, otherwise, return an empty string."""
+        return ""
+
 
 class NormalModeHandler(ModeHandlerBase):
     def __init__(self):
@@ -303,6 +307,10 @@ class BurdenModeHandler(ModeHandlerBase):
         return [
             _("Highest boost: %(boost)sx") % {"boost": boost}
         ]
+
+    def getModeSpecificResultsForScoreboard(self):
+        boost = "%.1f" % self.highestBoost
+        return "%(boost)sx highest boost" % {"boost": boost}
 
 
 def getModeHandler(mode):
