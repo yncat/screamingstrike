@@ -10,6 +10,12 @@ import platform_utils.paths
 import traceback
 if platform_utils.paths.is_mac and platform_utils.paths.is_frozen():
     os.chdir(platform_utils.paths.embedded_data_path())
+if platform_utils.paths.is_windows:
+    genpy_path = os.path.join(os.environ["temp"], "gen_py")
+    if os.path.isdir(genpy_path):
+        shutil.rmtree(genpy_path)
+    # end rebuilding
+# end win
 import buildSettings
 from ssAppMain import *
 
@@ -30,12 +36,5 @@ def exchandler(type, exc, tb):
 
 #global schope
 sys.excepthook = exchandler
-if platform_utils.paths.is_windows:
-    genpy_path = os.path.join(os.environ["temp"], "gen_py")
-    if os.path.isdir(genpy_path):
-        shutil.rmtree(genpy_path)
-    # end rebuilding
-# end win
-
 if __name__ == "__main__":
     main()
