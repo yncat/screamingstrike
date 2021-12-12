@@ -301,7 +301,7 @@ class BurdenModeHandler(ModeHandlerBase):
     def getModeSpecificResults(self):
         boost = "%.1f" % self.highestBoost
         return [
-            _("Highest boost: %(boost)sx" % {"boost": boost})
+            _("Highest boost: %(boost)sx") % {"boost": boost}
         ]
 
 

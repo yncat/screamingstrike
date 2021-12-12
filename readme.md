@@ -1,48 +1,87 @@
-# Screaming Strike  
+# Screaming Strike
+
 ## Intro
-I decided to opensource this.  
 
-## Dependencies  
-You need pygame and wxpython.  
-pip install pygame  
-pip install wxpython  
-Most of other modules will be included in this package because I'll very likely modify them a bit.  
+I decided to opensource this.
 
-## Other useful commands  
-Note: If You're using mac, you need to use / instead of \ (on windows you can use both \ and /).  
-python tools/build.py  
-Builds the app on win and mac.  Please read the following building section for details.  
-python tools/updateTranslation.py  
-Updates the translation catalog. Currently, cannot be executed on mac. Please read the following translating section for details.  
-python tools/buildTranslation.py  
-Compiles your edited translation catalogs. Currently, it cannot be executed on mac.  
-python tools/initdoc.py  
-Initializes auto document creation. Please read the auto documentation section for details.  
-python build/gendoc.py  
-to generate the API document.  
+## Dependencies
+
+Windows: pip install -r requirements-win.txt
+
+Mac: pip3 install -r requirements-mac.txt
+
+## Running from source
+
+Windows: python ss.py
+
+Mac: python3 ss.py
+
+## Other useful commands
+
+Note: If You're using mac, you need to use / instead of \ (on windows you can use both \ and /).
+
+Windows: python tools/build.py
+
+Mac: python3 tools/build.py
+
+Builds the app on win and mac. Please read the following building section for details.
+
+Windows: python tools/updateTranslation.py
+
+Mac: python3 tools/updateTranslation.py
+
+Updates the translation catalog. Currently, cannot be executed on mac. Please read the following translating section for details.
+
+Windows: python tools/buildTranslation.py
+
+Compiles your edited translation catalogs. Currently, it cannot be executed on mac.
+
+Windows: python tools/initdoc.py
+
+Mac: python3 tools/initdoc.py
+
+Initializes auto document creation. Please read the auto documentation section for details.
+
+Windows: python build/gendoc.py
+
+Mac: python3 build/gendoc.py
+
+to generate the API document.
 
 ## Building
-The game uses pyinstaller for building.  
-pip install pyinstaller  
-For automated packaging, WinRAR must be installed and WinRAR.exe must be accessible from the environment variable path.  
-On macOS, you just need pyinstaller.  
-pip install pyinstaller  
-After setting up the environment, run 'python tools/build.py'.  
+
+The game uses pyinstaller for building.
+
+For automated packaging for Windows, WinRAR must be installed and WinRAR.exe must be accessible from the environment variable path.
 
 ## Translating
-Sorry, it works only on Windows right now.  
-First, create folder for your language in the locale folder (E.G. ja-JP).  
-Run 'python tools/updateTranslation.py'  
-Edit the catalog file in the lc_messages folder under your created folder.  
-Run 'python tools/buildTranslation.py'  
-Your added language should be selectable from the options menu.  
+
+Sorry, it works only on Windows right now.
+
+First, create folder for your language in the locale folder (E.G. ja-JP).
+
+Run 'python tools/updateTranslation.py'
+
+Edit the catalog file in the lc_messages folder under your created folder.
+
+Run 'python tools/buildTranslation.py'
+
+Your added language should be selectable from the options menu.
 
 ## API reference
-You need sphinx.  
-pip install sphinx  
-run the following commands to generate the API reference, which may help you how the game is coded. There's missing docstrings here and there, so a small part of the API reference may have less detailed info.  
-python tools/initdoc.py  
-python tools/gendoc.py  
+
+You need sphinx.
+
+pip install sphinx
+
+run the following commands to generate the API reference, which may help you how the game is coded. There's missing docstrings here and there, so a small part of the API reference may have less detailed info.
+
+python tools/initdoc.py
+
+python tools/gendoc.py
+
+On mac, change python to python3.
 
 ## Contributing
-Please post issues / suggestions / ideas to the issue tracking in this repository. If you did something interesting, feel free to send pull requests.  
+
+Please post issues / suggestions / ideas to the issue tracking in this repository. If you did something interesting, feel free to send pull requests.

@@ -16,4 +16,5 @@ docs/api
 build/
 dist/
 ss.spec
-.DS_Store
+*.dmg
+.ds_store

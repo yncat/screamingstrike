@@ -71,25 +71,25 @@ class StatsStorage(object):
         self.items[key] = value
     # end set
 
-    def inclement(self, key, unit=1):
-        """Inclements the specified value by unit. If the key doesn't exist, create one.
+    def increment(self, key, unit=1):
+        """increments the specified value by unit. If the key doesn't exist, create one.
 
         :param unit: Unit. Default is 1.
         :type unit: int
         """
         self.checkKey(key)
         self.items[key] = self.items[key] + unit
-    # end inclement
+    # end increment
 
-    def declement(self, key, unit=1):
-        """Declements the specified value by unit. If the key doesn't exist, does nothing.
+    def decrement(self, key, unit=1):
+        """decrements the specified value by unit. If the key doesn't exist, does nothing.
 
         :param unit: Unit. Default is 1.
         :type unit: int
         """
         self.keyCheck(key)
         self.items[key] = self.items[key] - unit
-    # end inclement
+    # end increment
 
     def checkKey(self, key):
         """Checks the specified key. If it doesn't exist, create a new one with 0.
