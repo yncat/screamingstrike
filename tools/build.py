@@ -118,7 +118,7 @@ def dopackage():
             "-rsrc",
             "--sequesterRsrc",
             "--keepParent",
-            "%s.app" % (PROJECT_FULL_NAME),
+            os.path.join("dist", PROJECT_FULL_NAME+".app"),
             "%s.zip" % (PROJECT_FULL_NAME)
         ])
 
