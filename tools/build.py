@@ -110,25 +110,16 @@ def dopackage():
         os.rename(os.path.join("dist", PROJECT + ".app"),
                   os.path.join("dist", PROJECT_FULL_NAME+".app"))
         os.remove(os.path.join("dist", PROJECT))
-        print("Creating image dmg")
+        print("Creating zip for notarization")
         common.run([
-            "hdiutil",
-            "create",
-            "-volname",
-            PROJECT_FULL_NAME,
-            "-srcfolder",
-            "./dist",
-            "-ov",
-            "-format",
-            "UDZO",
-            "%s.dmg" % (PROJECT_FULL_NAME)
-        ])
-        common.run([
-            "codesign",
-            "-s",
-            "Yukio Nozawa",
-            "--timestamp",
-            "%s.dmg" % (PROJECT_FULL_NAME)
+            "ditto",
+            "-c",
+            "-k",
+            "-rsrc",
+            "--sequesterRsrc",
+            "--keepParent",
+            "%s.app" % (PROJECT_FULL_NAME),
+            "%s.zip" % (PROJECT_FULL_NAME)
         ])
 
 
