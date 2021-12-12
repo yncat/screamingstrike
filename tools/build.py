@@ -35,7 +35,9 @@ def copyBeforeBuild():
         "result.txt"
     ]
     for file in deletefiles:
-        os.remove(os.path.join("build", file))
+        f = os.path.join("build", file)
+        if os.path.isfile(f):
+            os.remove(f)
     copydirs = [
         "data",
         "locale",
@@ -87,9 +89,10 @@ def dopackage():
                 "--timestamp",
                 "-o",
                 "runtime",
-                os.path.join("dist", PROJECT+".app", "Contents", "Resources", "sound_lib", "lib", "x64", lib)
+                os.path.join("dist", PROJECT+".app", "Contents",
+                             "Resources", "sound_lib", "lib", "x64", lib)
             ])
-        #end codesign dylib
+        # end codesign dylib
         common.run([
             "codesign",
             "-f",
