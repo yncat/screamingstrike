@@ -2,7 +2,7 @@ Screaming Strike 2 Changelog
 2021/12/12 Version 2.06
 (1) Added newly contributed item voices and screams (#18, #19).
 (2) Added a new game mode, burden (#21).
-(3) TheMac version's binary is now codesigned and notarized so that the execution should no longer be blocked in newer OS.
+(3) The Mac version's binary is now codesigned and notarized so that the execution should no longer be blocked by newer OS.
 
 2019/08/07 Version 2.05
 (1) Fixed a bug which made the game crash when you got too many duplicate boosts (#13).
