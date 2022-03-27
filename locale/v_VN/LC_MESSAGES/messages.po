@@ -1,0 +1,685 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the screamingStrike package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: screamingStrike\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-09-26 21:52+0900\n"
+"PO-Revision-Date: 2022-02-28 19:48+0700\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: vi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.0.1\n"
+
+#: collection.py:216
+msgid ""
+"Use your left and right arrows to brows your collections, then press enter "
+"to make your unlocked one scream. You can move through your unlocked items "
+"with shift + left or right. To play with pitch changing, hold down up and "
+"down arrows. Press escape when you're satisfied."
+msgstr ""
+"Sử dụng mũi tên trái và phải để duyệt qua các collections của bạn, sau đó "
+"nhấn enter để làm cho một mục đã mở khóa của bạn phát da âm thanh. Bạn có "
+"thể di chuyển qua các mục đã mở khóa của mình bằng shift + trái hoặc phải. "
+"Để thay đổi sự cao độ, hãy giữ các mũi tên lên và xuống. Nhấn phím escape "
+"khi bạn hài lòng."
+
+#: collection.py:272
+msgid "Unlocked"
+msgstr "Mở khóa"
+
+#: collection.py:275
+msgid "Locked"
+msgstr "Khóa"
+
+#: collection.py:277
+#, python-format
+msgid "No.%(no)d, %(status)s, %(plays)d"
+msgstr "Không.%(no)d, %(status)s, %(plays)d"
+
+#: gameField.py:26
+#, python-format
+msgid "Game started at %(startedtime)s!"
+msgstr "Trò chơi bắt đầu lúc %(startedtime)s!"
+
+#: gameField.py:62
+#, python-format
+msgid "Playing: %(mode)s, high score: %(highscore)d."
+msgstr "Đang chơi: %(mode)s, điểm: %(highscore)d."
+
+#: gameField.py:64
+msgid " mode"
+msgstr "chế độ"
+
+#: gameField.py:90
+#, python-format
+msgid "Game over! Final score: %(score)d"
+msgstr "Game over! Điểm tổng: %(score)d"
+
+#: gameField.py:133
+#, python-format
+msgid ""
+"Leveled up to %(newlevel)d! (Accuracy %(accuracy).1f%%, with %(lives)d hp "
+"remaining)"
+msgstr ""
+"Đã thăng cấp lên %(newlevel)d! (Sự chính xác %(accuracy).1f%%, với %(lives)d "
+"hp còn lại)"
+
+#: gameField.py:170
+msgid "Game aborted."
+msgstr "Hủy chơi"
+
+#: gameField.py:187
+msgid "Activating destruction!"
+msgstr "Kích hoạt hủy diệt!"
+
+#: gameField.py:199
+msgid "End destruction!"
+msgstr "Kết thúc hủy diệt!"
+
+#: gameModes.py:58
+#, python-format
+msgid "Hit! (speed %(speed)d, distance %(distance)d, penetration bonus added)"
+msgstr ""
+"Đánh! (Tốc độ %(speed)d, khoảng cách %(distance)d, thêm phần thưởng đánh)"
+
+#: gameModes.py:60
+#, python-format
+msgid "Hit! (speed %(speed)d, distance %(distance)d)"
+msgstr "Đánh! (tốc độ %(speed)d, khoảng cách %(distance)d)"
+
+#: gameModes.py:222
+#, python-format
+msgid "Hit! (speed %(speed)d, burden %(burden)d, %(boost)sx boost)"
+msgstr "Đánh! (tốc độ %(speed)d, gánh %(burden)d, %(boost)sx boost)"
+
+#: gameModes.py:304
+#, python-format
+msgid "Highest boost: %(boost)sx"
+msgstr "Boost cao nhất: %(boost)sx"
+
+#: gameResult.py:36
+msgid "minute"
+msgstr "phút"
+
+#: gameResult.py:36
+msgid "minutes"
+msgstr "phút"
+
+#: gameResult.py:37
+msgid "second"
+msgstr "giây"
+
+#: gameResult.py:37
+msgid "seconds"
+msgstr "giây"
+
+#: gameResult.py:38
+#, python-format
+msgid "%(min)d %(minunit)s and %(sec)d %(secunit)s"
+msgstr "%(min)d %(minunit)s và %(sec)d %(secunit)s"
+
+#: item.py:66
+#, python-format
+msgid "A \"%(item)s\" item fell on the ground and shattered into peaces!"
+msgstr "một \"%(item)s\" vật phẩm rơi trên mặt đất và vỡ vụn!"
+
+#: item.py:70
+#, python-format
+msgid "Obtained a \"%(item)s\" item!"
+msgstr "Thu được một \"%(item)s\" vật phẩm!"
+
+#: item.py:95
+#, python-format
+msgid "A \"%(item)s\" item was shattered into peaces!"
+msgstr "Một \"%(item)s\" vật phẩm đã tan thành mây khói!"
+
+#: itemEffects.py:34
+#, python-format
+msgid "A new \"%(item)s\" effect is starting!"
+msgstr "Một \"%(item)s\" hiệu ứng đang bắt đầu!"
+
+#: itemEffects.py:41
+#, python-format
+msgid "One of your \"%(item)s\" effects is ending!"
+msgstr "Một \"%(item)s\" hiệu ứng đang kết thúc!"
+
+#: itemEffects.py:49
+#, python-format
+msgid ""
+"Your \"%(item)s\" effect has been extended for %(extended)d milliseconds! "
+"(now %(newtime)d)"
+msgstr ""
+"Của bạn \"%(item)s\" hiệu lực đã được mở rộng cho %(extended)d mili giây! "
+"(now %(newtime)d)"
+
+#: itemEffects.py:57
+#, python-format
+msgid "%(name)s: %(sec).2f seconds left"
+msgstr "%(name)s: %(sec).2f giây còn lại"
+
+#: player.py:137
+#, python-format
+msgid "%(hits)d consecutive hits bonus!"
+msgstr "%(hits)d phần thưởng đánh liên tiếp!"
+
+#: player.py:148
+#, python-format
+msgid "%(misses)d consecutive misses penalty!"
+msgstr "%(misses)d liên tiếp đánh hỏng hình phạt!"
+
+#: player.py:246
+#, python-format
+msgid "This effect will be used when it's necessary! (Remaining %(r)d)"
+msgstr "Hiệu ứng này sẽ được sử dụng khi cần thiết! (Remaining %(r)d)"
+
+#: player.py:250
+#, python-format
+msgid "Extra life! (now %(lives)d lives)"
+msgstr "Thêm mạng! (giờ là %(lives)d mạng)"
+
+#: player.py:279
+#, python-format
+msgid "The effective range of your Punch is now %(range)d (from %(from)d)"
+msgstr "Phạm vi hiệu quả khi bạn đánh  bây giờ là %(range)d (từ %(from)d)"
+
+#: player.py:290
+#, python-format
+msgid "The speed of your punch is now %(speed)d milliseconds (from %(from)d)"
+msgstr "Tốc độ cú đấm của bạn bây giờ là %(speed)d mili giây (từ %(from)d)"
+
+#: player.py:301
+msgid "Your punches now penetrate enemies and items!"
+msgstr "Các cú đấm của bạn bây giờ xuyên qua kẻ thù và các vật phẩm!"
+
+#: player.py:303
+msgid "Your punches no longer penetrate enemies and items!"
+msgstr "Những cú đấm của bạn không còn xuyên qua kẻ thù và vật phẩm!"
+
+#: player.py:327
+msgid "You're about to be attacked, but you have a counter!"
+msgstr "Bạn sắp bị tấn công, nhưng bạn có phản công!"
+
+#: player.py:333
+#, python-format
+msgid "You've been slapped! (%(lives)d HP remaining)"
+msgstr "Bạn đã bị tát! (%(lives)d HP còn lại)"
+
+#: player.py:339
+msgid "Game over!"
+msgstr "Game over!"
+
+#: player.py:356
+msgid "added"
+msgstr "thêm"
+
+#: player.py:358
+msgid "subtracted"
+msgstr "trừ"
+
+#: player.py:359
+#, python-format
+msgid "Point: %(added).1f %(changestr)s (%(total).1f)"
+msgstr "điểm: %(added).1f %(changestr)s (%(total).1f)"
+
+#: ssAppMain.py:184
+msgid "Normal mode"
+msgstr "Chế độ Normal"
+
+#: ssAppMain.py:185
+msgid "Arcade mode"
+msgstr "Chế độ arcade"
+
+#: ssAppMain.py:186
+msgid "Classic mode"
+msgstr "Chế độ Classic"
+
+#: ssAppMain.py:187
+msgid "Burden mode"
+msgstr "Chế độ burden"
+
+#: ssAppMain.py:196
+msgid ""
+"Main menu. Use your up and down arrows to choose an option, then press enter "
+"to confirm"
+msgstr ""
+"menu chính. Sử dụng mũi tên lên và xuống của bạn để chọn một mục, sau đó "
+"nhấn enter để xác nhận"
+
+#: ssAppMain.py:199
+msgid "Collection"
+msgstr ""
+
+#: ssAppMain.py:200
+msgid "View the scoreboard"
+msgstr "Xem bảng điểm"
+
+#: ssAppMain.py:201
+msgid "Read the manual"
+msgstr "Đọc hướng dẫn sử dụng bằng tiếng việt"
+
+#: ssAppMain.py:202
+msgid "Erase data"
+msgstr "Xóa dữ liệu"
+
+#: ssAppMain.py:203
+msgid "Options"
+msgstr "Tùy chọn"
+
+#: ssAppMain.py:204
+msgid "Quit"
+msgstr "Đóng game"
+
+#: ssAppMain.py:227
+#, python-format
+msgid "Update checking is disabled in this build of %(gamename)s."
+msgstr "Kiểm tra cập nhật bị tắt trong bản dựng này của %(gamename)s."
+
+#: ssAppMain.py:229
+#, python-format
+msgid ""
+"There was an error while retrieving software update information (%(error)s). "
+"Please try again later."
+msgstr ""
+"Đã xảy ra lỗi khi truy xuất thông tin cập nhật phần mềm (%(error)s). Please "
+"try again later."
+
+#: ssAppMain.py:232
+msgid ""
+"You're playing the latest version! When a new update is found, you will be "
+"notified here."
+msgstr ""
+"Game được dịch bởi Đào Đức Trung. Bạn đang chơi phiên bản mới nhất! Khi có "
+"bản cập nhật mới, bạn sẽ được thông báo tại đây."
+
+#: ssAppMain.py:235
+msgid "There is a new version of the game! Press enter here to download it."
+msgstr "Có một phiên bản mới của trò chơi! Nhấn enter tại đây để tải xuống."
+
+#: ssAppMain.py:248
+#, python-format
+msgid "Downloading the new version (%(current)dK/%(total)dK (%(percent)d%%)"
+msgstr "Đang tải xuống phiên bản mới (%(current)dK/%(total)dK (%(percent)d%%)"
+
+#: ssAppMain.py:254
+#, python-format
+msgid "The new version has been downloaded to %(location)s."
+msgstr "Phiên bản mới đã được tải xuống %(location)s."
+
+#: ssAppMain.py:256
+#, python-format
+msgid "Failed to download the new update (%(reason)s). Press enter to retry."
+msgstr ""
+"Không tải xuống được bản cập nhật mới (%(reason)s). Nhấn enter để thử lại."
+
+#: ssAppMain.py:304
+#, python-format
+msgid "This build of %(gamename)s doesn't have download location set."
+msgstr "Bản dựng này của %(gamename)s chưa đặt vị trí tải xuống."
+
+#: ssAppMain.py:307 ssAppMain.py:308
+msgid "Select the folder where you want to download the installer."
+msgstr "Chọn thư mục mà bạn muốn tải xuống trình cài đặt."
+
+#: ssAppMain.py:314
+msgid "Warning"
+msgstr "Cảnh báo"
+
+#: ssAppMain.py:314
+msgid " already exists. Do you want to overwrite?"
+msgstr " đã tồn tại. Bạn có muốn ghi đè lên?"
+
+#: ssAppMain.py:357
+#, python-format
+msgid ""
+"This is the new standard mode of %(gamename)s. Use your left and right "
+"arrows to move to the same position as an enemy and spacebar to punch! But "
+"remember, they need to be close enough to be hit by your fist. Compared to "
+"the previous version, you get bonus points when leveling up. Also, you have "
+"chances to get bonuses if you achieve more than 5 consecutive hits!"
+msgstr ""
+"Đây là chế độ tiêu chuẩn của %(gamename)s. Sử dụng mũi tên trái và phải của "
+"bạn để di chuyển đến cùng vị trí với kẻ thù và phím cách để đấm! Nhưng hãy "
+"nhớ rằng họ cần đủ gần để có thể bị bạn đấm trúng. Thử nào!"
+
+#: ssAppMain.py:361
+#, python-format
+msgid ""
+"This is the new arcade mode of %(gamename)s! From the new version, items "
+"that fall faster are more likely to be good, and slower ones are more likely "
+"to be bad. You can obtain an item by punching it, or destroy it by combining "
+"your up arrow when punching. Carefully choose which item to obtain!"
+msgstr ""
+"Đây là chế độ arcade của %(gamename)s! có vật phẩm. Bạn có thể lấy một vật "
+"phẩm bằng cách đấm hoặc phá hủy nó bằng cách kết hợp mũi tên lên khi đấm. "
+"Cẩn thận chọn vật phẩm để lấy!"
+
+#: ssAppMain.py:364
+msgid ""
+"This is the old-fashioned game mode! You don't get bonuses based on "
+"accuracy, so you can punch, punch, punch punch punch and punch! This mode "
+"has a sharper levelup curb, meaning that you can collect screams really fast!"
+msgstr ""
+"cái này rống cái  chế độ Normal! chả có gì làm ở đây hết, vì vậy bạn có thể "
+"đấm, đấm, đấm đấm và đấm! Chế độ này có độ khó hơn tí thôi"
+
+#: ssAppMain.py:366
+msgid ""
+"Welcome to this new and exciting burden mode! In this mode, every item gives "
+"you a nasty effect, and each nasty effect boosts points you gain! Guess "
+"what? The more you torture yourself, the more point boost you get! Oh, but "
+"if you die because of your own torturous act, hahahahahaha, you stupid! Good "
+"luck!"
+msgstr ""
+"Chào mừng bạn đến với chế độ burden  và thú vị này! Trong chế độ này, mọi "
+"vật phẩm đều mang lại cho bạn một hiệu ứng sấu và mỗi hiệu ứng sấu sẽ tăng "
+"điểm bạn nhận được! Đoán xem nào? Bạn càng hành hạ bản thân, bạn càng nhận "
+"được nhiều điểm hơn! Ồ, nhưng nếu bạn chết vì hành động tra tấn vào chính "
+"mình, hahahahahaha, vậy thì bạn là một thằng ngu! Bạn có vẻ là không hiểu "
+"nhỉ, thôi. Chúc may mắn nhé!"
+
+#: ssAppMain.py:374
+#, python-format
+msgid "Tip: %s (Press enter to close this tip)"
+msgstr "Mẹo: %s (Nhấn enter để đóng mẹo này)"
+
+#: ssAppMain.py:383
+msgid "Please select the game mode to view"
+msgstr "Vui lòng chọn chế độ để xem"
+
+#: ssAppMain.py:385 ssAppMain.py:408 ssAppMain.py:449
+msgid "Back"
+msgstr "Trở lại"
+
+#: ssAppMain.py:401
+#, python-format
+msgid "This build of %(gamename)s does not support scoreboard viewing."
+msgstr "Bản dựng này của %(gamename)s không hỗ trợ xem bảng điểm."
+
+#: ssAppMain.py:404
+#, python-format
+msgid "Score table for %(mode)s"
+msgstr "Bảng điểm cho %(mode)s"
+
+#: ssAppMain.py:423
+#, python-format
+msgid ""
+"The manual written in the selected language doesn't seem to exist. If you "
+"can write one and contribute, please create %(filename)s and contact the "
+"developer."
+msgstr ""
+"Hướng dẫn được viết bằng ngôn ngữ đã chọn dường như không tồn tại. Nếu bạn "
+"có thể viết và đóng góp, vui lòng tạo %(filename)s và liên hệ với nhà phát "
+"triển."
+
+#: ssAppMain.py:429
+msgid ""
+"Use your up and down arrows to read the manual. You can navigate to each "
+"section by using shortcut keys 1 to 9. Press escape to close"
+msgstr ""
+"Sử dụng mũi tên lên và xuống của bạn để đọc hướng dẫn. Bạn có thể điều hướng "
+"đến từng phần bằng cách sử dụng các phím tắt từ 1 đến 0. Nhấn phím escape để "
+"đóng"
+
+#: ssAppMain.py:449
+msgid "Select the data to erase"
+msgstr "Chọn dữ liệu để xóa"
+
+#: ssAppMain.py:449
+msgid "Highscores"
+msgstr "Điểm"
+
+#: ssAppMain.py:449
+msgid "Collections"
+msgstr ""
+
+#: ssAppMain.py:459
+msgid "Hold shift and enter to erase."
+msgstr "Giữ phím shift và enter để xóa."
+
+#: ssAppMain.py:464
+msgid "Your highscores are all reset!"
+msgstr "Điểm của bạn đã được xóa."
+
+#: ssAppMain.py:468
+msgid "Your collections are all reset!"
+msgstr "Tất cả các collections  của bạn đã được xóa"
+
+#: ssAppMain.py:479
+msgid ""
+"Options Menu, use your up and down arrows to choose an option, left and "
+"right arrows to change values, enter to save or escape to discard changes"
+msgstr ""
+"Menu Tùy chọn, Sử dụng mũi tên lên và xuống để chọn một mục cài đặt. Mũi tên "
+"trái và phải để thay đổi giá trị của cài đặt đó, Enter để lưu hoặc escape để "
+"hủy thay đổi"
+
+#: ssAppMain.py:480
+msgid "Background music volume"
+msgstr ""
+"Âm lượng nhạc nền, bấm mũi tên trái và phải để chỉnh Âm lượng nhạc nền. Bấm "
+"mũi tên phải là tăng, mũi tên trái là dảm"
+
+#: ssAppMain.py:481
+msgid "Left panning limit"
+msgstr "Bên trái, bấm mũi tên phải để đưa nó qua phải và nghe âm thanh"
+
+#: ssAppMain.py:482
+msgid "Right panning limit."
+msgstr "Bên phải, bấm mũi tên trái để đưa nó qua trái và nghe âm thanh"
+
+#: ssAppMain.py:483
+msgid "Item announcement voice"
+msgstr "Giọng nói thông báo vật phẩm, bấm mũi tên trái và phải để trọn"
+
+#: ssAppMain.py:484
+msgid "Language (restart to apply)"
+msgstr "Ngôn ngữ, Bấm mũi tên trái phải để trọn(khởi động lại để áp dụng)"
+
+#: ssAppMain.py:498
+msgid "Changes discarded."
+msgstr "Các cài đặt đã bị hủy."
+
+#: ssAppMain.py:503
+msgid "Settings saved"
+msgstr "Đã lưu cài đặt"
+
+#: ssAppMain.py:572
+#, python-format
+msgid "%(voice)s cannot be loaded."
+msgstr "%(voice)s không thể tải."
+
+#: ssAppMain.py:604
+#, python-format
+msgid "%(playmode)s, high score %(highscore)s, start!"
+msgstr "%(playmode)s, điểm %(highscore)s, Bắt đầu!"
+
+#: ssAppMain.py:648
+msgid "Game paused"
+msgstr "Tạm dừng chơi"
+
+#: ssAppMain.py:649
+msgid ""
+"Press enter or escape to resume. Use your up and down arrows to view current "
+"stats."
+msgstr ""
+"Nhấn enter hoặc escape để tiếp tục. Sử dụng mũi tên lên và xuống của bạn để "
+"xem số liệu thống kê chơi hiện tại."
+
+#: ssAppMain.py:650
+#, python-format
+msgid "Score: %(score)d"
+msgstr "Điểm: %(score)d"
+
+#: ssAppMain.py:652
+#, python-format
+msgid ""
+"You are updating your high score. Currently plus %(distance)d (last: "
+"%(last)d)"
+msgstr ""
+"Bạn đang cập nhật điểm số của mình. Hiện tại cộng %(distance)d (Trước đó: "
+"%(last)d)"
+
+#: ssAppMain.py:654 ssAppMain.py:725
+#, python-format
+msgid "Punches: %(punches)d, hits: %(hits)d, accuracy: %(accuracy).2f%%"
+msgstr "Đấm: %(punches)d, Đánh: %(hits)d, sự chính xác: %(accuracy).2f%%"
+
+#: ssAppMain.py:656
+#, python-format
+msgid "This game is currently lasting for %(time)s."
+msgstr "Thời gian chơi của bạn %(time)s."
+
+#: ssAppMain.py:657
+#, python-format
+msgid "Level: %(level)d, player HP: %(hp)d."
+msgstr "Cấp độ: %(level)d, HP của bạn: %(hp)d."
+
+#: ssAppMain.py:659
+#, python-format
+msgid ""
+"You have %(amount)d stored destructions. You will be protected automatically "
+"instead of consuming these."
+msgstr ""
+"Bạn có %(amount)d sự phá hủy được lưu. Bạn sẽ được bảo vệ tự động thay vì sử "
+"dụng nó."
+
+#: ssAppMain.py:662
+#, python-format
+msgid "Active item effects: %(fx)d"
+msgstr "Hiệu ứng vật phẩm hoạt động: %(fx)d"
+
+#: ssAppMain.py:666
+msgid "-- Last 10 logs --"
+msgstr "-- bản ghi gần đây nhất -"
+
+#: ssAppMain.py:697
+msgid "collection"
+msgstr ""
+
+#: ssAppMain.py:697
+msgid "collections"
+msgstr ""
+
+#: ssAppMain.py:698
+#, python-format
+msgid "Unlocked %(number)d %(collection)s!"
+msgstr "Mở khóa %(number)d %(collection)s!"
+
+#: ssAppMain.py:702
+msgid "Close"
+msgstr "Đóng"
+
+#: ssAppMain.py:717
+msgid "Game result"
+msgstr "Kết quả chơi"
+
+#: ssAppMain.py:718
+#, python-format
+msgid "Final score: %(score)d"
+msgstr "Điểm tổng: %(score)d"
+
+#: ssAppMain.py:720
+#, python-format
+msgid "New high score! Plus %(distance)d (last: %(last)d)"
+msgstr "Kỷ lục mới! Thêm %(distance)d (trước đó: %(last)d)"
+
+#: ssAppMain.py:731
+#, python-format
+msgid "This game lasted for %(time)s."
+msgstr "Trò chơi này kéo dài được %(time)s."
+
+#: ssAppMain.py:732
+#, python-format
+msgid "You reached level %(level)d."
+msgstr "Bạn đã đạt đến cấp độ %(level)d."
+
+#: ssAppMain.py:752
+msgid "Score posting"
+msgstr "Đăng điểm"
+
+#: ssAppMain.py:752
+msgid "Do you want to post this score to the scoreboard?"
+msgstr "Bạn có muốn đăng điểm của bạn lên bảng điểm không?"
+
+#: ssAppMain.py:754 ssAppMain.py:755
+msgid "Please input your name."
+msgstr "Vui lòng nhập tên của bạn."
+
+#: ssAppMain.py:755
+msgid "Name entry"
+msgstr "Ô nhập tên"
+
+#: ssAppMain.py:764
+#, python-format
+msgid "This build of %(gamename)s does not support score posting. Sorry!"
+msgstr "Bản dựng này của %(gamename)s không hỗ trợ đăng điểm. Xin lỗi!"
+
+#: ssAppMain.py:768
+#, python-format
+msgid ""
+"There was an error while posting your score (%(error)s). Please try again "
+"later."
+msgstr "Đã xảy ra lỗi khi đăng điểm của bạn (%(error)s). Vui lòng thử lại sau."
+
+#: ssAppMain.py:773
+msgid ""
+"Your score was posted, but you were not ranked in. Better luck next time!"
+msgstr ""
+"Điểm của bạn đã được đăng, nhưng bạn không được xếp hạng. Chúc bạn may mắn "
+"lần sau. Lí do là bạn chơi chưa tốt, tôi ngĩ vậy!"
+
+#: ssAppMain.py:776
+#, python-format
+msgid ""
+"Congratulations! Your score has ranked in position %(pos)d! Keep up your "
+"great work!"
+msgstr ""
+"Xin chúc mừng! Điểm của bạn đã xếp ở thứ hạng %(pos)d! Chên bảng điểm. Chơi "
+"để leo rank thôi nào, cho cả thế giới biết, bạn bố đời thế nào đi!"
+
+#: ssAppMain.py:818
+msgid "Yes"
+msgstr "có"
+
+#: ssAppMain.py:819
+msgid "No"
+msgstr "không"
+
+#: ssAppMain.py:876
+msgid "Update downloading is still in progress"
+msgstr "Quá trình tải xuống bản cập nhật vẫn đang được tiến hành"
+
+#: ssAppMain.py:878
+msgid "Forcefully shutdown"
+msgstr "tắt khẩn cấp"
+
+#: ssAppMain.py:886
+msgid "Download job has ended! Press enter to close the application."
+msgstr "tải xuống đã xong! Nhấn enter để đóng ứng dụng."
+
+#: ssAppMain.py:898
+msgid "Choose 'Forcefully shutdown' or alt+f4 to abort the download."
+msgstr "Chọn 'Tắt khẩn cấp hoặc alt + f4 để hủy tải xuống."
+
+#: ssAppMain.py:931
+#, python-format
+msgid ""
+"The changelog file written in the selected language doesn't seem to exist. "
+"If you can write one and contribute, please create %(filename)s and contact "
+"the developer."
+msgstr ""
+"Tệp thay đổi được viết bằng ngôn ngữ đã chọn dường như không tồn tại. Nếu "
+"bạn có thể viết và đóng góp, vui lòng tạo %(filename)s và liên hệ với nhà "
+"phát triển."
+
+#: ssAppMain.py:936
+msgid "Changelog"
+msgstr "nhật kí thay đổi"
