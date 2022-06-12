@@ -1,6 +1,6 @@
 ﻿Screaming Strike 2!
 
-Sürüm: 2.06
+Sürüm: 2.07
 Nyanchan tarafından üretilmiştir
 Skorbord: https://www.nyanchangames.com/scoreboard/score.php
 
