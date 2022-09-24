@@ -28,7 +28,7 @@ common.run([
 common.run([
     "codesign",
     "-s",
-    "Yukio Nozawa",
+    "Developer ID Application: Yukio Nozawa",
     "--timestamp",
     "%s.dmg" % (PROJECT_FULL_NAME)
 ])

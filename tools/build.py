@@ -85,7 +85,7 @@ def dopackage():
             common.run([
                 "codesign",
                 "-s",
-                "Yukio Nozawa",
+                "Developer ID Application: Yukio Nozawa",
                 "--timestamp",
                 "-o",
                 "runtime",
@@ -97,7 +97,7 @@ def dopackage():
             "codesign",
             "-f",
             "-s",
-            "Yukio Nozawa",
+            "Developer ID Application: Yukio Nozawa",
             "-v",
             "--deep",
             "--timestamp",
