@@ -1,6 +1,6 @@
 Screaming Strike 2!
 
-Version : 2.07
+Version : 2.08
 作成者　: にゃんちゃん
 スコアボード: https://www.nyanchangames.com/scoreboard/score.php
 

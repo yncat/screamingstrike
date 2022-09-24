@@ -1,4 +1,7 @@
 Screaming Strike 2 Changelog
+2022/09/24 Version 2.08
+(1) Updated the Mac version installer's distribution certificate. There's no change for the Windows version.
+
 2022/06/13 Version 2.07
 (1) Added newly contributed language settings, Vietnamese (#41).
 
