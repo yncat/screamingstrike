@@ -1,6 +1,6 @@
 ﻿Screaming Strike 2!
 
-Version : 2.08
+Version : 2.07
 Developed by : Nyanchan
 Scoreboard: https://www.nyanchangames.com/scoreboard/score.php
 
