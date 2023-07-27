@@ -46,7 +46,11 @@ class Enemy():
         """
         self.paused = False
         self.field = field
-        self.x = x
+        if globalVars.stressrelease: # Should return True only in stress release mode.
+            self.x = field.getCenterPosition() # Should make sure enemies always spawn in the center. This may not be meaningful to you, but this actually matters. By making enemies spawn in the center, if you ever decided to mod the game by adding more screams, then the true stereo sounds will sound much better in this mode.
+        else: # Handle enemies as usual.
+            self.x = x
+#end stress release check
         self.y = field.getY()
         self.speed = speed
         self.state = STATE_ALIVE
@@ -123,7 +127,11 @@ class Enemy():
         self.playScream()
         self.field.collectionCounter.increment(self.screamNum)
         self.switchState(STATE_SCREAMING)
-        score = self.field.modeHandler.calculateEnemyDefeatScore(self.speed, self.y)
+        if globalVars.stressrelease: # Just loke before.
+            score = 1 # One point per kill in stress release.
+        else:
+            score = self.field.modeHandler.calculateEnemyDefeatScore(self.speed, self.y)
+# end stress release check
         s = self.field.modeHandler.getDefeatMessage(self.speed, self.y)
         if self.field.easter:
             s = s.replace("Hit!", "I punched a monkey!")

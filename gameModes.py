@@ -8,12 +8,13 @@ import bonusCounter
 import item
 import itemConstants
 import window
-
+import globalVars # To make use of the new variable.
 NORMAL = 0
 ARCADE = 1
 CLASSIC = 2
 BURDEN = 3
-ALL_MODES_STR = ["Normal", "Arcade", "Classic", "Burden"]
+STRESS = 4
+ALL_MODES_STR = ["Normal", "Arcade", "Classic", "Burden", "Stress release"]
 
 
 class ModeHandlerBase(object):
@@ -185,7 +186,10 @@ class ClassicModeHandler(ModeHandlerBase):
         self.allowConsecutiveHitsBonus = False
         self.allowConsecutiveMissesBonus = False
         self.allowLevelupBonus = False
-        self.name = ALL_MODES_STR[2]
+        if globalVars.stressrelease:
+            self.name = ALL_MODES_STR[4]
+        else:
+            self.name = ALL_MODES_STR[2]
 
     def calculateNextLevelup(self):
         """
@@ -327,4 +331,7 @@ def getModeHandler(mode):
         return ClassicModeHandler()
     if mode == ALL_MODES_STR[3]:
         return BurdenModeHandler()
+    if mode == ALL_MODES_STR[4]:
+        globalVars.stressrelease = True
+        return ClassicModeHandler()
     return None
