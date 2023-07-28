@@ -1,10 +1,10 @@
-import collections
+from collections.abc import Mapping
 import ctypes
 from sound_lib.external import pybass
 from sound_lib.main import bass_call, bass_call_0
 
 
-class BassConfig(collections.Mapping):
+class BassConfig(Mapping):
     config_map = {
         '3d_algorithm': pybass.BASS_CONFIG_3DALGORITHM,
         'buffer': pybass.BASS_CONFIG_BUFFER,
