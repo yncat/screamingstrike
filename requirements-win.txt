@@ -1,3 +1,5 @@
 wxpython
 pywin32
 pygame
+winpaths
+pyinstaller==5.13
