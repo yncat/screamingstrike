@@ -1,5 +1,5 @@
 wxpython
 pygame
 pyobjc
-pyinstaller==3.6
+pyinstaller==5.13.1
 appscript
