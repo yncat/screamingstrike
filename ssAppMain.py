@@ -75,11 +75,22 @@ class ssAppMain(window.SingletonWindow):
         self.options.initialize(OPTIONS_FILENAME)
         self.itemVoices = self.getItemVoicesList()
         self.locales = self.getLocalesList()
+        self.environments = self.getEnvironmentsList()
+        # Validate environment: if not set, deleted, or no environments exist, default appropriately
+        if len(self.environments) > 0:
+            # If environment is not set or doesn't exist, use first alphabetically
+            if not hasattr(self.options, 'environment') or self.options.environment not in self.environments:
+                self.options.environment = self.environments[0]
+        else:
+            # No environments found, set to None to trigger fallback
+            self.options.environment = None
         self.initTranslation()
         self.music = bgtsound.sound()
         self.musicData = sound_lib.sample.Sample("data/sounds/stream//bg.ogg")
         self.music.load(self.musicData)
         self.music.volume = self.options.bgmVolume
+        self.ambiance = None
+        self.ambianceData = None
         self.numScreams = len(glob.glob("data/sounds/scream*.ogg"))
         self.collectionStorage = collection.CollectionStorage()
         self.collectionStorage.initialize(self.numScreams, COLLECTION_DATA_FILENAME)
@@ -128,13 +139,77 @@ class ssAppMain(window.SingletonWindow):
                 lst.append(os.path.basename(elem))
         return lst
 
+    def getEnvironmentsList(self):
+        """
+        Searches for available environments. Returns the list of found environments sorted alphabetically.
+
+        :rtype: list
+        """
+        lst = []
+        for elem in glob.glob("data/environments/*"):
+            if os.path.isdir(elem):
+                lst.append(os.path.basename(elem))
+        lst.sort()  # Sort alphabetically
+        return lst
+
     def loadSounds(self):
         """Preloads ingame sounds into memory. This is for enhancing performance while playing the game. """
         self.sounds = {}
         files = glob.glob("data/sounds/*.ogg")
         for elem in files:
             self.sounds[os.path.basename(elem)] = sound_lib.sample.Sample(elem)
+        # Load environment sounds
+        self.loadEnvironmentSounds()
     # end loadSounds
+
+    def loadEnvironmentSounds(self):
+        """Loads footsteps and body fall sounds from the selected environment."""
+        # Free old environment sounds if they exist (avoid memory leak when switching)
+        if hasattr(self, 'environmentSteps'):
+            for sample in self.environmentSteps:
+                # Only free if it's not from the main sounds dict (those are managed separately)
+                if sample not in self.sounds.values():
+                    sample.free()
+        if hasattr(self, 'environmentFalls'):
+            for sample in self.environmentFalls:
+                # Only free if it's not from the main sounds dict (those are managed separately)
+                if sample not in self.sounds.values():
+                    sample.free()
+
+        # Initialize empty lists
+        self.environmentSteps = []
+        self.environmentFalls = []
+
+        # Check if environment is set and valid
+        env = self.options.environment if hasattr(self.options, 'environment') and self.options.environment else None
+
+        if env is not None:
+            env_path = "data/environments/%s" % env
+            if os.path.isdir(env_path):
+                # Try to load footsteps from environment
+                step_files = glob.glob(env_path + "/step*.ogg")
+                if len(step_files) > 0:
+                    for elem in step_files:
+                        self.environmentSteps.append(sound_lib.sample.Sample(elem))
+
+                # Try to load body falls from environment
+                fall_files = glob.glob(env_path + "/fall*.ogg")
+                if len(fall_files) > 0:
+                    for elem in fall_files:
+                        self.environmentFalls.append(sound_lib.sample.Sample(elem))
+
+        # Fallback to old sounds if no environment or no sounds loaded
+        if len(self.environmentSteps) == 0:
+            # Fallback to s_lf*.ogg from sounds folder
+            for i in range(1, 19):
+                if "s_lf%d.ogg" % i in self.sounds:
+                    self.environmentSteps.append(self.sounds["s_lf%d.ogg" % i])
+
+        if len(self.environmentFalls) == 0:
+            # Fallback to dead.ogg from sounds folder
+            if "dead.ogg" in self.sounds:
+                self.environmentFalls.append(self.sounds["dead.ogg"])
+    # end loadEnvironmentSounds
 
     def getNumScreams(self):
         """
@@ -143,6 +218,31 @@ class ssAppMain(window.SingletonWindow):
         :rtype: int
         """
         return self.numScreams
+
+    def startAmbiance(self):
+        """Starts playing the ambiance sound if available in the current environment."""
+        env = self.options.environment if hasattr(self.options, 'environment') else "default"
+        env_path = "data/environments/%s" % env
+        if not os.path.isdir(env_path):
+            env_path = "data/environments/default"
+        amb_file = env_path + "/amb.ogg"
+        if os.path.isfile(amb_file):
+            self.ambianceData = sound_lib.sample.Sample(amb_file)
+            self.ambiance = bgtsound.sound()
+            self.ambiance.load(self.ambianceData)
+            self.ambiance.volume = self.options.ambianceVolume if hasattr(self.options, 'ambianceVolume') else -10
+            self.ambiance.play_looped()
+    # end startAmbiance
+
+    def stopAmbiance(self):
+        """Stops the ambiance sound if it's playing."""
+        if self.ambiance is not None:
+            self.ambiance.stop()
+            self.ambiance = None
+        if self.ambianceData is not None:
+            self.ambianceData.free()
+            self.ambianceData = None
+    # end stopAmbiance
 
     def intro(self):
         """Plays the intro sound. It blocks when the sound is playing, then starts the game music. """
@@ -478,9 +578,11 @@ class ssAppMain(window.SingletonWindow):
         m = self.createMenu(
             _("Options Menu, use your up and down arrows to choose an option, left and right arrows to change values, enter to save or escape to discard changes"))
         m.append(_("Background music volume"))
+        m.append(_("Ambiance volume"))
         m.append(_("Left panning limit"))
         m.append(_("Right panning limit."))
         m.append(_("Item announcement voice"))
+        m.append(_("Environment"))
         m.append(_("Language (restart to apply)"))
         m.open()
         while(True):
@@ -525,7 +627,21 @@ class ssAppMain(window.SingletonWindow):
             self.say("%d" % (abs(-30 - self.options.bgmVolume) * 0.5))
             return
         # end bgm volume
-        if cursor == 1:  # left panning limit
+        if cursor == 1:  # ambiance volume
+            if direction == 1 and self.options.ambianceVolume == self.options.AMBIANCEVOLUME_POSITIVE_BOUNDARY:
+                return
+            if direction == -1 and self.options.ambianceVolume == self.options.AMBIANCEVOLUME_NEGATIVE_BOUNDARY:
+                return
+            if direction == 1:
+                self.options.ambianceVolume += 2
+            if direction == -1:
+                self.options.ambianceVolume -= 2
+            if self.ambiance is not None:
+                self.ambiance.volume = self.options.ambianceVolume
+            self.say("%d" % (abs(-30 - self.options.ambianceVolume) * 0.5))
+            return
+        # end ambiance volume
+        if cursor == 2:  # left panning limit
             if direction == 1 and self.options.leftPanningLimit == self.options.LEFTPANNINGLIMIT_POSITIVE_BOUNDARY:
                 return
             if direction == -1 and self.options.leftPanningLimit == self.options.LEFTPANNINGLIMIT_NEGATIVE_BOUNDARY:
@@ -540,7 +656,7 @@ class ssAppMain(window.SingletonWindow):
             s.play()
             return
     # end left panning limit
-        if cursor == 2:  # right panning limit
+        if cursor == 3:  # right panning limit
             if direction == 1 and self.options.rightPanningLimit == self.options.RIGHTPANNINGLIMIT_POSITIVE_BOUNDARY:
                 return
             if direction == -1 and self.options.rightPanningLimit == self.options.RIGHTPANNINGLIMIT_NEGATIVE_BOUNDARY:
@@ -554,8 +670,8 @@ class ssAppMain(window.SingletonWindow):
             s.pan = self.options.rightPanningLimit
             s.play()
             return
-        # end left panning limit
-        if cursor == 3:  # item voice
+        # end right panning limit
+        if cursor == 4:  # item voice
             c = 0
             for n in self.itemVoices:  # which are we selecting?
                 if self.options.itemVoice == n:
@@ -576,7 +692,38 @@ class ssAppMain(window.SingletonWindow):
             self.options.itemVoice = self.itemVoices[c]
             return
         # end item voices
-        if cursor == 4:  # language
+        if cursor == 5:  # environment
+            # Check if there are any environments available
+            if len(self.environments) == 0:
+                self.say(_("No environments found"))
+                return
+            c = 0
+            for n in self.environments:  # which are we selecting?
+                if self.options.environment == n:
+                    break
+                c += 1
+            # detected the current option
+            if direction == 1 and c == len(self.environments) - 1:
+                return  # clipping
+            if direction == -1 and c == 0:
+                return  # clipping
+            c += direction
+            self.say(self.environments[c])
+            self.options.environment = self.environments[c]
+            # Reload environment sounds immediately
+            self.loadEnvironmentSounds()
+            # Play a test footstep sound
+            if len(self.environmentSteps) > 0:
+                testSound = bgtsound.sound()
+                testSound.load(self.environmentSteps[0])
+                testSound.play()
+            # Restart ambiance if it was playing
+            if self.ambiance is not None and self.ambiance.playing:
+                self.stopAmbiance()
+                self.startAmbiance()
+            return
+        # end environment
+        if cursor == 6:  # language
             c = 0
             for n in self.locales:  # which are we selecting?
                 if n == self.options.language:
@@ -591,7 +738,7 @@ class ssAppMain(window.SingletonWindow):
             self.say(self.locales[c])
             self.options.language = self.locales[c]
             return
-        # end item voices
+        # end language
 
     # end optionChange
 
@@ -602,6 +749,7 @@ class ssAppMain(window.SingletonWindow):
         :rtype: gameResult.GameResult
         """
         self.say(_("%(playmode)s, high score %(highscore)s, start!") % {"playmode": mode, "highscore": self.statsStorage.get("hs_" + mode)})
+        self.startAmbiance()
         field = gameField.GameField()
         if random.randint(0, 4999) == 1:
             self.resetMusicPitch(200)
@@ -616,6 +764,7 @@ class ssAppMain(window.SingletonWindow):
                 result = gameResult.GameResult()
                 result.initialize(field)
                 result.aborted = True
+                self.stopAmbiance()
                 return result
             # end abort
             if self.keyPressed(window.K_TAB):
@@ -623,6 +772,7 @@ class ssAppMain(window.SingletonWindow):
             if field.frameUpdate() is False:
                 break
         # end while
+        self.stopAmbiance()
         field.clear()
         self.wait(2000)
         s = bgtsound.sound()
