@@ -461,27 +461,39 @@ msgstr ""
 "trái và phải để thay đổi giá trị của cài đặt đó, Enter để lưu hoặc escape để "
 "hủy thay đổi"
 
-#: ssAppMain.py:480
+#: ssAppMain.py:551
 msgid "Background music volume"
 msgstr ""
 "Âm lượng nhạc nền, bấm mũi tên trái và phải để chỉnh Âm lượng nhạc nền. Bấm "
 "mũi tên phải là tăng, mũi tên trái là dảm"
 
-#: ssAppMain.py:481
+#: ssAppMain.py:552
+msgid "Ambiance volume"
+msgstr "Âm lượng môi trường xung quanh, bấm mũi tên trái và phải để chỉnh"
+
+#: ssAppMain.py:553
 msgid "Left panning limit"
 msgstr "Bên trái, bấm mũi tên phải để đưa nó qua phải và nghe âm thanh"
 
-#: ssAppMain.py:482
+#: ssAppMain.py:554
 msgid "Right panning limit."
 msgstr "Bên phải, bấm mũi tên trái để đưa nó qua trái và nghe âm thanh"
 
-#: ssAppMain.py:483
+#: ssAppMain.py:555
 msgid "Item announcement voice"
 msgstr "Giọng nói thông báo vật phẩm, bấm mũi tên trái và phải để trọn"
 
-#: ssAppMain.py:484
+#: ssAppMain.py:556
+msgid "Environment"
+msgstr "Môi trường, bấm mũi tên trái và phải để trọn"
+
+#: ssAppMain.py:557
 msgid "Language (restart to apply)"
 msgstr "Ngôn ngữ, Bấm mũi tên trái phải để trọn(khởi động lại để áp dụng)"
+
+#: ssAppMain.py:681
+msgid "No environments found"
+msgstr "Không tìm thấy môi trường"
 
 #: ssAppMain.py:498
 msgid "Changes discarded."

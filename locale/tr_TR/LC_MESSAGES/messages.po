@@ -455,25 +455,37 @@ msgstr ""
 "değiştirmek için sağ sol okları kullanın, ayarları kaydetmek için enter'ı, "
 "iptal etmek için escape'i kullanın"
 
-#: ssAppMain.py:480
+#: ssAppMain.py:551
 msgid "Background music volume"
 msgstr "Müzik seviyesi"
 
-#: ssAppMain.py:481
+#: ssAppMain.py:552
+msgid "Ambiance volume"
+msgstr "Ortam ses seviyesi"
+
+#: ssAppMain.py:553
 msgid "Left panning limit"
 msgstr "Soldaki ses sınırı"
 
-#: ssAppMain.py:482
+#: ssAppMain.py:554
 msgid "Right panning limit."
 msgstr "Sağdaki ses sınırı."
 
-#: ssAppMain.py:483
+#: ssAppMain.py:555
 msgid "Item announcement voice"
 msgstr "Bonus duyuru sesi"
 
-#: ssAppMain.py:484
+#: ssAppMain.py:556
+msgid "Environment"
+msgstr "Ortam"
+
+#: ssAppMain.py:557
 msgid "Language (restart to apply)"
 msgstr "Dil (değişikliği uygulamak için oyunu yeniden başlatın)"
+
+#: ssAppMain.py:681
+msgid "No environments found"
+msgstr "Ortam bulunamadı"
 
 #: ssAppMain.py:498
 msgid "Changes discarded."

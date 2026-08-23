@@ -466,25 +466,37 @@ msgstr ""
 "設定メニューです。上下の矢印キーで設定項目を移動し、左右矢印で値を変更しま"
 "す。エンターキーで設定を保存し、エスケープキーで変更を破棄します。"
 
-#: ssAppMain.py:480
+#: ssAppMain.py:551
 msgid "Background music volume"
 msgstr "BGMの音量"
 
-#: ssAppMain.py:481
+#: ssAppMain.py:552
+msgid "Ambiance volume"
+msgstr "環境音ボリューム"
+
+#: ssAppMain.py:553
 msgid "Left panning limit"
 msgstr "左側のパンニング・リミット"
 
-#: ssAppMain.py:482
+#: ssAppMain.py:554
 msgid "Right panning limit."
 msgstr "右側のパンニング・リミット"
 
-#: ssAppMain.py:483
+#: ssAppMain.py:555
 msgid "Item announcement voice"
 msgstr "アイテム・アナウンスの声"
 
-#: ssAppMain.py:484
+#: ssAppMain.py:556
+msgid "Environment"
+msgstr "環境"
+
+#: ssAppMain.py:557
 msgid "Language (restart to apply)"
 msgstr "言語(再起動後に適用)"
+
+#: ssAppMain.py:681
+msgid "No environments found"
+msgstr "環境が見つかりません"
 
 #: ssAppMain.py:498
 msgid "Changes discarded."

@@ -420,24 +420,36 @@ msgid ""
 "right arrows to change values, enter to save or escape to discard changes"
 msgstr ""
 
-#: ssAppMain.py:480
+#: ssAppMain.py:551
 msgid "Background music volume"
 msgstr ""
 
-#: ssAppMain.py:481
+#: ssAppMain.py:552
+msgid "Ambiance volume"
+msgstr ""
+
+#: ssAppMain.py:553
 msgid "Left panning limit"
 msgstr ""
 
-#: ssAppMain.py:482
+#: ssAppMain.py:554
 msgid "Right panning limit."
 msgstr ""
 
-#: ssAppMain.py:483
+#: ssAppMain.py:555
 msgid "Item announcement voice"
 msgstr ""
 
-#: ssAppMain.py:484
+#: ssAppMain.py:556
+msgid "Environment"
+msgstr ""
+
+#: ssAppMain.py:557
 msgid "Language (restart to apply)"
+msgstr ""
+
+#: ssAppMain.py:681
+msgid "No environments found"
 msgstr ""
 
 #: ssAppMain.py:498

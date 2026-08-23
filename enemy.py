@@ -89,13 +89,30 @@ class Enemy():
             return
         self.y -= 1
         s = bgtsound.sound()
-        num = 0
-        while True:
-            num = random.randint(1, 18)
-            if num != self.lastStepNum:
-                break
-        # end while
-        s.load(globalVars.appMain.sounds["s_lf%d.ogg" % num])
+        # Use environment-based footsteps
+        if hasattr(globalVars.appMain, 'environmentSteps') and len(globalVars.appMain.environmentSteps) > 0:
+            num = 0
+            # If there's only 1 sound, just use it (avoid infinite loop)
+            if len(globalVars.appMain.environmentSteps) == 1:
+                num = 0
+            else:
+                while True:
+                    num = random.randint(0, len(globalVars.appMain.environmentSteps) - 1)
+                    if num != self.lastStepNum:
+                        break
+                # end while
+            s.load(globalVars.appMain.environmentSteps[num])
+            self.lastStepNum = num
+        else:
+            # Fallback to old method
+            num = 0
+            while True:
+                num = random.randint(1, 18)
+                if num != self.lastStepNum:
+                    break
+            # end while
+            s.load(globalVars.appMain.sounds["s_lf%d.ogg" % num])
+            self.lastStepNum = num
         s.pan = self.field.getPan(self.x)
         s.volume = self.field.getVolume(self.y)
         s.pitch = random.randint(90, 110)
@@ -142,7 +159,14 @@ class Enemy():
     def playBodyfall(self):
         """Makes a bodyfall sound for this enemy. Internally called."""
         self.bodyfall = bgtsound.sound()
-        self.bodyfall.load(globalVars.appMain.sounds["dead.ogg"])
+        # Use environment-based body falls
+        if hasattr(globalVars.appMain, 'environmentFalls') and len(globalVars.appMain.environmentFalls) > 0:
+            # Randomly select from available body fall sounds
+            fallIndex = random.randint(0, len(globalVars.appMain.environmentFalls) - 1)
+            self.bodyfall.load(globalVars.appMain.environmentFalls[fallIndex])
+        else:
+            # Fallback to old method
+            self.bodyfall.load(globalVars.appMain.sounds["dead.ogg"])
         self.bodyfall.pitch = random.randint(70, 130)
         self.bodyfall.pan = self.field.getPan(self.x)
         self.bodyfall.volume = self.field.getVolume(self.y)
